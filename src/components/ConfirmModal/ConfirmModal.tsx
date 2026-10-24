@@ -1,9 +1,16 @@
+import { Button } from '../../design-system';
 import { Modal } from '../Modal';
 
-import { Actions, Description } from './ConfirmModal.styles';
+import styles from './ConfirmModal.module.css';
 import type { ConfirmModalProps } from './ConfirmModal.types';
-import { Button } from '@/design-system';
 
+/**
+ * Confirmation dialog with a message and cancel and confirm actions.
+ *
+ * While `isConfirming` is true, both buttons are disabled and the confirm
+ * button shows a pending label. `onConfirm` may return a promise; the dialog
+ * does not close itself, the parent controls `isOpen`.
+ */
 export function ConfirmModal({
   isOpen,
   onClose,
@@ -15,15 +22,21 @@ export function ConfirmModal({
   isConfirming = false,
   isConfirmDisabled = false,
 }: ConfirmModalProps) {
+  // Wrapped so the click event is not passed to `onConfirm`,
+  // and the returned promise is not left unhandled in the event handler.
+  const handleConfirm = () => {
+    void onConfirm();
+  };
+
   return (
     <Modal
       title={title}
       isOpen={isOpen}
       onClose={onClose}
     >
-      {children && <Description>{children}</Description>}
+      {children ? <div className={styles.description}>{children}</div> : null}
 
-      <Actions>
+      <div className={styles.actions}>
         <Button
           type="button"
           variant="secondary"
@@ -36,12 +49,12 @@ export function ConfirmModal({
         <Button
           type="button"
           variant="primary"
-          onClick={onConfirm}
+          onClick={handleConfirm}
           disabled={isConfirming || isConfirmDisabled}
         >
           {isConfirming ? 'Please wait…' : confirmLabel}
         </Button>
-      </Actions>
+      </div>
     </Modal>
   );
 }

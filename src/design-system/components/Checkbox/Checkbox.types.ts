@@ -5,6 +5,9 @@ export interface CheckboxProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type'
 > {
-  /** Label shown next to the checkbox. */
+  /**
+   * Text label shown next to the checkbox.
+   * Required: a checkbox without a label is not accessible.
+   */
   label: string;
 }

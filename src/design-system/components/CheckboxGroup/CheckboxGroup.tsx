@@ -1,19 +1,20 @@
+import { useId } from 'react';
+
+import clsx from 'clsx';
+
 import { Checkbox } from '../Checkbox';
 
-import {
-  Group,
-  Helper,
-  Label,
-  LabelRow,
-  List,
-  TooltipIcon,
-} from './CheckboxGroup.styles';
+import styles from './CheckboxGroup.module.css';
 import type { CheckboxGroupProps } from './CheckboxGroup.types';
 
 /**
- * Checkbox group with optional helper/error text and label tooltip.
+ * Checkbox group with optional helper or error text and a label tooltip.
+ *
+ * Uses `<fieldset>` and `<legend>`, so assistive technologies announce the
+ * group name for every checkbox in it. Helper and error text are linked
+ * through `aria-describedby`.
  */
-export function CheckboxGroup({
+export const CheckboxGroup = ({
   label,
   tooltip,
   options,
@@ -22,41 +23,72 @@ export function CheckboxGroup({
   helper,
   error,
   disabled = false,
-}: CheckboxGroupProps) {
+}: CheckboxGroupProps) => {
+  const groupId = useId();
+  const messageId = `${groupId}-message`;
+  const tooltipId = `${groupId}-tooltip`;
+
+  // Error replaces helper text, so only one message is rendered.
+  const message = error ?? helper;
+  const hasError = Boolean(error);
+
+  const handleToggle = (option: string) => {
+    const next = value.includes(option)
+      ? value.filter((item) => item !== option)
+      : [...value, option];
+    onChange(next);
+  };
+
   return (
-    <Group>
-      <LabelRow>
-        <Label>{label}</Label>
-        {tooltip ? (
-          <TooltipIcon
-            aria-label={tooltip}
-            data-tooltip={tooltip}
-          >
-            i
-          </TooltipIcon>
-        ) : null}
-      </LabelRow>
-      <List>
-        {options.map((option) => {
-          const checked = value.includes(option);
-          return (
+    <fieldset
+      className={styles.group}
+      disabled={disabled}
+      aria-describedby={message ? messageId : undefined}
+    >
+      <legend className={styles.legend}>
+        <span className={styles.labelRow}>
+          {label}
+          {tooltip ? (
+            // Focusable so keyboard users can read the tooltip too.
+            <span
+              className={styles.tooltipTrigger}
+              tabIndex={0}
+              aria-describedby={tooltipId}
+            >
+              <span aria-hidden="true">i</span>
+              <span
+                id={tooltipId}
+                role="tooltip"
+                className={styles.tooltipContent}
+              >
+                {tooltip}
+              </span>
+            </span>
+          ) : null}
+        </span>
+      </legend>
+
+      <ul className={styles.list}>
+        {options.map((option) => (
+          <li key={option}>
             <Checkbox
-              key={option}
               label={option}
-              checked={checked}
+              checked={value.includes(option)}
               disabled={disabled}
-              onChange={() => {
-                const next = checked
-                  ? value.filter((item) => item !== option)
-                  : [...value, option];
-                onChange(next);
-              }}
+              onChange={() => handleToggle(option)}
             />
-          );
-        })}
-      </List>
-      {error ? <Helper $hasError>{error}</Helper> : null}
-      {!error && helper ? <Helper>{helper}</Helper> : null}
-    </Group>
+          </li>
+        ))}
+      </ul>
+
+      {message ? (
+        <p
+          id={messageId}
+          className={clsx(styles.helper, hasError && styles.error)}
+        >
+          {message}
+        </p>
+      ) : null}
+    </fieldset>
   );
 }

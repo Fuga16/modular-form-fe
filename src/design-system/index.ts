@@ -25,5 +25,3 @@ export type {
 } from './components/IconButton';
 export { Drawer } from './components/Drawer';
 export type { DrawerProps } from './components/Drawer';
-export { theme } from './theme/theme';
-export { GlobalStyles } from './theme/GlobalStyles';

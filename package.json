@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.104.1",
-    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "clsx": "^2.1.1",
     "prettier": "^3.9.10",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -22,6 +22,7 @@
     "@babel/core": "^7.29.7",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",

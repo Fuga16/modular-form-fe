@@ -1,43 +1,72 @@
-import { BaseButton } from './Button.styles';
-import type { ButtonProps, ButtonState } from './Button.types';
+import { forwardRef } from 'react';
+
+import clsx from 'clsx';
+
+import styles from './Button.module.css';
+import type { ButtonProps, ButtonSize } from './Button.types';
+
+const DEFAULT_LOCK_ICON = '🔒';
+
+const sizeClassName: Record<ButtonSize, string> = {
+  sm: styles.small,
+  md: styles.medium,
+  lg: styles.large,
+};
 
 /**
- * Design-system button with semantic variant, size, and interaction state.
+ * Design-system button with variant, size, block layout and locked state.
+ * Locked buttons are disabled and render a lock icon before the label.
  */
-export function Button({
-  variant = 'primary',
-  size = 'medium',
-  state,
-  fullWidth,
-  lockedIcon = '🔒',
-  children,
-  disabled,
-  ...props
-}: ButtonProps) {
-  const resolvedState: ButtonState =
-    state ?? (disabled ? 'disabled' : 'normal');
-  const isDisabled =
-    disabled || resolvedState === 'disabled' || resolvedState === 'locked';
-  const content =
-    resolvedState === 'locked' ? (
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(
+    {
+      variant = 'primary',
+      size = 'md',
+      block = false,
+      locked = false,
+      lockIcon = DEFAULT_LOCK_ICON,
+      lockedLabel = 'Locked',
+      disabled = false,
+      type = 'button',
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) {
+    const isDisabled = disabled || locked;
+
+    const content = locked ? (
       <>
-        <span aria-hidden="true">{lockedIcon}</span>
-        <span>{children ?? 'Locked'}</span>
+        <span
+          aria-hidden="true"
+          className={styles.lockedIcon}
+        >
+          {lockIcon}
+        </span>
+        <span>{children ?? lockedLabel}</span>
       </>
     ) : (
       children
     );
 
-  return (
-    <BaseButton
-      {...props}
-      disabled={isDisabled}
-      $variant={variant}
-      $size={size}
-      $state={resolvedState}
-      $fullWidth={fullWidth}
-    >
-      {content}
-    </BaseButton>
-  );
-}
+    return (
+      <button
+        {...props}
+        ref={ref}
+        type={type}
+        disabled={isDisabled}
+        className={clsx(
+          styles.button,
+          styles[variant],
+          sizeClassName[size],
+          locked && styles.locked,
+          block && styles.fullWidth,
+          className,
+        )}
+      >
+        {content}
+      </button>
+    );
+  },
+);

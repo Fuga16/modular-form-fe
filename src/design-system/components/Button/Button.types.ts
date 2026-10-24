@@ -1,8 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
-export type ButtonSize = 'small' | 'medium' | 'large';
-export type ButtonState = 'normal' | 'disabled' | 'locked';
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 /** Props for the Button component. */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,10 +9,12 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   /** Size of the button. */
   size?: ButtonSize;
-  /** Interaction state of the button. */
-  state?: ButtonState;
-  /** Optional full-width layout. */
-  fullWidth?: boolean;
-  /** Optional lock icon content shown when state is locked. */
-  lockedIcon?: ReactNode;
+  /** Stretch the button to the width of its container. */
+  block?: boolean;
+  /** Locked state: the button is disabled and shows a lock icon. */
+  locked?: boolean;
+  /** Icon shown when locked. */
+  lockIcon?: ReactNode;
+  /** Label shown when locked and no children are passed. */
+  lockedLabel?: ReactNode;
 }

@@ -1,93 +1,140 @@
-import { useId } from 'react';
-
 import {
-  Control,
-  ControlShell,
-  Field,
-  Helper,
-  Label,
-  LabelRow,
-  LockIcon,
-  Textarea,
-  TooltipIcon,
-} from './Input.styles';
+  type InputHTMLAttributes,
+  type Ref,
+  type TextareaHTMLAttributes,
+  forwardRef,
+  useId,
+} from 'react';
+
+import clsx from 'clsx';
+
+import styles from './Input.module.css';
 import type { InputProps } from './Input.types';
 
+/** Default icon for the locked state. */
+const DEFAULT_LOCK_ICON = '🔒';
+
+/** Default visible rows for multiline fields. */
+const DEFAULT_ROWS = 4;
+
 /**
- * Text input or textarea field with label, helper/error text, tooltip, and locked state support.
+ * Text input or textarea with label, helper or error text, tooltip, and locked state.
+ *
+ * Helper and error text are linked to the control with `aria-describedby`.
+ * `aria-invalid` reflects the presence of `error`.
  */
-export function Input({
-  label,
-  hint,
-  helperText,
-  error,
-  tooltip,
-  state = 'normal',
-  multiline = false,
-  rows = 4,
-  id,
-  disabled,
-  ...props
-}: InputProps) {
+export const Input = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  InputProps
+>(function Input(props, ref) {
+  const {
+    label,
+    helperText,
+    error,
+    tooltip,
+    locked = false,
+    lockIcon = DEFAULT_LOCK_ICON,
+    disabled = false,
+    id,
+    className,
+    multiline = false,
+    ...controlProps
+  } = props;
+
   const generatedId = useId();
-  const inputId = id ?? generatedId;
-  const resolvedState = disabled ? 'disabled' : state;
-  const isLocked = resolvedState === 'locked';
-  const isDisabled = resolvedState === 'disabled' || isLocked;
-  const resolvedHelperText = helperText ?? hint;
-  const ariaDescribedBy =
-    resolvedHelperText || error ? `${inputId}-help` : undefined;
+  const controlId = id ?? generatedId;
+  const helpId = `${controlId}-help`;
+  const tooltipId = `${controlId}-tooltip`;
+
+  // Error replaces helper text, so only one message is rendered.
+  const message = error ?? helperText;
+  const hasError = Boolean(error);
+
+  const controlClassName = clsx(
+    styles.control,
+    multiline && styles.textarea,
+    locked && styles.locked,
+    locked && styles.hasLockIcon,
+  );
+
+  // Shared attributes for both native elements.
+  const sharedAttributes = {
+    id: controlId,
+    disabled,
+    readOnly: locked,
+    'aria-invalid': hasError,
+    'aria-describedby': message ? helpId : undefined,
+    className: controlClassName,
+  };
+
+  // forwardRef cannot narrow the element type by `multiline`, so the ref
+  // and the remaining props are cast in each branch. The branch itself
+  // guarantees the correct type.
+  const control = multiline ? (
+    <textarea
+      rows={DEFAULT_ROWS}
+      {...(controlProps as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+      {...sharedAttributes}
+      ref={ref as Ref<HTMLTextAreaElement>}
+    />
+  ) : (
+    <input
+      {...(controlProps as InputHTMLAttributes<HTMLInputElement>)}
+      {...sharedAttributes}
+      ref={ref as Ref<HTMLInputElement>}
+    />
+  );
 
   return (
-    <Field>
+    <div className={clsx(styles.field, className)}>
       {label ? (
-        <LabelRow>
-          <Label htmlFor={inputId}>{label}</Label>
+        <div className={styles.labelRow}>
+          <label
+            htmlFor={controlId}
+            className={styles.label}
+          >
+            {label}
+          </label>
           {tooltip ? (
-            <TooltipIcon
-              aria-label={tooltip}
-              data-tooltip={tooltip}
+            <span
+              className={styles.tooltipTrigger}
+              tabIndex={0}
+              aria-describedby={tooltipId}
             >
-              i
-            </TooltipIcon>
+              <span aria-hidden="true">i</span>
+              <span
+                id={tooltipId}
+                role="tooltip"
+                className={styles.tooltipContent}
+              >
+                {tooltip}
+              </span>
+            </span>
           ) : null}
-        </LabelRow>
+        </div>
       ) : null}
-      <ControlShell>
-        {multiline ? (
-          <Textarea
-            id={inputId}
-            rows={rows}
-            aria-invalid={Boolean(error)}
-            aria-describedby={ariaDescribedBy}
-            $hasError={Boolean(error)}
-            $isLocked={isLocked}
-            disabled={isDisabled}
-            readOnly={isLocked}
-            {...props}
-          />
-        ) : (
-          <Control
-            id={inputId}
-            aria-invalid={Boolean(error)}
-            aria-describedby={ariaDescribedBy}
-            $hasError={Boolean(error)}
-            $isLocked={isLocked}
-            disabled={isDisabled}
-            readOnly={isLocked}
-            {...props}
-          />
-        )}
-        {isLocked ? <LockIcon aria-hidden="true">🔒</LockIcon> : null}
-      </ControlShell>
-      {(resolvedHelperText || error) && (
-        <Helper
-          id={`${inputId}-help`}
-          $hasError={Boolean(error)}
+
+      <div className={styles.shell}>
+        {control}
+        {locked ? (
+          // Decorative: the locked state is already exposed via `readOnly`.
+          <span
+            aria-hidden="true"
+            className={clsx(styles.lockIcon, multiline && styles.lockIconTop)}
+          >
+            {lockIcon}
+          </span>
+        ) : null}
+      </div>
+
+      {message ? (
+        <p
+          id={helpId}
+          className={clsx(styles.helper, hasError && styles.helperError)}
         >
-          {error ?? resolvedHelperText}
-        </Helper>
-      )}
-    </Field>
+          {message}
+        </p>
+      ) : null}
+    </div>
   );
-}
+});

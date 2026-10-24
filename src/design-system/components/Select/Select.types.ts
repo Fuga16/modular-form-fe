@@ -1,26 +1,36 @@
-import type { SelectHTMLAttributes } from 'react';
+import type { ReactNode, SelectHTMLAttributes } from 'react';
 
+/** One option in the select list. */
 export interface SelectOption {
-  /** Value submitted in forms. */
+  /** Value submitted with the form. */
   value: string;
-  /** Visible label for the option. */
+  /** Text shown to the user. */
   label: string;
 }
 
 /** Props for the Select component. */
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  /** Optional label shown above the field. */
+export interface SelectProps extends Omit<
+  SelectHTMLAttributes<HTMLSelectElement>,
+  'children'
+> {
+  /** Label shown above the field. */
   label?: string;
-  /** Legacy helper alias for backward compatibility. */
-  hint?: string;
-  /** Helper text shown below the field. */
+  /** Helper text shown below the field. Replaced by `error` when both are set. */
   helperText?: string;
-  /** Error message shown below the field. */
+  /** Error message shown below the field. Sets `aria-invalid`. */
   error?: string;
-  /** Optional tooltip text displayed from the label icon. */
+  /** Tooltip text shown from the label icon. */
   tooltip?: string;
-  /** Field interaction state. */
-  state?: 'normal' | 'disabled' | 'locked';
+  /**
+   * Locked state: the select is disabled and shows `lockIcon`.
+   * A native select has no read-only mode, so its value is not submitted while locked.
+   */
+  locked?: boolean;
+  /**
+   * Icon shown when `locked` is true.
+   * @default '🔒'
+   */
+  lockIcon?: ReactNode;
   /** Options to render. */
   options: SelectOption[];
 }

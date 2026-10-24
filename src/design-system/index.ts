@@ -2,7 +2,6 @@ export { Button } from './components/Button';
 export type {
   ButtonProps,
   ButtonSize,
-  ButtonState,
   ButtonVariant,
 } from './components/Button';
 export { Input } from './components/Input';
@@ -18,10 +17,11 @@ export type { CardProps, CardVariant } from './components/Card';
 export { Badge } from './components/Badge';
 export type { BadgeProps, BadgeVariant } from './components/Badge';
 export { IconButton } from './components/IconButton';
-export type {
-  IconButtonProps,
-  IconButtonSize,
-  IconButtonState,
-} from './components/IconButton';
+export type { IconButtonProps, IconButtonSize } from './components/IconButton';
 export { Drawer } from './components/Drawer';
 export type { DrawerProps } from './components/Drawer';
+export { useDialog } from './hooks/useDialog';
+export { Modal } from './components/Modal';
+export type { ModalProps } from './components/Modal';
+export { Tooltip } from './components/Tooltip';
+export type { TooltipProps } from './components/Tooltip';

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useForm, useWatch } from 'react-hook-form';
 
-import { Modal } from '../Modal';
+import { Modal } from '../../design-system/components/Modal';
 
 import {
   CANCEL_LABEL,

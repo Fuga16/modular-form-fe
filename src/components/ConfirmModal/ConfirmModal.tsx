@@ -1,5 +1,5 @@
 import { Button } from '../../design-system';
-import { Modal } from '../Modal';
+import { Modal } from '../../design-system/components/Modal';
 
 import styles from './ConfirmModal.module.css';
 import type { ConfirmModalProps } from './ConfirmModal.types';

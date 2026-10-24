@@ -8,6 +8,8 @@ import {
 
 import clsx from 'clsx';
 
+import { Tooltip } from '../Tooltip';
+
 import styles from './Input.module.css';
 import type { InputProps } from './Input.types';
 
@@ -44,7 +46,6 @@ export const Input = forwardRef<
   const generatedId = useId();
   const controlId = id ?? generatedId;
   const helpId = `${controlId}-help`;
-  const tooltipId = `${controlId}-tooltip`;
 
   // Error replaces helper text, so only one message is rendered.
   const message = error ?? helperText;
@@ -95,22 +96,7 @@ export const Input = forwardRef<
           >
             {label}
           </label>
-          {tooltip ? (
-            <span
-              className={styles.tooltipTrigger}
-              tabIndex={0}
-              aria-describedby={tooltipId}
-            >
-              <span aria-hidden="true">i</span>
-              <span
-                id={tooltipId}
-                role="tooltip"
-                className={styles.tooltipContent}
-              >
-                {tooltip}
-              </span>
-            </span>
-          ) : null}
+          {tooltip ? <Tooltip content={tooltip} /> : null}
         </div>
       ) : null}
 

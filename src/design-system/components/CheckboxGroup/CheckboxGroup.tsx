@@ -3,6 +3,7 @@ import { useId } from 'react';
 import clsx from 'clsx';
 
 import { Checkbox } from '../Checkbox';
+import { Tooltip } from '../Tooltip';
 
 import styles from './CheckboxGroup.module.css';
 import type { CheckboxGroupProps } from './CheckboxGroup.types';
@@ -26,7 +27,6 @@ export const CheckboxGroup = ({
 }: CheckboxGroupProps) => {
   const groupId = useId();
   const messageId = `${groupId}-message`;
-  const tooltipId = `${groupId}-tooltip`;
 
   // Error replaces helper text, so only one message is rendered.
   const message = error ?? helper;
@@ -48,23 +48,7 @@ export const CheckboxGroup = ({
       <legend className={styles.legend}>
         <span className={styles.labelRow}>
           {label}
-          {tooltip ? (
-            // Focusable so keyboard users can read the tooltip too.
-            <span
-              className={styles.tooltipTrigger}
-              tabIndex={0}
-              aria-describedby={tooltipId}
-            >
-              <span aria-hidden="true">i</span>
-              <span
-                id={tooltipId}
-                role="tooltip"
-                className={styles.tooltipContent}
-              >
-                {tooltip}
-              </span>
-            </span>
-          ) : null}
+          {tooltip ? <Tooltip content={tooltip} /> : null}s
         </span>
       </legend>
 
@@ -91,4 +75,4 @@ export const CheckboxGroup = ({
       ) : null}
     </fieldset>
   );
-}
+};

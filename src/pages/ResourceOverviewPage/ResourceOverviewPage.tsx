@@ -1,16 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
-
-import { Button } from '@/design-system'
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb'
-import { LoadingState } from '@/components/LoadingState'
-import { Summary } from '@/components/Summary'
-
-import { useResourceQuery } from '@/hooks/queries/useResourceQuery'
-import { useUpdateResourceMutation } from '@/hooks/queries/useUpdateResourceMutation'
-import { useResourceBuffer } from '@/hooks/useResourceBuffer'
-import { getBreadcrumbs } from '@/utils/getBreadcrumbs'
-
-import { ActionsRow, ErrorBanner, UnsavedBanner } from './ResourceOverviewPage.styles'
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   PageActions,
@@ -18,23 +6,37 @@ import {
   PageLayout,
   PageSubtitle,
   PageTitle,
-} from '../PageLayout.styles'
+} from '../PageLayout.styles';
+
+import {
+  ActionsRow,
+  ErrorBanner,
+  UnsavedBanner,
+} from './ResourceOverviewPage.styles';
+import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
+import { LoadingState } from '@/components/LoadingState';
+import { Summary } from '@/components/Summary';
+import { Button } from '@/design-system';
+import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
+import { useUpdateResourceMutation } from '@/hooks/queries/useUpdateResourceMutation';
+import { useResourceBuffer } from '@/hooks/useResourceBuffer';
+import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
 export function ResourceOverviewPage() {
-  const { resourceId } = useParams()
-  const navigate = useNavigate()
+  const { resourceId } = useParams();
+  const navigate = useNavigate();
 
-  const { getBuffer, clearBuffer } = useResourceBuffer()
+  const { getBuffer, clearBuffer } = useResourceBuffer();
 
-  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId)
-  const updateResourceMutation = useUpdateResourceMutation(resourceId)
+  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId);
+  const updateResourceMutation = useUpdateResourceMutation(resourceId);
 
   if (!resourceId) {
-    return null
+    return null;
   }
 
   if (fetchStatus === 'pending') {
-    return <LoadingState message="Loading resource..." />
+    return <LoadingState message="Loading resource..." />;
   }
 
   if (fetchStatus === 'error' || !resource) {
@@ -45,20 +47,22 @@ export function ResourceOverviewPage() {
         </ErrorBanner>
 
         <ActionsRow>
-          <Button onClick={() => navigate('/resources')}>Back to resources</Button>
+          <Button onClick={() => navigate('/resources')}>
+            Back to resources
+          </Button>
         </ActionsRow>
       </PageLayout>
-    )
+    );
   }
 
-  const draft = getBuffer(resourceId)
-  const hasUnsavedChanges = resource.status === 'completed' && Boolean(draft)
+  const draft = getBuffer(resourceId);
+  const hasUnsavedChanges = resource.status === 'completed' && Boolean(draft);
 
-  const isSaving = updateResourceMutation.isPending
+  const isSaving = updateResourceMutation.isPending;
 
   const handleSaveChanges = () => {
     if (!draft) {
-      return
+      return;
     }
 
     updateResourceMutation.mutate(
@@ -75,11 +79,11 @@ export function ResourceOverviewPage() {
       },
       {
         onSuccess: () => {
-          clearBuffer(resourceId)
+          clearBuffer(resourceId);
         },
       },
-    )
-  }
+    );
+  };
 
   return (
     <PageLayout>
@@ -105,7 +109,10 @@ export function ResourceOverviewPage() {
           </Button>
 
           {hasUnsavedChanges && (
-            <Button onClick={handleSaveChanges} disabled={isSaving}>
+            <Button
+              onClick={handleSaveChanges}
+              disabled={isSaving}
+            >
               {isSaving ? 'Saving…' : 'Save Changes'}
             </Button>
           )}
@@ -118,7 +125,7 @@ export function ResourceOverviewPage() {
 
       <Summary resource={resource} />
     </PageLayout>
-  )
+  );
 }
 
-export default ResourceOverviewPage
+export default ResourceOverviewPage;

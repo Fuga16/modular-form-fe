@@ -1,19 +1,19 @@
 export interface MultiSelectOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 export interface MultiSelectProps {
-  label?: string
-  tooltip?: string
-  helperText?: string
-  error?: string
-  disabled?: boolean
+  label?: string;
+  tooltip?: string;
+  helperText?: string;
+  error?: string;
+  disabled?: boolean;
 
-  options: MultiSelectOption[]
+  options: MultiSelectOption[];
 
-  value: string[]
-  onChange: (value: string[]) => void
+  value: string[];
+  onChange: (value: string[]) => void;
 
-  placeholder?: string
+  placeholder?: string;
 }

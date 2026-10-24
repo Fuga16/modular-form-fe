@@ -1,5 +1,5 @@
-import { useId } from 'react'
-import type { SelectProps } from './Select.types'
+import { useId } from 'react';
+
 import {
   Control,
   ControlShell,
@@ -9,7 +9,8 @@ import {
   LabelRow,
   LockIcon,
   TooltipIcon,
-} from './Select.styles'
+} from './Select.styles';
+import type { SelectProps } from './Select.types';
 
 /**
  * Select field with label, helper/error text, tooltip, and locked state support.
@@ -26,13 +27,14 @@ export function Select({
   disabled,
   ...props
 }: SelectProps) {
-  const generatedId = useId()
-  const selectId = id ?? generatedId
-  const resolvedState = disabled ? 'disabled' : state
-  const isLocked = resolvedState === 'locked'
-  const isDisabled = resolvedState === 'disabled' || isLocked
-  const resolvedHelperText = helperText ?? hint
-  const ariaDescribedBy = resolvedHelperText || error ? `${selectId}-help` : undefined
+  const generatedId = useId();
+  const selectId = id ?? generatedId;
+  const resolvedState = disabled ? 'disabled' : state;
+  const isLocked = resolvedState === 'locked';
+  const isDisabled = resolvedState === 'disabled' || isLocked;
+  const resolvedHelperText = helperText ?? hint;
+  const ariaDescribedBy =
+    resolvedHelperText || error ? `${selectId}-help` : undefined;
 
   return (
     <Field>
@@ -40,7 +42,10 @@ export function Select({
         <LabelRow>
           <Label htmlFor={selectId}>{label}</Label>
           {tooltip ? (
-            <TooltipIcon aria-label={tooltip} data-tooltip={tooltip}>
+            <TooltipIcon
+              aria-label={tooltip}
+              data-tooltip={tooltip}
+            >
               i
             </TooltipIcon>
           ) : null}
@@ -57,7 +62,10 @@ export function Select({
           {...props}
         >
           {options.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+            >
               {option.label}
             </option>
           ))}
@@ -65,10 +73,13 @@ export function Select({
         {isLocked ? <LockIcon aria-hidden="true">🔒</LockIcon> : null}
       </ControlShell>
       {(resolvedHelperText || error) && (
-        <Helper id={`${selectId}-help`} $hasError={Boolean(error)}>
+        <Helper
+          id={`${selectId}-help`}
+          $hasError={Boolean(error)}
+        >
           {error ?? resolvedHelperText}
         </Helper>
       )}
     </Field>
-  )
+  );
 }

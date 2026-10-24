@@ -1,10 +1,10 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components';
 
 const spin = keyframes`
   to {
     transform: rotate(360deg);
   }
-`
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export const Container = styled.div`
 
   min-height: 320px;
   padding: ${({ theme }) => theme.spacing.xl};
-`
+`;
 
 export const SpinnerWrapper = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ export const SpinnerWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.lg};
   box-shadow: ${({ theme }) => theme.shadows.card};
-`
+`;
 
 export const Spinner = styled.div`
   width: 32px;
@@ -45,10 +45,10 @@ export const Spinner = styled.div`
   @media (prefers-reduced-motion: reduce) {
     animation-duration: 1.6s;
   }
-`
+`;
 
 export const Message = styled.p`
   color: ${({ theme }) => theme.colors.inkMuted};
   font-size: 1rem;
   text-align: center;
-`
+`;

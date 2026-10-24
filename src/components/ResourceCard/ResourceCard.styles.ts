@@ -1,8 +1,9 @@
-import { Card } from '@/design-system'
-import styled from 'styled-components'
+import styled from 'styled-components';
+
+import { Card } from '@/design-system';
 
 export const StyledCard = styled(Card)<{
-  $disabled?: boolean
+  $disabled?: boolean;
 }>`
   display: flex;
   flex-direction: column;
@@ -30,17 +31,17 @@ export const StyledCard = styled(Card)<{
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 2px;
   }
-`
+`;
 
 export const Header = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
-`
+`;
 
 export const HeaderInfo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
-`
+`;
 
 export const IconBox = styled.div`
   display: flex;
@@ -57,7 +58,7 @@ export const IconBox = styled.div`
   font-size: 18px;
 
   flex-shrink: 0;
-`
+`;
 
 export const Title = styled.h3`
   margin: 0 0 ${({ theme }) => theme.spacing.xs};
@@ -68,7 +69,7 @@ export const Title = styled.h3`
   font-weight: 700;
 
   color: ${({ theme }) => theme.colors.inkStrong};
-`
+`;
 
 export const Content = styled.div`
   display: flex;
@@ -76,7 +77,7 @@ export const Content = styled.div`
   gap: ${({ theme }) => theme.spacing.xs};
 
   flex: 1;
-`
+`;
 
 export const Row = styled.div`
   display: flex;
@@ -90,13 +91,13 @@ export const Row = styled.div`
   &:last-child {
     border-bottom: none;
   }
-`
+`;
 
 export const Label = styled.span`
   color: ${({ theme }) => theme.colors.inkMuted};
 
   font-size: 13px;
-`
+`;
 
 export const Value = styled.span`
   color: ${({ theme }) => theme.colors.inkStrong};
@@ -105,14 +106,14 @@ export const Value = styled.span`
   font-weight: 600;
 
   text-align: right;
-`
+`;
 
 export const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
 
   margin-top: ${({ theme }) => theme.spacing.lg};
-`
+`;
 
 export const StatusBadge = styled.span<{ $completed: boolean }>`
   display: inline-flex;
@@ -132,7 +133,7 @@ export const StatusBadge = styled.span<{ $completed: boolean }>`
     `color-mix(in srgb, ${
       $completed ? theme.colors.success : theme.colors.warning
     } 12%, ${theme.colors.surface})`};
-`
+`;
 
 export const ActionButton = styled.button`
   border: none;
@@ -158,4 +159,4 @@ export const ActionButton = styled.button`
     opacity: 0.5;
     pointer-events: none;
   }
-`
+`;

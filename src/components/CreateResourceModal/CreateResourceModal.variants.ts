@@ -1,14 +1,17 @@
-import type { ResourceNameStatus } from './CreateResourceModal.types'
+import type { ResourceNameStatus } from './CreateResourceModal.types';
 
 interface StatusContent {
-  emoji: string
-  text: string
-  submitLabel: string
+  emoji: string;
+  text: string;
+  submitLabel: string;
 }
 
-export const INVALID_CHARS_REGEX = /[^A-Za-z0-9 -]/g
+export const INVALID_CHARS_REGEX = /[^A-Za-z0-9 -]/g;
 
-export const resourceNameStatusContent: Record<ResourceNameStatus, StatusContent> = {
+export const resourceNameStatusContent: Record<
+  ResourceNameStatus,
+  StatusContent
+> = {
   empty: {
     emoji: '😶',
     text: 'Waiting for a title',
@@ -19,8 +22,8 @@ export const resourceNameStatusContent: Record<ResourceNameStatus, StatusContent
     text: 'Ready to create',
     submitLabel: '🚀 Create Resource',
   },
-}
+};
 
 export function getResourceNameStatus(resourceName = ''): ResourceNameStatus {
-  return resourceName.trim() ? 'ready' : 'empty'
+  return resourceName.trim() ? 'ready' : 'empty';
 }

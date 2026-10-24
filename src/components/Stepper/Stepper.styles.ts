@@ -1,6 +1,7 @@
-import styled, { css } from 'styled-components'
-import type { StepStatus } from './Stepper.types'
-import { stepStatusColors } from './Stepper.variants'
+import styled, { css } from 'styled-components';
+
+import type { StepStatus } from './Stepper.types';
+import { stepStatusColors } from './Stepper.variants';
 
 export const List = styled.ol`
   display: grid;
@@ -10,7 +11,7 @@ export const List = styled.ol`
   padding: 0;
   margin: 0;
   list-style: none;
-`
+`;
 
 export const Item = styled.li<{ $status: StepStatus }>`
   display: flex;
@@ -24,7 +25,7 @@ export const Item = styled.li<{ $status: StepStatus }>`
   background: ${({ theme }) => theme.colors.surface};
 
   box-shadow: ${({ theme }) => theme.shadows.card};
-`
+`;
 
 export const Circle = styled.div<{ $status: StepStatus }>`
   display: flex;
@@ -39,14 +40,14 @@ export const Circle = styled.div<{ $status: StepStatus }>`
   margin-bottom: ${({ theme }) => theme.spacing.md};
 
   ${({ theme, $status }) => {
-    const { background, color } = stepStatusColors[$status]
+    const { background, color } = stepStatusColors[$status];
 
     return css`
       background: ${theme.colors[background]};
       color: ${theme.colors[color]};
-    `
+    `;
   }}
-`
+`;
 
 export const StatusLabel = styled.span<{ $status: StepStatus }>`
   margin-top: ${({ theme }) => theme.spacing.sm};
@@ -60,7 +61,7 @@ export const StatusLabel = styled.span<{ $status: StepStatus }>`
       : $status === 'active'
         ? theme.colors.primary
         : theme.colors.inkMuted};
-`
+`;
 
 export const Title = styled.h3`
   margin: 0;
@@ -71,7 +72,7 @@ export const Title = styled.h3`
   color: ${({ theme }) => theme.colors.inkStrong};
 
   text-align: center;
-`
+`;
 
 export const Icon = styled.img`
   width: 24px;
@@ -79,4 +80,4 @@ export const Icon = styled.img`
 
   object-fit: contain;
   pointer-events: none;
-`
+`;

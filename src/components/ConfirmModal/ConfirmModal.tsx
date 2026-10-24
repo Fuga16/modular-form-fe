@@ -1,7 +1,8 @@
-import { Modal } from '../Modal'
-import { Button } from '@/design-system'
-import { Actions, Description } from './ConfirmModal.styles'
-import type { ConfirmModalProps } from './ConfirmModal.types'
+import { Modal } from '../Modal';
+
+import { Actions, Description } from './ConfirmModal.styles';
+import type { ConfirmModalProps } from './ConfirmModal.types';
+import { Button } from '@/design-system';
 
 export function ConfirmModal({
   isOpen,
@@ -15,7 +16,11 @@ export function ConfirmModal({
   isConfirmDisabled = false,
 }: ConfirmModalProps) {
   return (
-    <Modal title={title} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      title={title}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       {children && <Description>{children}</Description>}
 
       <Actions>
@@ -38,5 +43,5 @@ export function ConfirmModal({
         </Button>
       </Actions>
     </Modal>
-  )
+  );
 }

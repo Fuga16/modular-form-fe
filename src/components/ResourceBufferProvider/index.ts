@@ -1,1 +1,1 @@
-export { ResourceBufferProvider } from './ResourceBufferProvider'
+export { ResourceBufferProvider } from './ResourceBufferProvider';

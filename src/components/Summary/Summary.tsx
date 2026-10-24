@@ -8,13 +8,13 @@ import {
   SummaryStatus,
   SummaryTitle,
   SummaryValue,
-} from './Summary.styles'
-import { isModuleCompleted } from '@/utils/isModuleCompleted'
-import type { SummaryProps } from './Summary.types'
+} from './Summary.styles';
+import type { SummaryProps } from './Summary.types';
+import { isModuleCompleted } from '@/utils/isModuleCompleted';
 
 export function Summary({ resource }: SummaryProps) {
-  const basicInfoCompleted = isModuleCompleted(resource.basicInfo)
-  const projectDetailsCompleted = isModuleCompleted(resource.projectDetails)
+  const basicInfoCompleted = isModuleCompleted(resource.basicInfo);
+  const projectDetailsCompleted = isModuleCompleted(resource.projectDetails);
 
   const steps = [
     {
@@ -80,7 +80,7 @@ export function Summary({ resource }: SummaryProps) {
         },
       ],
     },
-  ]
+  ];
 
   return (
     <SummaryGrid>
@@ -108,5 +108,5 @@ export function Summary({ resource }: SummaryProps) {
         </SummaryCard>
       ))}
     </SummaryGrid>
-  )
+  );
 }

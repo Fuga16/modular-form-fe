@@ -1,18 +1,6 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useState } from 'react';
 
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb'
-import { ConfirmModal } from '@/components/ConfirmModal'
-import { LoadingState } from '@/components/LoadingState'
-import { ResourceCard } from '@/components/ResourceCard'
-import { Stepper } from '@/components/Stepper'
-
-import { useProvisionResourceMutation } from '@/hooks/queries/useProvisionResourceMutation'
-import { useResourceQuery } from '@/hooks/queries/useResourceQuery'
-
-import { getBreadcrumbs } from '@/utils/getBreadcrumbs'
-
-import { buildDetailsCards } from './ResourceDetailsPage.cards'
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   CardGrid,
@@ -20,53 +8,63 @@ import {
   PageLayout,
   PageSubtitle,
   PageTitle,
-} from '../PageLayout.styles'
-import { CardContainer } from './ResourceDetailsPage.styles'
+} from '../PageLayout.styles';
+
+import { buildDetailsCards } from './ResourceDetailsPage.cards';
+import { CardContainer } from './ResourceDetailsPage.styles';
+import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
+import { ConfirmModal } from '@/components/ConfirmModal';
+import { LoadingState } from '@/components/LoadingState';
+import { ResourceCard } from '@/components/ResourceCard';
+import { Stepper } from '@/components/Stepper';
+import { useProvisionResourceMutation } from '@/hooks/queries/useProvisionResourceMutation';
+import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
+import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
 export function ResourceDetailsPage() {
-  const { resourceId } = useParams()
-  const navigate = useNavigate()
+  const { resourceId } = useParams();
+  const navigate = useNavigate();
 
-  const [isProvisionModalOpen, setProvisionModalOpen] = useState(false)
+  const [isProvisionModalOpen, setProvisionModalOpen] = useState(false);
 
-  const { data: resource, status } = useResourceQuery(resourceId)
-  const provisionMutation = useProvisionResourceMutation(resourceId)
+  const { data: resource, status } = useResourceQuery(resourceId);
+  const provisionMutation = useProvisionResourceMutation(resourceId);
 
   if (!resourceId) {
-    return null
+    return null;
   }
 
   if (status === 'pending') {
-    return <LoadingState />
+    return <LoadingState />;
   }
 
   if (status === 'error' || !resource) {
-    return <div>Failed to load resource</div>
+    return <div>Failed to load resource</div>;
   }
 
   const handleOpenProvisionModal = () => {
-    setProvisionModalOpen(true)
-  }
+    setProvisionModalOpen(true);
+  };
 
   const handleCloseProvisionModal = () => {
-    setProvisionModalOpen(false)
-  }
+    setProvisionModalOpen(false);
+  };
 
   const handleConfirmProvision = () => {
     provisionMutation.mutate(undefined, {
       onSuccess: () => {
-        handleCloseProvisionModal()
-        navigate(`/resources/${resourceId}/details`)
+        handleCloseProvisionModal();
+        navigate(`/resources/${resourceId}/details`);
       },
-    })
-  }
+    });
+  };
 
   const cards = buildDetailsCards({
     resource,
     resourceId,
     navigate,
     onProvision: handleOpenProvisionModal,
-  })
+  });
 
   return (
     <PageLayout>
@@ -97,7 +95,10 @@ export function ResourceDetailsPage() {
       <CardGrid>
         <CardContainer>
           {cards.map((card) => (
-            <ResourceCard key={card.title} {...card} />
+            <ResourceCard
+              key={card.title}
+              {...card}
+            />
           ))}
         </CardContainer>
       </CardGrid>
@@ -115,7 +116,7 @@ export function ResourceDetailsPage() {
         provisioning process for this resource.
       </ConfirmModal>
     </PageLayout>
-  )
+  );
 }
 
-export default ResourceDetailsPage
+export default ResourceDetailsPage;

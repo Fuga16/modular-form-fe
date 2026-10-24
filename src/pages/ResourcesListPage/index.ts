@@ -1,1 +1,1 @@
-export { ResourcesListPage } from './ResourcesListPage'
+export { ResourcesListPage } from './ResourcesListPage';

@@ -1,13 +1,13 @@
-import { mapToOptions } from '@/utils/mapToOptions'
-import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types'
-import { RESOURCE_PRIORITY_VALUES } from '@/constants/ResourcePriority'
-import { FIELD_TOOLTIPS } from '@/constants/tooltips'
+import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
+import { RESOURCE_PRIORITY_VALUES } from '@/constants/ResourcePriority';
+import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import { mapToOptions } from '@/utils/mapToOptions';
 
-const INVALID_DESCRIPTION_CHARS = /[^A-Za-z0-9 -]/g
-const INVALID_OWNER_CHARS = /[^A-Za-z ]/g
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const INVALID_DESCRIPTION_CHARS = /[^A-Za-z0-9 -]/g;
+const INVALID_OWNER_CHARS = /[^A-Za-z ]/g;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const { description, email, owner } = FIELD_TOOLTIPS
+const { description, email, owner } = FIELD_TOOLTIPS;
 
 export const basicInfoFieldsConfig: FieldConfig[] = [
   {
@@ -40,4 +40,4 @@ export const basicInfoFieldsConfig: FieldConfig[] = [
     type: 'select',
     options: mapToOptions(RESOURCE_PRIORITY_VALUES),
   },
-]
+];

@@ -1,16 +1,16 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 import {
-  Container,
   Card,
-  Title,
-  Subtitle,
+  Container,
   Description,
   HomeButton,
-} from './NotFoundPage.styles'
+  Subtitle,
+  Title,
+} from './NotFoundPage.styles';
 
 const NotFoundPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -23,10 +23,12 @@ const NotFoundPage = () => {
           The page you are looking for does not exist or may have been moved.
         </Description>
 
-        <HomeButton onClick={() => navigate('/resources')}>Go to Resources</HomeButton>
+        <HomeButton onClick={() => navigate('/resources')}>
+          Go to Resources
+        </HomeButton>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
-export default NotFoundPage
+export default NotFoundPage;

@@ -1,17 +1,17 @@
-import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 
-import { showErrorToast } from '@/utils/toast'
+import { showErrorToast } from '@/utils/toast';
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError(error) {
-      showErrorToast(error)
+      showErrorToast(error);
     },
   }),
 
   mutationCache: new MutationCache({
     onError(error) {
-      showErrorToast(error)
+      showErrorToast(error);
     },
   }),
 
@@ -21,4 +21,4 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
-})
+});

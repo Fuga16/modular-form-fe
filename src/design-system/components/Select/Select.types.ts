@@ -1,26 +1,26 @@
-import type { SelectHTMLAttributes } from 'react'
+import type { SelectHTMLAttributes } from 'react';
 
 export interface SelectOption {
   /** Value submitted in forms. */
-  value: string
+  value: string;
   /** Visible label for the option. */
-  label: string
+  label: string;
 }
 
 /** Props for the Select component. */
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   /** Optional label shown above the field. */
-  label?: string
+  label?: string;
   /** Legacy helper alias for backward compatibility. */
-  hint?: string
+  hint?: string;
   /** Helper text shown below the field. */
-  helperText?: string
+  helperText?: string;
   /** Error message shown below the field. */
-  error?: string
+  error?: string;
   /** Optional tooltip text displayed from the label icon. */
-  tooltip?: string
+  tooltip?: string;
   /** Field interaction state. */
-  state?: 'normal' | 'disabled' | 'locked'
+  state?: 'normal' | 'disabled' | 'locked';
   /** Options to render. */
-  options: SelectOption[]
+  options: SelectOption[];
 }

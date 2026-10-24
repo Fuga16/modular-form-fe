@@ -1,5 +1,5 @@
-import type { FieldConfig } from '../FormFieldsRenderer/FormFieldsRenderer.types'
+import type { FieldConfig } from '../FormFieldsRenderer/FormFieldsRenderer.types';
 
 export interface FiltersBlockProps {
-  config: FieldConfig[]
+  config: FieldConfig[];
 }

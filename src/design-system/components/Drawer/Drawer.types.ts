@@ -1,13 +1,13 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 /** Props for the Drawer component. */
 export interface DrawerProps {
   /** Drawer title shown in the header. */
-  title: string
+  title: string;
   /** Controls visibility. */
-  isOpen: boolean
+  isOpen: boolean;
   /** Called when the drawer should close. */
-  onClose: () => void
+  onClose: () => void;
   /** Drawer content. */
-  children: ReactNode
+  children: ReactNode;
 }

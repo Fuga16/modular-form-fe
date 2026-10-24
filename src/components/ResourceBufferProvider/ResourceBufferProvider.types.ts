@@ -1,20 +1,23 @@
-import type { BasicInfo, ProjectDetails } from '@/api/types'
+import type { BasicInfo, ProjectDetails } from '@/api/types';
 
 export type ResourceBufferItem = {
-  basicInfo?: Partial<BasicInfo>
-  projectDetails?: Partial<ProjectDetails>
-}
+  basicInfo?: Partial<BasicInfo>;
+  projectDetails?: Partial<ProjectDetails>;
+};
 
-export type ResourceBuffer = Record<string, ResourceBufferItem>
+export type ResourceBuffer = Record<string, ResourceBufferItem>;
 
 export interface ResourceBufferContextValue {
-  buffer: ResourceBuffer
+  buffer: ResourceBuffer;
 
-  getBuffer: (resourceId: string) => ResourceBufferItem | undefined
+  getBuffer: (resourceId: string) => ResourceBufferItem | undefined;
 
-  updateBasicInfo: (resourceId: string, data: Partial<BasicInfo>) => void
+  updateBasicInfo: (resourceId: string, data: Partial<BasicInfo>) => void;
 
-  updateProjectDetails: (resourceId: string, data: Partial<ProjectDetails>) => void
+  updateProjectDetails: (
+    resourceId: string,
+    data: Partial<ProjectDetails>,
+  ) => void;
 
-  clearBuffer: (resourceId: string) => void
+  clearBuffer: (resourceId: string) => void;
 }

@@ -1,36 +1,36 @@
-import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types'
-import { sanitizePaginationParams } from './sanitizePaginationParams'
-import { sanitizeSortParams } from './sanitizeSortParams'
+import { sanitizePaginationParams } from './sanitizePaginationParams';
+import { sanitizeSortParams } from './sanitizeSortParams';
+import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 
 export const sanitizeSearchParams = (
   searchParams: URLSearchParams,
   config: FieldConfig[],
 ) => {
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
 
   config.forEach((field) => {
-    const value = searchParams.get(field.name)
+    const value = searchParams.get(field.name);
 
     if (!value) {
-      return
+      return;
     }
 
     const sanitized =
-      'sanitize' in field && field.sanitize ? field.sanitize(value) : value
+      'sanitize' in field && field.sanitize ? field.sanitize(value) : value;
 
-    params.set(field.name, sanitized)
-  })
+    params.set(field.name, sanitized);
+  });
 
-  const { page, pageSize } = sanitizePaginationParams(searchParams)
+  const { page, pageSize } = sanitizePaginationParams(searchParams);
 
-  params.set('page', page)
-  params.set('pageSize', pageSize)
+  params.set('page', page);
+  params.set('pageSize', pageSize);
 
-  const sortOrder = sanitizeSortParams(searchParams)
+  const sortOrder = sanitizeSortParams(searchParams);
 
   if (sortOrder) {
-    params.set('sortOrder', sortOrder)
+    params.set('sortOrder', sortOrder);
   }
 
-  return params
-}
+  return params;
+};

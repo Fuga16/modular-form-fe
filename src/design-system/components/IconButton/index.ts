@@ -1,6 +1,6 @@
-export { IconButton } from './IconButton'
+export { IconButton } from './IconButton';
 export type {
-	IconButtonProps,
-	IconButtonSize,
-	IconButtonState,
-} from './IconButton.types'
+  IconButtonProps,
+  IconButtonSize,
+  IconButtonState,
+} from './IconButton.types';

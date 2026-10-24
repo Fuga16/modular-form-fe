@@ -1,22 +1,23 @@
-import { useSearchParams } from 'react-router-dom'
-import { Button } from '@/design-system'
-import { updateSearchParams } from '@/utils/updateSearchParams'
-import { PageInput } from './PageInput'
-import { PageSizeSelect } from './PageSizeSelect'
-import { Container, Status } from './Pagination.styles'
-import type { PaginationProps } from './Pagination.types'
+import { useSearchParams } from 'react-router-dom';
+
+import { PageInput } from './PageInput';
+import { PageSizeSelect } from './PageSizeSelect';
+import { Container, Status } from './Pagination.styles';
+import type { PaginationProps } from './Pagination.types';
+import { Button } from '@/design-system';
+import { updateSearchParams } from '@/utils/updateSearchParams';
 
 /** Pagination controls synced with URL search params. */
 export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const updatePage = (nextPage: number) => {
     setSearchParams(
       updateSearchParams(searchParams, {
         page: String(nextPage),
       }),
-    )
-  }
+    );
+  };
 
   const updatePageSize = (nextPageSize: number) => {
     setSearchParams(
@@ -24,8 +25,8 @@ export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
         page: '1',
         pageSize: String(nextPageSize),
       }),
-    )
-  }
+    );
+  };
 
   return (
     <Container aria-label="Pagination">
@@ -37,13 +38,20 @@ export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
         Prev
       </Button>
 
-      <PageInput page={page} totalPages={totalPages} onChange={updatePage} />
+      <PageInput
+        page={page}
+        totalPages={totalPages}
+        onChange={updatePage}
+      />
 
       <Status aria-live="polite">
         {page} / {totalPages}
       </Status>
 
-      <PageSizeSelect value={pageSize} onChange={updatePageSize} />
+      <PageSizeSelect
+        value={pageSize}
+        onChange={updatePageSize}
+      />
 
       <Button
         variant="secondary"
@@ -53,5 +61,5 @@ export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
         Next
       </Button>
     </Container>
-  )
+  );
 }

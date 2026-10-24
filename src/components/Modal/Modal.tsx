@@ -1,60 +1,62 @@
-import { useEffect, useRef } from 'react'
-import { createPortal } from 'react-dom'
-import { AnimatePresence } from 'framer-motion'
+import { useEffect, useRef } from 'react';
 
-import { IconButton } from '@/design-system'
+import { createPortal } from 'react-dom';
 
-import { Content, Header, Overlay, Panel, Title } from './Modal.styles'
+import { AnimatePresence } from 'framer-motion';
 
-import { OVERLAY_ANIMATION, PANEL_ANIMATION } from './Modal.constants'
-
-import type { ModalProps } from './Modal.types'
+import { OVERLAY_ANIMATION, PANEL_ANIMATION } from './Modal.constants';
+import { Content, Header, Overlay, Panel, Title } from './Modal.styles';
+import type { ModalProps } from './Modal.types';
+import { IconButton } from '@/design-system';
 
 export function Modal({ title, isOpen, onClose, children }: ModalProps) {
-  const panelRef = useRef<HTMLDivElement>(null)
-  const previouslyFocused = useRef<HTMLElement | null>(null)
+  const panelRef = useRef<HTMLDivElement>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
-    document.body.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
-    previouslyFocused.current = document.activeElement as HTMLElement
-    panelRef.current?.focus()
-  }, [isOpen])
+    previouslyFocused.current = document.activeElement as HTMLElement;
+    panelRef.current?.focus();
+  }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose()
+        onClose();
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, onClose])
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   return createPortal(
     <AnimatePresence
       onExitComplete={() => {
-        previouslyFocused.current?.focus()
+        previouslyFocused.current?.focus();
       }}
     >
       {isOpen && (
-        <Overlay {...OVERLAY_ANIMATION} onClick={onClose}>
+        <Overlay
+          {...OVERLAY_ANIMATION}
+          onClick={onClose}
+        >
           <Panel
             {...PANEL_ANIMATION}
             ref={panelRef}
@@ -83,7 +85,7 @@ export function Modal({ title, isOpen, onClose, children }: ModalProps) {
       )}
     </AnimatePresence>,
     document.body,
-  )
+  );
 }
 
-export default Modal
+export default Modal;

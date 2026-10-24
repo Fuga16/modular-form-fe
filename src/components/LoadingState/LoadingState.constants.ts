@@ -1,1 +1,1 @@
-export const DEFAULT_LOADING_MESSAGE = 'Loading resources...'
+export const DEFAULT_LOADING_MESSAGE = 'Loading resources...';

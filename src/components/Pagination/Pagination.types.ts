@@ -1,5 +1,5 @@
 export interface PaginationProps {
-  page: number
-  totalPages: number
-  pageSize: number
+  page: number;
+  totalPages: number;
+  pageSize: number;
 }

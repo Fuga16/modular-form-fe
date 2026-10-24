@@ -1,7 +1,7 @@
-import type { Theme } from '@/design-system/theme/theme'
-import type { StepStatus } from './Stepper.types'
+import type { StepStatus } from './Stepper.types';
+import type { Theme } from '@/design-system/theme/theme';
 
-type ThemeColorKey = keyof Theme['colors']
+type ThemeColorKey = keyof Theme['colors'];
 
 /** Circle background/text color keys (theme.colors) mapped by step status. */
 export const stepStatusColors: Record<
@@ -11,4 +11,4 @@ export const stepStatusColors: Record<
   completed: { background: 'success', color: 'surface' },
   active: { background: 'primary', color: 'surface' },
   locked: { background: 'border', color: 'inkMuted' },
-}
+};

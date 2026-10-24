@@ -1,1 +1,1 @@
-export { ResourceBasicInfoPage } from './ResourceBasicInfoPage'
+export { ResourceBasicInfoPage } from './ResourceBasicInfoPage';

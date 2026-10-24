@@ -1,7 +1,7 @@
-import Progress from '@/assets/spinner.svg'
-import PositiveMark from '@/assets/positive-mark.svg'
-import WarningMark from '@/assets/warning-mark.svg'
-import type { Step } from '@/components/Stepper'
+import PositiveMark from '@/assets/positive-mark.svg';
+import Progress from '@/assets/spinner.svg';
+import WarningMark from '@/assets/warning-mark.svg';
+import type { Step } from '@/components/Stepper';
 
 export const createStepperSteps = (
   basicInfoCompleted: boolean,
@@ -37,7 +37,11 @@ export const createStepperSteps = (
       basicInfoCompleted && projectDetailsCompleted
         ? 'Ready for Provisioning'
         : 'Waiting for modules',
-    status: basicInfoCompleted && projectDetailsCompleted ? 'completed' : 'locked',
-    icon: basicInfoCompleted && projectDetailsCompleted ? PositiveMark : WarningMark,
+    status:
+      basicInfoCompleted && projectDetailsCompleted ? 'completed' : 'locked',
+    icon:
+      basicInfoCompleted && projectDetailsCompleted
+        ? PositiveMark
+        : WarningMark,
   },
-]
+];

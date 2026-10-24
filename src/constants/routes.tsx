@@ -1,11 +1,13 @@
-import { ResourceLayout } from '@/layouts/ResourceLayout/ResourceLayout'
-import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage'
-import { ResourceBasicInfoPage } from '@/pages/ResourceBasicInfoPage'
-import { ResourceOverviewPage } from '@/pages/ResourceOverviewPage'
-import { ResourceProjectDetailsPage } from '@/pages/ResourceProjectDetailsPage'
-import { ResourceDetailsPage } from '@/pages/ResourcesDetailsPage'
-import { ResourcesListPage } from '@/pages/ResourcesListPage'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { Navigate, createBrowserRouter } from 'react-router-dom';
+
+import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+import { ResourceBasicInfoPage } from '@/pages/ResourceBasicInfoPage';
+import { ResourceOverviewPage } from '@/pages/ResourceOverviewPage';
+import { ResourceProjectDetailsPage } from '@/pages/ResourceProjectDetailsPage';
+import { ResourceDetailsPage } from '@/pages/ResourcesDetailsPage';
+import { ResourcesListPage } from '@/pages/ResourcesListPage';
+
+import { ResourceLayout } from '@/layouts/ResourceLayout/ResourceLayout';
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +15,12 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/resources" replace />,
+        element: (
+          <Navigate
+            to="/resources"
+            replace
+          />
+        ),
       },
       {
         path: 'resources',
@@ -47,4 +54,4 @@ export const router = createBrowserRouter([
     path: '*',
     element: <NotFoundPage />,
   },
-])
+]);

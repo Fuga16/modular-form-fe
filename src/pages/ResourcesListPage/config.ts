@@ -1,12 +1,10 @@
-import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types'
-import type { TableColumn } from '@/components/Table/Table.types'
+import type { ResourceTable } from './ResourcesListPage.types';
+import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
+import type { TableColumn } from '@/components/Table/Table.types';
+import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import { formatIsoDate } from '@/utils/formatIsoDate';
 
-import { formatIsoDate } from '@/utils/formatIsoDate'
-
-import type { ResourceTable } from './ResourcesListPage.types'
-import { FIELD_TOOLTIPS } from '@/constants/tooltips'
-
-const INVALID_RESOURCE_NAME_CHARS = /[^A-Za-z0-9 -]/g
+const INVALID_RESOURCE_NAME_CHARS = /[^A-Za-z0-9 -]/g;
 
 const STATUS_OPTIONS = [
   { label: 'Select status', value: '' },
@@ -18,10 +16,10 @@ const STATUS_OPTIONS = [
     label: 'Completed',
     value: 'completed',
   },
-]
+];
 
 const isoDateConverter = (value: unknown) =>
-  formatIsoDate(typeof value === 'string' ? value : String(value))
+  formatIsoDate(typeof value === 'string' ? value : String(value));
 
 export const filtersConfig: FieldConfig[] = [
   {
@@ -39,7 +37,7 @@ export const filtersConfig: FieldConfig[] = [
     required: false,
     options: STATUS_OPTIONS,
   },
-]
+];
 
 export const tableConfig: TableColumn<ResourceTable>[] = [
   {
@@ -77,4 +75,4 @@ export const tableConfig: TableColumn<ResourceTable>[] = [
     fieldName: 'updatedAt',
     converter: isoDateConverter,
   },
-]
+];

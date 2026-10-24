@@ -1,15 +1,15 @@
-import { useState, type PropsWithChildren } from 'react'
+import { type PropsWithChildren, useState } from 'react';
 
-import type { ResourceBuffer } from './ResourceBufferProvider.types'
-import { ResourceBufferContext } from '@/context/ResourceBufferContext'
-import type { BasicInfo, ProjectDetails } from '@/api/types'
+import type { ResourceBuffer } from './ResourceBufferProvider.types';
+import type { BasicInfo, ProjectDetails } from '@/api/types';
+import { ResourceBufferContext } from '@/context/ResourceBufferContext';
 
 export function ResourceBufferProvider({ children }: PropsWithChildren) {
-  const [buffer, setBuffer] = useState<ResourceBuffer>({})
+  const [buffer, setBuffer] = useState<ResourceBuffer>({});
 
   const getBuffer = (resourceId: string) => {
-    return buffer[resourceId]
-  }
+    return buffer[resourceId];
+  };
 
   const updateBasicInfo = (resourceId: string, data: Partial<BasicInfo>) => {
     setBuffer((prev) => ({
@@ -21,10 +21,13 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
           ...data,
         },
       },
-    }))
-  }
+    }));
+  };
 
-  const updateProjectDetails = (resourceId: string, data: Partial<ProjectDetails>) => {
+  const updateProjectDetails = (
+    resourceId: string,
+    data: Partial<ProjectDetails>,
+  ) => {
     setBuffer((prev) => ({
       ...prev,
       [resourceId]: {
@@ -34,18 +37,18 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
           ...data,
         },
       },
-    }))
-  }
+    }));
+  };
 
   const clearBuffer = (resourceId: string) => {
     setBuffer((prev) => {
-      const next = { ...prev }
+      const next = { ...prev };
 
-      delete next[resourceId]
+      delete next[resourceId];
 
-      return next
-    })
-  }
+      return next;
+    });
+  };
 
   return (
     <ResourceBufferContext.Provider
@@ -59,5 +62,5 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
     >
       {children}
     </ResourceBufferContext.Provider>
-  )
+  );
 }

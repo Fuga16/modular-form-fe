@@ -1,14 +1,14 @@
-import type { NavigateFunction } from 'react-router-dom'
+import type { NavigateFunction } from 'react-router-dom';
 
-import type { Resource } from '@/api/types'
-import type { DetailCardConfig } from './ResourceDetailsPage.types'
-import { isModuleCompleted } from '@/utils/isModuleCompleted'
+import type { DetailCardConfig } from './ResourceDetailsPage.types';
+import type { Resource } from '@/api/types';
+import { isModuleCompleted } from '@/utils/isModuleCompleted';
 
 interface BuildDetailsCardsParams {
-  resource: Resource
-  resourceId: string
-  navigate: NavigateFunction
-  onProvision: () => void
+  resource: Resource;
+  resourceId: string;
+  navigate: NavigateFunction;
+  onProvision: () => void;
 }
 
 export function buildDetailsCards({
@@ -17,9 +17,9 @@ export function buildDetailsCards({
   navigate,
   onProvision,
 }: BuildDetailsCardsParams): DetailCardConfig[] {
-  const basicInfoCompleted = isModuleCompleted(resource.basicInfo)
-  const projectDetailsCompleted = isModuleCompleted(resource.projectDetails)
-  const isCompleted = resource.status === 'completed'
+  const basicInfoCompleted = isModuleCompleted(resource.basicInfo);
+  const projectDetailsCompleted = isModuleCompleted(resource.projectDetails);
+  const isCompleted = resource.status === 'completed';
 
   return [
     {
@@ -61,5 +61,5 @@ export function buildDetailsCards({
       disabled: !basicInfoCompleted || !projectDetailsCompleted || isCompleted,
       actionLabel: 'Provision Resource',
     },
-  ]
+  ];
 }

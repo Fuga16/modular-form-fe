@@ -1,22 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react';
 
-import { CreateResourceModal } from '@/components/CreateResourceModal'
-import { Pagination } from '@/components/Pagination/Pagination'
-import { Table } from '@/components/Table'
-import { Button } from '@/design-system'
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { filtersConfig, tableConfig } from './config'
-import { toResourceTableRow, type ResourceTable } from './ResourcesListPage.types'
-
-import { useResourcesListQuery } from '@/hooks/queries/useResourcesListQuery'
-import { useDeleteResourceMutation } from '@/hooks/queries/useDeleteResourceMutation'
-
-import { getFilterValues } from '@/utils/getDefaultFilterValues'
-import { getQueryParams } from '@/utils/getQueryParams'
-import { sanitizeSearchParams } from '@/utils/sanitizeSearchParams'
-import { updateSearchParams } from '@/utils/updateSearchParams'
+import { FormProvider, useForm } from 'react-hook-form';
 
 import {
   PageActions,
@@ -24,33 +10,52 @@ import {
   PageLayout,
   PageTitle,
   SectionCard,
-} from '@/pages/PageLayout.styles'
-import { Breadcrumb } from '@/components/Breadcrumb'
-import { FiltersBlock } from '@/components/FiltersBlock'
-import { LoadingState } from '@/components/LoadingState'
-import { ConfirmModal } from '@/components/ConfirmModal'
+} from '@/pages/PageLayout.styles';
+
+import {
+  type ResourceTable,
+  toResourceTableRow,
+} from './ResourcesListPage.types';
+import { filtersConfig, tableConfig } from './config';
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { ConfirmModal } from '@/components/ConfirmModal';
+import { CreateResourceModal } from '@/components/CreateResourceModal';
+import { FiltersBlock } from '@/components/FiltersBlock';
+import { LoadingState } from '@/components/LoadingState';
+import { Pagination } from '@/components/Pagination/Pagination';
+import { Table } from '@/components/Table';
+import { Button } from '@/design-system';
+import { useDeleteResourceMutation } from '@/hooks/queries/useDeleteResourceMutation';
+import { useResourcesListQuery } from '@/hooks/queries/useResourcesListQuery';
+import { getFilterValues } from '@/utils/getDefaultFilterValues';
+import { getQueryParams } from '@/utils/getQueryParams';
+import { sanitizeSearchParams } from '@/utils/sanitizeSearchParams';
+import { updateSearchParams } from '@/utils/updateSearchParams';
 
 export const ResourcesListPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [isModalOpen, setModalOpen] = useState(false)
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const [rowToDelete, setRowToDelete] = useState<ReturnType<
     typeof toResourceTableRow
-  > | null>(null)
+  > | null>(null);
 
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const filterValues = useMemo(
     () => getFilterValues(searchParams, filtersConfig),
     [searchParams],
-  )
+  );
 
-  const query = useMemo(() => getQueryParams(searchParams, filtersConfig), [searchParams])
+  const query = useMemo(
+    () => getQueryParams(searchParams, filtersConfig),
+    [searchParams],
+  );
 
   const methods = useForm({
     defaultValues: filterValues,
-  })
+  });
 
   useEffect(() => {
     if (!searchParams.has('page') || !searchParams.has('pageSize')) {
@@ -60,31 +65,31 @@ export const ResourcesListPage = () => {
           pageSize: '10',
         }),
         { replace: true },
-      )
+      );
     }
-  }, [searchParams, setSearchParams])
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
-    const sanitized = sanitizeSearchParams(searchParams, filtersConfig)
+    const sanitized = sanitizeSearchParams(searchParams, filtersConfig);
 
     if (sanitized.toString() !== searchParams.toString()) {
       setSearchParams(sanitized, {
         replace: true,
-      })
+      });
     }
-  }, [searchParams, setSearchParams])
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
-    methods.reset(filterValues)
-  }, [filterValues, methods])
+    methods.reset(filterValues);
+  }, [filterValues, methods]);
 
-  const { data, status } = useResourcesListQuery(query)
-  const deleteResourceMutation = useDeleteResourceMutation()
+  const { data, status } = useResourcesListQuery(query);
+  const deleteResourceMutation = useDeleteResourceMutation();
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
 
-    const requestedPage = Number(query.page)
+    const requestedPage = Number(query.page);
 
     if (
       requestedPage > data.pagination.totalPages &&
@@ -95,40 +100,46 @@ export const ResourcesListPage = () => {
           page: String(data.pagination.page),
         }),
         { replace: true },
-      )
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- react only to fetched data/page changing, not every searchParams/setSearchParams identity
-  }, [data, query.page])
+  }, [data, query.page]);
 
-  const rows = useMemo(() => (data ? data.items.map(toResourceTableRow) : []), [data])
+  const rows = useMemo(
+    () => (data ? data.items.map(toResourceTableRow) : []),
+    [data],
+  );
 
   const handleRequestDelete = (row: ReturnType<typeof toResourceTableRow>) => {
-    setRowToDelete(row)
-  }
+    setRowToDelete(row);
+  };
 
   const handleConfirmDelete = () => {
-    if (!rowToDelete) return
+    if (!rowToDelete) return;
 
     deleteResourceMutation.mutate(String(rowToDelete.resourceId), {
       onSuccess: () => {
-        setRowToDelete(null)
+        setRowToDelete(null);
       },
-    })
-  }
+    });
+  };
 
   if (status === 'pending') {
-    return <LoadingState />
+    return <LoadingState />;
   }
 
   if (status === 'error' || !data) {
-    return <div>Failed to load resources</div>
+    return <div>Failed to load resources</div>;
   }
 
-  const { pagination } = data
+  const { pagination } = data;
 
   return (
     <PageLayout>
-      <CreateResourceModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <CreateResourceModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+      />
       <ConfirmModal
         isOpen={Boolean(rowToDelete)}
         onClose={() => setRowToDelete(null)}
@@ -137,8 +148,9 @@ export const ResourcesListPage = () => {
         confirmLabel="Delete"
         isConfirming={deleteResourceMutation.isPending}
       >
-        Are you sure you want to delete <strong>{rowToDelete?.resourceName}</strong>? This
-        action cannot be undone.
+        Are you sure you want to delete{' '}
+        <strong>{rowToDelete?.resourceName}</strong>? This action cannot be
+        undone.
       </ConfirmModal>
       <PageHeader>
         <PageTitle>Resource Management</PageTitle>
@@ -184,7 +196,7 @@ export const ResourcesListPage = () => {
         />
       </SectionCard>
     </PageLayout>
-  )
-}
+  );
+};
 
-export default ResourcesListPage
+export default ResourcesListPage;

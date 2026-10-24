@@ -1,11 +1,5 @@
-import { useSearchParams } from 'react-router-dom'
-import { Button } from '@/design-system'
-import { getNestedValue } from '@/utils/getNestedValue'
-import { getNextSortOrder } from '@/utils/getNextSortOrder'
-import TopArrow from '@/assets/triangle-top.svg'
-import TopArrowActive from '@/assets/triangle-top-active.svg'
-import DownArrow from '@/assets/triangle-down.svg'
-import DownArrowActive from '@/assets/triangle-down-active.svg'
+import { useSearchParams } from 'react-router-dom';
+
 import {
   ActionsCell,
   ArrowsBlock,
@@ -22,10 +16,17 @@ import {
   SortBlock,
   SortButton,
   StyledTable,
-} from './Table.styles'
-import type { TableProps } from './Table.types'
+} from './Table.styles';
+import type { TableProps } from './Table.types';
+import DownArrowActive from '@/assets/triangle-down-active.svg';
+import DownArrow from '@/assets/triangle-down.svg';
+import TopArrowActive from '@/assets/triangle-top-active.svg';
+import TopArrow from '@/assets/triangle-top.svg';
+import { Button } from '@/design-system';
+import { getNestedValue } from '@/utils/getNestedValue';
+import { getNextSortOrder } from '@/utils/getNextSortOrder';
 
-type SortOrder = 'asc' | 'desc' | null
+type SortOrder = 'asc' | 'desc' | null;
 
 export function Table<T>({
   data,
@@ -35,23 +36,23 @@ export function Table<T>({
   onDeleteRow,
   emptyState,
 }: TableProps<T>) {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const sortOrder = searchParams.get('sortOrder') as SortOrder
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortOrder = searchParams.get('sortOrder') as SortOrder;
 
   const handleSort = (clicked: 'asc' | 'desc') => {
-    const nextSortOrder = getNextSortOrder(sortOrder, clicked)
-    const params = new URLSearchParams(searchParams)
-    params.set('page', '1')
+    const nextSortOrder = getNextSortOrder(sortOrder, clicked);
+    const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
     if (nextSortOrder) {
-      params.set('sortOrder', nextSortOrder)
+      params.set('sortOrder', nextSortOrder);
     } else {
-      params.delete('sortOrder')
+      params.delete('sortOrder');
     }
-    setSearchParams(params)
-  }
+    setSearchParams(params);
+  };
 
-  const colSpan = config.length + (onDeleteRow ? 1 : 0)
-  const isEmpty = data.length === 0
+  const colSpan = config.length + (onDeleteRow ? 1 : 0);
+  const isEmpty = data.length === 0;
 
   return (
     <Scroll>
@@ -95,7 +96,9 @@ export function Table<T>({
                         onClick={() => handleSort('desc')}
                       >
                         <img
-                          src={sortOrder === 'desc' ? DownArrowActive : DownArrow}
+                          src={
+                            sortOrder === 'desc' ? DownArrowActive : DownArrow
+                          }
                           alt=""
                           aria-hidden="true"
                         />
@@ -105,7 +108,12 @@ export function Table<T>({
                 </SortBlock>
               </HeaderCell>
             ))}
-            {onDeleteRow && <HeaderCell scope="col" aria-hidden="true" />}
+            {onDeleteRow && (
+              <HeaderCell
+                scope="col"
+                aria-hidden="true"
+              />
+            )}
           </tr>
         </thead>
         <tbody>
@@ -113,7 +121,9 @@ export function Table<T>({
             <tr>
               <EmptyStateCell colSpan={colSpan}>
                 <EmptyStateWrapper>
-                  {emptyState.icon && <EmptyStateIcon>{emptyState.icon}</EmptyStateIcon>}
+                  {emptyState.icon && (
+                    <EmptyStateIcon>{emptyState.icon}</EmptyStateIcon>
+                  )}
                   <EmptyStateTitle>{emptyState.title}</EmptyStateTitle>
                   {emptyState.description && (
                     <EmptyStateDescription>
@@ -128,7 +138,7 @@ export function Table<T>({
             </tr>
           ) : (
             data.map((item) => {
-              const rowId = getRowId(item)
+              const rowId = getRowId(item);
               return (
                 <Row
                   key={rowId}
@@ -139,12 +149,12 @@ export function Table<T>({
                     const value = getNestedValue(
                       column.fieldName,
                       item as Record<string, unknown>,
-                    )
+                    );
                     const displayValue: React.ReactNode = column.converter
                       ? column.converter(value)
-                      : String(value && value !== '' ? value : '-')
+                      : String(value && value !== '' ? value : '-');
 
-                    return <Cell key={column.fieldName}>{displayValue}</Cell>
+                    return <Cell key={column.fieldName}>{displayValue}</Cell>;
                   })}
                   {onDeleteRow && (
                     <ActionsCell>
@@ -152,8 +162,8 @@ export function Table<T>({
                         variant="secondary"
                         size="small"
                         onClick={(e) => {
-                          e.stopPropagation()
-                          onDeleteRow(item)
+                          e.stopPropagation();
+                          onDeleteRow(item);
                         }}
                       >
                         Delete
@@ -161,11 +171,11 @@ export function Table<T>({
                     </ActionsCell>
                   )}
                 </Row>
-              )
+              );
             })
           )}
         </tbody>
       </StyledTable>
     </Scroll>
-  )
+  );
 }

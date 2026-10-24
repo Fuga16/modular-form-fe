@@ -1,21 +1,22 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
+
 import {
   Field,
   Helper,
   Label,
   LabelRow,
   TooltipIcon,
-} from '@/design-system/components/Select/Select.styles'
+} from '@/design-system/components/Select/Select.styles';
 
-export { Field, Helper, Label, LabelRow, TooltipIcon }
+export { Field, Helper, Label, LabelRow, TooltipIcon };
 
-const TRIGGER_HEIGHT = '48px'
-const DROPDOWN_OFFSET = '6px'
-const DROPDOWN_MAX_HEIGHT = '240px'
+const TRIGGER_HEIGHT = '48px';
+const DROPDOWN_OFFSET = '6px';
+const DROPDOWN_MAX_HEIGHT = '240px';
 
 export const Wrapper = styled.div`
   position: relative;
-`
+`;
 
 export const Trigger = styled.button<{ $hasError: boolean }>`
   width: 100%;
@@ -57,7 +58,7 @@ export const Trigger = styled.button<{ $hasError: boolean }>`
     background: ${({ theme }) => theme.colors.surfaceAlt};
     opacity: 0.7;
   }
-`
+`;
 
 export const Value = styled.span`
   flex: 1;
@@ -67,7 +68,7 @@ export const Value = styled.span`
   white-space: nowrap;
 
   color: ${({ theme }) => theme.colors.ink};
-`
+`;
 
 export const Arrow = styled.span<{ $open: boolean }>`
   margin-left: ${({ theme }) => theme.spacing.sm};
@@ -77,7 +78,7 @@ export const Arrow = styled.span<{ $open: boolean }>`
   transition: transform 0.2s ease;
 
   transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0deg)')};
-`
+`;
 
 export const Dropdown = styled.div`
   position: absolute;
@@ -116,7 +117,7 @@ export const Dropdown = styled.div`
       transform: translateY(0);
     }
   }
-`
+`;
 
 export const DropdownItem = styled.div`
   display: flex;
@@ -134,4 +135,4 @@ export const DropdownItem = styled.div`
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 2px;
   }
-`
+`;

@@ -5,7 +5,7 @@ export const OVERLAY_ANIMATION = {
   transition: {
     duration: 0.2,
   },
-}
+};
 
 export const PANEL_ANIMATION = {
   initial: {
@@ -26,4 +26,4 @@ export const PANEL_ANIMATION = {
   transition: {
     duration: 0.2,
   },
-}
+};

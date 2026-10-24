@@ -1,13 +1,13 @@
-import { SELECT_TEAM_OPTIONS } from '@/constants/TeamOptions'
-import { RESOURCE_CATEGORY_VALUES } from '@/constants/ResourceCategory'
-import { mapToOptions } from '@/utils/mapToOptions'
-import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types'
-import { FIELD_TOOLTIPS } from '@/constants/tooltips'
+import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
+import { RESOURCE_CATEGORY_VALUES } from '@/constants/ResourceCategory';
+import { SELECT_TEAM_OPTIONS } from '@/constants/TeamOptions';
+import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import { mapToOptions } from '@/utils/mapToOptions';
 
-const DIGITS_ONLY = /\D/g
-const INVALID_PROJECT_NAME_CHARS = /[^A-Za-z0-9 -]/g
+const DIGITS_ONLY = /\D/g;
+const INVALID_PROJECT_NAME_CHARS = /[^A-Za-z0-9 -]/g;
 
-const { budget, projectName } = FIELD_TOOLTIPS
+const { budget, projectName } = FIELD_TOOLTIPS;
 
 export const projectDetailsConfig: FieldConfig[] = [
   {
@@ -36,4 +36,4 @@ export const projectDetailsConfig: FieldConfig[] = [
     tooltip: projectName,
     sanitize: (value: string) => value.replace(INVALID_PROJECT_NAME_CHARS, ''),
   },
-]
+];

@@ -1,10 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query';
 
-import { provisionResource } from '@/api/resources'
-import { useApiMutation } from '@/hooks/useApiMutation'
+import { provisionResource } from '@/api/resources';
+import { useApiMutation } from '@/hooks/useApiMutation';
 
 export function useProvisionResourceMutation(resourceId: string | undefined) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useApiMutation({
     mutationFn: () => provisionResource(resourceId!),
@@ -14,7 +14,7 @@ export function useProvisionResourceMutation(resourceId: string | undefined) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['resource', resourceId],
-      })
+      });
     },
-  })
+  });
 }

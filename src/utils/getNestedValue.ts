@@ -1,15 +1,18 @@
-export const getNestedValue = (path: string, data: Record<string, unknown>): unknown => {
-  const [current, ...rest] = path.split('.')
+export const getNestedValue = (
+  path: string,
+  data: Record<string, unknown>,
+): unknown => {
+  const [current, ...rest] = path.split('.');
 
-  const value = data[current]
+  const value = data[current];
 
   if (!rest.length) {
-    return value ?? '-'
+    return value ?? '-';
   }
 
   if (value === null || value === undefined || typeof value !== 'object') {
-    return '-'
+    return '-';
   }
 
-  return getNestedValue(rest.join('.'), value as Record<string, unknown>)
-}
+  return getNestedValue(rest.join('.'), value as Record<string, unknown>);
+};

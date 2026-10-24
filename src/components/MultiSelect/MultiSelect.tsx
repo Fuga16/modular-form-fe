@@ -1,8 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-
-import { Checkbox } from '@/design-system'
-
-import type { MultiSelectProps } from './MultiSelect.types'
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   Arrow,
@@ -16,7 +12,9 @@ import {
   Trigger,
   Value,
   Wrapper,
-} from './MultiSelect.styles'
+} from './MultiSelect.styles';
+import type { MultiSelectProps } from './MultiSelect.types';
+import { Checkbox } from '@/design-system';
 
 export function MultiSelect({
   label,
@@ -29,31 +27,36 @@ export function MultiSelect({
   onChange,
   placeholder = 'Select options',
 }: MultiSelectProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
-  const wrapperRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleToggle = (optionValue: string) => {
-    const isSelected = value.includes(optionValue)
+    const isSelected = value.includes(optionValue);
 
     onChange(
-      isSelected ? value.filter((item) => item !== optionValue) : [...value, optionValue],
-    )
-  }
+      isSelected
+        ? value.filter((item) => item !== optionValue)
+        : [...value, optionValue],
+    );
+  };
 
   const selectedLabels = useMemo(
     () =>
@@ -61,9 +64,10 @@ export function MultiSelect({
         .filter((option) => value.includes(option.value))
         .map((option) => option.label),
     [options, value],
-  )
+  );
 
-  const displayValue = selectedLabels.length > 0 ? selectedLabels.join(', ') : placeholder
+  const displayValue =
+    selectedLabels.length > 0 ? selectedLabels.join(', ') : placeholder;
 
   return (
     <Field>
@@ -72,7 +76,10 @@ export function MultiSelect({
           <Label>{label}</Label>
 
           {tooltip && (
-            <TooltipIcon aria-label={tooltip} data-tooltip={tooltip}>
+            <TooltipIcon
+              aria-label={tooltip}
+              data-tooltip={tooltip}
+            >
               i
             </TooltipIcon>
           )}
@@ -96,7 +103,10 @@ export function MultiSelect({
         {isOpen && !disabled && (
           <Dropdown role="listbox">
             {options.map((option) => (
-              <DropdownItem key={option.value} onClick={() => handleToggle(option.value)}>
+              <DropdownItem
+                key={option.value}
+                onClick={() => handleToggle(option.value)}
+              >
                 <Checkbox
                   label={option.label}
                   checked={value.includes(option.value)}
@@ -113,5 +123,5 @@ export function MultiSelect({
         <Helper $hasError={Boolean(error)}>{error ?? helperText}</Helper>
       )}
     </Field>
-  )
+  );
 }

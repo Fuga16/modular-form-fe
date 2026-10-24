@@ -1,2 +1,2 @@
-export { ResourceCard } from './ResourceCard'
-export type { ResourceCardProps } from './ResourceCard.types'
+export { ResourceCard } from './ResourceCard';
+export type { ResourceCardProps } from './ResourceCard.types';

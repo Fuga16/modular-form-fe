@@ -1,16 +1,16 @@
-import type { Resource } from '@/api/types'
+import type { Resource } from '@/api/types';
 
-export type StepStatus = 'done' | 'working' | 'pending'
+export type StepStatus = 'done' | 'working' | 'pending';
 
 export interface Step {
-  title: string
+  title: string;
   information: {
-    label: string
-    value: string
-  }[]
-  status: StepStatus
+    label: string;
+    value: string;
+  }[];
+  status: StepStatus;
 }
 
 export interface SummaryProps {
-  resource: Resource
+  resource: Resource;
 }

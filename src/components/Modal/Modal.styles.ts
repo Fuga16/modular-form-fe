@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
-import styled from 'styled-components'
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const Overlay = styled(motion.div)`
   position: fixed;
@@ -15,7 +15,7 @@ export const Overlay = styled(motion.div)`
   backdrop-filter: blur(4px);
 
   z-index: 1000;
-`
+`;
 
 export const Panel = styled(motion.div)`
   width: 100%;
@@ -34,7 +34,7 @@ export const Panel = styled(motion.div)`
   box-shadow: ${({ theme }) => theme.shadows.raised};
 
   padding: ${({ theme }) => theme.spacing.xl};
-`
+`;
 
 export const Header = styled.div`
   display: flex;
@@ -44,7 +44,7 @@ export const Header = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
 
   margin-bottom: ${({ theme }) => theme.spacing.lg};
-`
+`;
 
 export const Title = styled.h2`
   margin: 0;
@@ -55,7 +55,7 @@ export const Title = styled.h2`
   line-height: 1.2;
 
   color: ${({ theme }) => theme.colors.inkStrong};
-`
+`;
 
 export const Content = styled.div`
   display: flex;
@@ -63,4 +63,4 @@ export const Content = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
 
   color: ${({ theme }) => theme.colors.ink};
-`
+`;

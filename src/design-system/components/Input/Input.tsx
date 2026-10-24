@@ -1,5 +1,5 @@
-import { useId } from 'react'
-import type { InputProps } from './Input.types'
+import { useId } from 'react';
+
 import {
   Control,
   ControlShell,
@@ -10,7 +10,8 @@ import {
   LockIcon,
   Textarea,
   TooltipIcon,
-} from './Input.styles'
+} from './Input.styles';
+import type { InputProps } from './Input.types';
 
 /**
  * Text input or textarea field with label, helper/error text, tooltip, and locked state support.
@@ -28,13 +29,14 @@ export function Input({
   disabled,
   ...props
 }: InputProps) {
-  const generatedId = useId()
-  const inputId = id ?? generatedId
-  const resolvedState = disabled ? 'disabled' : state
-  const isLocked = resolvedState === 'locked'
-  const isDisabled = resolvedState === 'disabled' || isLocked
-  const resolvedHelperText = helperText ?? hint
-  const ariaDescribedBy = resolvedHelperText || error ? `${inputId}-help` : undefined
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
+  const resolvedState = disabled ? 'disabled' : state;
+  const isLocked = resolvedState === 'locked';
+  const isDisabled = resolvedState === 'disabled' || isLocked;
+  const resolvedHelperText = helperText ?? hint;
+  const ariaDescribedBy =
+    resolvedHelperText || error ? `${inputId}-help` : undefined;
 
   return (
     <Field>
@@ -42,7 +44,10 @@ export function Input({
         <LabelRow>
           <Label htmlFor={inputId}>{label}</Label>
           {tooltip ? (
-            <TooltipIcon aria-label={tooltip} data-tooltip={tooltip}>
+            <TooltipIcon
+              aria-label={tooltip}
+              data-tooltip={tooltip}
+            >
               i
             </TooltipIcon>
           ) : null}
@@ -76,10 +81,13 @@ export function Input({
         {isLocked ? <LockIcon aria-hidden="true">🔒</LockIcon> : null}
       </ControlShell>
       {(resolvedHelperText || error) && (
-        <Helper id={`${inputId}-help`} $hasError={Boolean(error)}>
+        <Helper
+          id={`${inputId}-help`}
+          $hasError={Boolean(error)}
+        >
           {error ?? resolvedHelperText}
         </Helper>
       )}
     </Field>
-  )
+  );
 }

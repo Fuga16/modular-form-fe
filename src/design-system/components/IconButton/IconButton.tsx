@@ -1,5 +1,5 @@
-import { BaseIconButton } from './IconButton.styles'
-import type { IconButtonProps, IconButtonState } from './IconButton.types'
+import { BaseIconButton } from './IconButton.styles';
+import type { IconButtonProps, IconButtonState } from './IconButton.types';
 
 /**
  * Compact button for icon-only actions with variant, size, and state controls.
@@ -13,9 +13,11 @@ export function IconButton({
   disabled,
   ...props
 }: IconButtonProps) {
-  const resolvedState: IconButtonState = state ?? (disabled ? 'disabled' : 'normal')
-  const isDisabled = disabled || resolvedState === 'disabled' || resolvedState === 'locked'
-  const content = resolvedState === 'locked' ? lockedIcon : children
+  const resolvedState: IconButtonState =
+    state ?? (disabled ? 'disabled' : 'normal');
+  const isDisabled =
+    disabled || resolvedState === 'disabled' || resolvedState === 'locked';
+  const content = resolvedState === 'locked' ? lockedIcon : children;
 
   return (
     <BaseIconButton
@@ -27,5 +29,5 @@ export function IconButton({
     >
       {content}
     </BaseIconButton>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import type { Resource, ResourceStatus } from '@/api/types'
-import type { ResourcePriority } from '@/constants/ResourcePriority'
+import type { Resource, ResourceStatus } from '@/api/types';
+import type { ResourcePriority } from '@/constants/ResourcePriority';
 
 export interface ResourceTable {
-  resourceId: number
-  resourceName: string
-  description: string
-  email: string
-  owner: string
-  priority: ResourcePriority | ''
-  status: ResourceStatus
-  createdAt?: string
-  updatedAt?: string
+  resourceId: number;
+  resourceName: string;
+  description: string;
+  email: string;
+  owner: string;
+  priority: ResourcePriority | '';
+  status: ResourceStatus;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const toResourceTableRow = ({
@@ -29,4 +29,4 @@ export const toResourceTableRow = ({
   status,
   createdAt,
   updatedAt,
-})
+});

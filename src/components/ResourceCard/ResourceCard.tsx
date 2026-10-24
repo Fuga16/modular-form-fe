@@ -1,4 +1,5 @@
-import type { KeyboardEvent, MouseEvent } from 'react'
+import type { KeyboardEvent, MouseEvent } from 'react';
+
 import {
   ActionButton,
   Content,
@@ -12,8 +13,8 @@ import {
   StyledCard,
   Title,
   Value,
-} from './ResourceCard.styles'
-import type { ResourceCardProps } from './ResourceCard.types'
+} from './ResourceCard.styles';
+import type { ResourceCardProps } from './ResourceCard.types';
 
 /** Clickable summary card representing a single resource. */
 export function ResourceCard({
@@ -27,21 +28,21 @@ export function ResourceCard({
 }: ResourceCardProps) {
   const handleOpen = () => {
     if (!disabled) {
-      onOpen()
+      onOpen();
     }
-  }
+  };
 
   const handleActionClick = (e: MouseEvent) => {
-    e.stopPropagation()
-    handleOpen()
-  }
+    e.stopPropagation();
+    handleOpen();
+  };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleOpen()
+      e.preventDefault();
+      handleOpen();
     }
-  }
+  };
 
   return (
     <StyledCard
@@ -77,12 +78,16 @@ export function ResourceCard({
       </Content>
 
       <Footer>
-        <ActionButton type="button" disabled={disabled} onClick={handleActionClick}>
+        <ActionButton
+          type="button"
+          disabled={disabled}
+          onClick={handleActionClick}
+        >
           {actionLabel} →
         </ActionButton>
       </Footer>
     </StyledCard>
-  )
+  );
 }
 
-export default ResourceCard
+export default ResourceCard;

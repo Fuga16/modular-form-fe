@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const StatusRow = styled.div`
   display: flex;
@@ -11,17 +11,17 @@ export const StatusRow = styled.div`
   border-radius: ${({ theme }) => theme.radii.md};
 
   background: ${({ theme }) => theme.colors.accentSoft};
-`
+`;
 
 export const StatusEmoji = styled.span`
   font-size: 22px;
-`
+`;
 
 export const StatusText = styled.span`
   color: ${({ theme }) => theme.colors.ink};
   font-size: 14px;
   font-weight: 500;
-`
+`;
 
 export const Actions = styled.div`
   display: flex;
@@ -29,4 +29,4 @@ export const Actions = styled.div`
 
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: ${({ theme }) => theme.spacing.lg};
-`
+`;

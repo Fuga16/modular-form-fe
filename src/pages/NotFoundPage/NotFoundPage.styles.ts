@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Container = styled.main`
   min-height: 100vh;
@@ -8,7 +8,7 @@ export const Container = styled.main`
   justify-content: center;
 
   padding: ${({ theme }) => theme.spacing.xl};
-`
+`;
 
 export const Card = styled.section`
   width: 100%;
@@ -31,7 +31,7 @@ export const Card = styled.section`
   box-shadow: ${({ theme }) => theme.shadows.card};
 
   text-align: center;
-`
+`;
 
 export const Subtitle = styled.span`
   font-family: ${({ theme }) => theme.typography.heading};
@@ -42,11 +42,11 @@ export const Subtitle = styled.span`
   line-height: 1;
 
   color: ${({ theme }) => theme.colors.accent};
-`
+`;
 
 export const Title = styled.h1`
   font-size: 2rem;
-`
+`;
 
 export const Description = styled.p`
   max-width: 360px;
@@ -54,7 +54,7 @@ export const Description = styled.p`
   color: ${({ theme }) => theme.colors.inkMuted};
 
   font-size: 1.05rem;
-`
+`;
 
 export const HomeButton = styled.button`
   border: none;
@@ -76,4 +76,4 @@ export const HomeButton = styled.button`
   &:hover {
     background: ${({ theme }) => theme.colors.primaryStrong};
   }
-`
+`;

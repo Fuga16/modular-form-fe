@@ -1,13 +1,16 @@
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form';
 
-import { MultiSelect } from '../MultiSelect/MultiSelect'
+import { MultiSelect } from '../MultiSelect/MultiSelect';
 
-import type { AdapterProps, MultiSelectField } from './FormFieldsRenderer.types'
+import type {
+  AdapterProps,
+  MultiSelectField,
+} from './FormFieldsRenderer.types';
 
 export function MultiSelectAdapter({ field }: AdapterProps<MultiSelectField>) {
-  const { control } = useFormContext()
+  const { control } = useFormContext();
 
-  const { name, label, options, tooltip } = field
+  const { name, label, options, tooltip } = field;
 
   return (
     <Controller
@@ -25,5 +28,5 @@ export function MultiSelectAdapter({ field }: AdapterProps<MultiSelectField>) {
         />
       )}
     />
-  )
+  );
 }

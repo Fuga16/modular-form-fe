@@ -1,10 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query';
 
-import { deleteResource } from '@/api/resources'
-import { useApiMutation } from '@/hooks/useApiMutation'
+import { deleteResource } from '@/api/resources';
+import { useApiMutation } from '@/hooks/useApiMutation';
 
 export function useDeleteResourceMutation() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useApiMutation({
     mutationFn: deleteResource,
@@ -14,7 +14,7 @@ export function useDeleteResourceMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['resources'],
-      })
+      });
     },
-  })
+  });
 }

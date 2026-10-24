@@ -3,8 +3,8 @@ export const getNextSortOrder = (
   clicked: 'asc' | 'desc',
 ): 'asc' | 'desc' | null => {
   if (current === clicked) {
-    return null
+    return null;
   }
 
-  return clicked
-}
+  return clicked;
+};

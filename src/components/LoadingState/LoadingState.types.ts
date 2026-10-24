@@ -1,3 +1,3 @@
 export interface LoadingStateProps {
-  message?: string
+  message?: string;
 }

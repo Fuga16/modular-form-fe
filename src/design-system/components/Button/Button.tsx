@@ -1,5 +1,5 @@
-import { BaseButton } from './Button.styles'
-import type { ButtonProps, ButtonState } from './Button.types'
+import { BaseButton } from './Button.styles';
+import type { ButtonProps, ButtonState } from './Button.types';
 
 /**
  * Design-system button with semantic variant, size, and interaction state.
@@ -14,8 +14,10 @@ export function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const resolvedState: ButtonState = state ?? (disabled ? 'disabled' : 'normal')
-  const isDisabled = disabled || resolvedState === 'disabled' || resolvedState === 'locked'
+  const resolvedState: ButtonState =
+    state ?? (disabled ? 'disabled' : 'normal');
+  const isDisabled =
+    disabled || resolvedState === 'disabled' || resolvedState === 'locked';
   const content =
     resolvedState === 'locked' ? (
       <>
@@ -24,7 +26,7 @@ export function Button({
       </>
     ) : (
       children
-    )
+    );
 
   return (
     <BaseButton
@@ -37,5 +39,5 @@ export function Button({
     >
       {content}
     </BaseButton>
-  )
+  );
 }

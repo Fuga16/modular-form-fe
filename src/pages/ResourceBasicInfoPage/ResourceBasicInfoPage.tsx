@@ -1,21 +1,8 @@
-import { useEffect } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react';
 
-import { Button } from '@/design-system'
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb'
-import { FormFieldsRenderer } from '@/components/FormFieldsRenderer/FormFieldsRenderer'
-import { LoadingState } from '@/components/LoadingState'
-import { Stepper } from '@/components/Stepper'
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { usePatchBasicInfoMutation } from '@/hooks/queries/usePatchBasicInfoMutation'
-import { useResourceQuery } from '@/hooks/queries/useResourceQuery'
-import { useResourceBuffer } from '@/hooks/useResourceBuffer'
-import { getBreadcrumbs } from '@/utils/getBreadcrumbs'
-
-import { basicInfoFieldsConfig } from './config'
-import { ErrorBanner, SubmitError } from './ResourceBasicInfoPage.styles'
-import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types'
+import { FormProvider, useForm } from 'react-hook-form';
 
 import {
   FormLayout,
@@ -23,44 +10,58 @@ import {
   PageLayout,
   PageTitle,
   SectionCard,
-} from '../PageLayout.styles'
+} from '../PageLayout.styles';
+
+import { ErrorBanner, SubmitError } from './ResourceBasicInfoPage.styles';
+import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types';
+import { basicInfoFieldsConfig } from './config';
+import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
+import { FormFieldsRenderer } from '@/components/FormFieldsRenderer/FormFieldsRenderer';
+import { LoadingState } from '@/components/LoadingState';
+import { Stepper } from '@/components/Stepper';
+import { Button } from '@/design-system';
+import { usePatchBasicInfoMutation } from '@/hooks/queries/usePatchBasicInfoMutation';
+import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
+import { useResourceBuffer } from '@/hooks/useResourceBuffer';
+import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
 export function ResourceBasicInfoPage() {
-  const { resourceId } = useParams()
-  const navigate = useNavigate()
+  const { resourceId } = useParams();
+  const navigate = useNavigate();
 
-  const { updateBasicInfo, getBuffer } = useResourceBuffer()
+  const { updateBasicInfo, getBuffer } = useResourceBuffer();
 
   const form = useForm<BasicInfoFormValues>({
     mode: 'onChange',
-  })
+  });
 
-  const { reset, handleSubmit, formState } = form
+  const { reset, handleSubmit, formState } = form;
 
-  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId)
-  const patchBasicInfoMutation = usePatchBasicInfoMutation(resourceId)
+  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId);
+  const patchBasicInfoMutation = usePatchBasicInfoMutation(resourceId);
 
   useEffect(() => {
     if (!resource || !resourceId) {
-      return
+      return;
     }
 
-    const draft = getBuffer(resourceId)
+    const draft = getBuffer(resourceId);
 
     reset({
-      description: draft?.basicInfo?.description ?? resource.basicInfo.description,
+      description:
+        draft?.basicInfo?.description ?? resource.basicInfo.description,
       email: draft?.basicInfo?.email ?? resource.basicInfo.email,
       owner: draft?.basicInfo?.owner ?? resource.basicInfo.owner,
       priority: draft?.basicInfo?.priority ?? resource.basicInfo.priority,
-    })
-  }, [resource, resourceId, getBuffer, reset])
+    });
+  }, [resource, resourceId, getBuffer, reset]);
 
   if (!resourceId) {
-    return null
+    return null;
   }
 
   if (fetchStatus === 'pending') {
-    return <LoadingState message="Loading resource..." />
+    return <LoadingState message="Loading resource..." />;
   }
 
   if (fetchStatus === 'error' || !resource) {
@@ -70,15 +71,17 @@ export function ResourceBasicInfoPage() {
           Could not load this resource. Please try again.
         </ErrorBanner>
 
-        <Button onClick={() => navigate('/resources')}>Back to resources</Button>
+        <Button onClick={() => navigate('/resources')}>
+          Back to resources
+        </Button>
       </PageLayout>
-    )
+    );
   }
 
   const handleCompletedResource = (data: BasicInfoFormValues) => {
-    updateBasicInfo(resourceId, data)
-    navigate(`/resources/${resourceId}`)
-  }
+    updateBasicInfo(resourceId, data);
+    navigate(`/resources/${resourceId}`);
+  };
 
   const handleEditableResource = (data: BasicInfoFormValues) => {
     patchBasicInfoMutation.mutate(
@@ -88,22 +91,22 @@ export function ResourceBasicInfoPage() {
       },
       {
         onSuccess: () => {
-          navigate(`/resources/${resourceId}/project-details`)
+          navigate(`/resources/${resourceId}/project-details`);
         },
       },
-    )
-  }
+    );
+  };
 
   const onSubmit = (data: BasicInfoFormValues) => {
     if (resource.status === 'completed') {
-      handleCompletedResource(data)
-      return
+      handleCompletedResource(data);
+      return;
     }
 
-    handleEditableResource(data)
-  }
+    handleEditableResource(data);
+  };
 
-  const isSaving = formState.isSubmitting || patchBasicInfoMutation.isPending
+  const isSaving = formState.isSubmitting || patchBasicInfoMutation.isPending;
 
   return (
     <PageLayout>
@@ -127,7 +130,7 @@ export function ResourceBasicInfoPage() {
         <FormProvider {...form}>
           <FormLayout
             onSubmit={(event) => {
-              void handleSubmit(onSubmit)(event)
+              void handleSubmit(onSubmit)(event);
             }}
           >
             <FormFieldsRenderer config={basicInfoFieldsConfig} />
@@ -138,14 +141,17 @@ export function ResourceBasicInfoPage() {
               </SubmitError>
             )}
 
-            <Button type="submit" disabled={isSaving}>
+            <Button
+              type="submit"
+              disabled={isSaving}
+            >
               {patchBasicInfoMutation.isPending ? 'Saving…' : 'Submit'}
             </Button>
           </FormLayout>
         </FormProvider>
       </SectionCard>
     </PageLayout>
-  )
+  );
 }
 
-export default ResourceBasicInfoPage
+export default ResourceBasicInfoPage;

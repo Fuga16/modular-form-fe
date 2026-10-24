@@ -1,10 +1,10 @@
 export interface CreateResourceModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export interface CreateResourceFormValues {
-  resourceName: string
+  resourceName: string;
 }
 
-export type ResourceNameStatus = 'empty' | 'ready'
+export type ResourceNameStatus = 'empty' | 'ready';

@@ -1,9 +1,10 @@
-import styled from 'styled-components'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
+
+import styled from 'styled-components';
 
 export const Nav = styled.nav`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
-`
+`;
 
 export const List = styled.ol`
   display: flex;
@@ -15,7 +16,7 @@ export const List = styled.ol`
   padding: 0;
 
   list-style: none;
-`
+`;
 
 export const Item = styled.li`
   display: flex;
@@ -28,7 +29,7 @@ export const Item = styled.li`
 
     color: ${({ theme }) => theme.colors.inkMuted};
   }
-`
+`;
 
 export const Link = styled(RouterLink)`
   display: inline-flex;
@@ -69,4 +70,4 @@ export const Link = styled(RouterLink)`
 
     pointer-events: none;
   }
-`
+`;

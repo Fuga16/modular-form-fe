@@ -1,0 +1,1 @@
+export { ResourceBasicInfoPage } from './ResourceBasicInfoPage'

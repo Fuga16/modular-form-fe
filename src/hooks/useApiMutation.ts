@@ -2,7 +2,9 @@ import {
   useMutation,
   type UseMutationOptions,
   type UseMutationResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query'
+
+import { showSuccessToast } from '@/utils/toast'
 
 interface ApiMutationOptions<
   TData,
@@ -10,7 +12,7 @@ interface ApiMutationOptions<
   TVariables,
   TOnMutateResult,
 > extends UseMutationOptions<TData, TError, TVariables, TOnMutateResult> {
-  successMessage?: string;
+  successMessage?: string
 }
 
 export function useApiMutation<
@@ -21,13 +23,17 @@ export function useApiMutation<
 >(
   options: ApiMutationOptions<TData, TError, TVariables, TOnMutateResult>,
 ): UseMutationResult<TData, TError, TVariables, TOnMutateResult> {
-  const { onSuccess, ...mutationOptions } = options;
+  const { successMessage, onSuccess, ...mutationOptions } = options
 
   return useMutation({
     ...mutationOptions,
 
     onSuccess(data, variables, onMutateResult, mutationContext) {
-      return onSuccess?.(data, variables, onMutateResult, mutationContext);
+      if (successMessage) {
+        showSuccessToast(successMessage)
+      }
+
+      return onSuccess?.(data, variables, onMutateResult, mutationContext)
     },
-  });
+  })
 }

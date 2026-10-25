@@ -6,7 +6,7 @@ interface StatusContent {
   submitLabel: string;
 }
 
-export const INVALID_CHARS_REGEX = /[^A-Za-z0-9 -]/g;
+export const INVALID_CHARS_REGEX = /[^A-Za-z0-9 ]/g;
 
 export const resourceNameStatusContent: Record<
   ResourceNameStatus,

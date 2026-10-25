@@ -1,22 +1,17 @@
+import { defineSelectField } from '../../components/FormFieldsRenderer/FormFieldsRenderer.fields';
+import type { FieldConfig } from '../../components/FormFieldsRenderer/FormFieldsRenderer.types';
+import type { TableColumn } from '../../components/Table';
+import { FIELD_TOOLTIPS } from '../../constants/tooltips';
+import { formatIsoDate } from '../../utils/formatIsoDate';
+
 import type { ResourceTable } from './ResourcesListPage.types';
-import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
-import type { TableColumn } from '@/components/Table/Table.types';
-import { FIELD_TOOLTIPS } from '@/constants/tooltips';
-import { formatIsoDate } from '@/utils/formatIsoDate';
 
 const INVALID_RESOURCE_NAME_CHARS = /[^A-Za-z0-9 -]/g;
 
-const STATUS_OPTIONS = [
-  { label: 'Select status', value: '' },
-  {
-    label: 'Draft',
-    value: 'draft',
-  },
-  {
-    label: 'Completed',
-    value: 'completed',
-  },
-];
+type ResourcesFilters = {
+  status: string;
+  type: string;
+};
 
 const isoDateConverter = (value: unknown) =>
   formatIsoDate(typeof value === 'string' ? value : String(value));
@@ -30,13 +25,16 @@ export const filtersConfig: FieldConfig[] = [
     required: false,
     sanitize: (value: string) => value.replace(INVALID_RESOURCE_NAME_CHARS, ''),
   },
-  {
-    label: 'Status',
+  defineSelectField<ResourcesFilters, 'active' | 'archived'>({
     name: 'status',
+    label: 'Статус',
     type: 'select',
-    required: false,
-    options: STATUS_OPTIONS,
-  },
+    options: [
+      { value: 'active', label: 'Активные' },
+      { value: 'archived', label: 'Архивные' },
+    ],
+    defaultValue: 'active',
+  }),
 ];
 
 export const tableConfig: TableColumn<ResourceTable>[] = [

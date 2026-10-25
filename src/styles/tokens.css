@@ -78,6 +78,12 @@
   --duration-drawer: 280ms;
 
   --shadow-tooltip: var(--shadow-md);
+
+  --loading-min-height: 20rem;
+  --border-width-spinner: 3px;
+
+  --opacity-disabled: 0.65;
+  --card-hover-lift: 0.125rem;
 }
 
 :root,

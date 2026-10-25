@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import { useForm, useWatch } from 'react-hook-form';
 
+import { Button, Input } from '../../design-system';
 import { Modal } from '../../design-system/components/Modal';
+import { useCreateResourceMutation } from '../../hooks/queries/useCreateResourceMutation';
 
 import {
   CANCEL_LABEL,
@@ -17,12 +19,7 @@ import {
   RESOURCE_NAME_REQUIRED_ERROR,
   RESOURCE_NAME_TOOLTIP,
 } from './CreateResourceModal.constants';
-import {
-  Actions,
-  StatusEmoji,
-  StatusRow,
-  StatusText,
-} from './CreateResourceModal.styles';
+import styles from './CreateResourceModal.module.css';
 import type {
   CreateResourceFormValues,
   CreateResourceModalProps,
@@ -32,9 +29,14 @@ import {
   getResourceNameStatus,
   resourceNameStatusContent,
 } from './CreateResourceModal.variants';
-import { Button, Input } from '@/design-system';
-import { useCreateResourceMutation } from '@/hooks/queries/useCreateResourceMutation';
 
+/**
+ * Modal with a form for creating a resource.
+ *
+ * The status row above the field reflects what the user has typed and what the
+ * submit button will do. On success the user is taken to the new resource and the
+ * modal closes. Server errors are shown under the field and focus returns to it.
+ */
 export function CreateResourceModal({
   isOpen,
   onClose,
@@ -42,6 +44,7 @@ export function CreateResourceModal({
   const navigate = useNavigate();
 
   const createResourceMutation = useCreateResourceMutation();
+  const isPending = createResourceMutation.isPending;
 
   const {
     register,
@@ -64,6 +67,24 @@ export function CreateResourceModal({
 
   const status = resourceNameStatusContent[getResourceNameStatus(resourceName)];
 
+  // Latest `isOpen` for callbacks that outlive the render they were created in.
+  const isOpenRef = useRef(isOpen);
+
+  // Set in `onError`; consumed once the field is enabled again.
+  // A field disabled by `isPending` cannot take focus, so the focus call waits.
+  const shouldRefocusRef = useRef(false);
+
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isPending && shouldRefocusRef.current) {
+      shouldRefocusRef.current = false;
+      setFocus('resourceName');
+    }
+  }, [isPending, setFocus]);
+
   useEffect(() => {
     if (isOpen) {
       setFocus('resourceName');
@@ -71,6 +92,7 @@ export function CreateResourceModal({
   }, [isOpen, setFocus]);
 
   const handleClose = () => {
+    shouldRefocusRef.current = false;
     reset();
     onClose();
   };
@@ -82,10 +104,13 @@ export function CreateResourceModal({
         handleClose();
       },
       onError: () => {
+        if (!isOpenRef.current) return;
+
         setError('resourceName', {
           type: 'server',
           message: CREATE_RESOURCE_ERROR,
         });
+        shouldRefocusRef.current = true;
       },
     });
   };
@@ -96,14 +121,14 @@ export function CreateResourceModal({
       isOpen={isOpen}
       onClose={handleClose}
     >
-      <StatusRow>
-        <StatusEmoji>{status.emoji}</StatusEmoji>
-        <StatusText>{status.text}</StatusText>
-      </StatusRow>
+      <div className={styles.statusRow}>
+        <span className={styles.statusEmoji}>{status.emoji}</span>
+        <span className={styles.statusText}>{status.text}</span>
+      </div>
 
       <form
-        onSubmit={(e) => {
-          void handleSubmit(onSubmit)(e);
+        onSubmit={(event) => {
+          void handleSubmit(onSubmit)(event);
         }}
       >
         <Input
@@ -111,21 +136,26 @@ export function CreateResourceModal({
           placeholder={RESOURCE_NAME_PLACEHOLDER}
           tooltip={RESOURCE_NAME_TOOLTIP}
           error={errors.resourceName?.message}
+          disabled={isPending}
           {...register('resourceName', {
-            required: RESOURCE_NAME_REQUIRED_ERROR,
+            validate: (value) =>
+              value.trim() !== '' || RESOURCE_NAME_REQUIRED_ERROR,
             setValueAs: (value: string) => value.trim(),
-            onChange: (e) => {
-              e.target.value = e.target.value.replace(INVALID_CHARS_REGEX, '');
+            onChange: (event) => {
+              event.target.value = event.target.value.replace(
+                INVALID_CHARS_REGEX,
+                '',
+              );
             },
           })}
         />
 
-        <Actions>
+        <div className={styles.actions}>
           <Button
             type="button"
             variant="secondary"
             onClick={handleClose}
-            disabled={createResourceMutation.isPending}
+            disabled={isPending}
           >
             {CANCEL_LABEL}
           </Button>
@@ -133,13 +163,11 @@ export function CreateResourceModal({
           <Button
             type="submit"
             variant="primary"
-            disabled={createResourceMutation.isPending}
+            disabled={isPending}
           >
-            {createResourceMutation.isPending
-              ? CREATING_LABEL
-              : status.submitLabel}
+            {isPending ? CREATING_LABEL : status.submitLabel}
           </Button>
-        </Actions>
+        </div>
       </form>
     </Modal>
   );

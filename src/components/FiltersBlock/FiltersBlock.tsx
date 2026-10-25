@@ -1,40 +1,61 @@
+import type { FormEvent } from 'react';
+
 import { useSearchParams } from 'react-router-dom';
 
-import { useFormContext } from 'react-hook-form';
+import { type FieldValues, useFormContext } from 'react-hook-form';
 
+import { Button } from '../../design-system';
+import { createSearchParamsFromForm } from '../../utils/createSearchParamsFromForm';
 import { FormFieldsRenderer } from '../FormFieldsRenderer/FormFieldsRenderer';
 
 import {
   CLEAR_BUTTON_LABEL,
   SEARCH_BUTTON_LABEL,
 } from './FiltersBlock.constants';
-import { ActionsBlock, Container } from './FiltersBlock.styles';
+import styles from './FiltersBlock.module.css';
 import type { FiltersBlockProps } from './FiltersBlock.types';
-import { Button } from '@/design-system';
-import { createSearchParamsFromForm } from '@/utils/createSearchParamsFromForm';
 
-export function FiltersBlock({ config }: FiltersBlockProps) {
-  const { handleSubmit, reset } = useFormContext<Record<string, string>>();
+/**
+ * Filter panel rendered from a field config.
+ *
+ * Search validates the form and writes its values to the URL query string.
+ * Clear empties the filter fields and removes only the query parameters that
+ * belong to `config`, so unrelated parameters such as `page` or `sort` are kept.
+ */
+export function FiltersBlock<TValues extends FieldValues = FieldValues>({
+  config,
+}: FiltersBlockProps<TValues>) {
+  const { handleSubmit, reset } = useFormContext<TValues>();
 
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleApplyFilters = handleSubmit((data) => {
-    setSearchParams(createSearchParamsFromForm(data));
+    setSearchParams(createSearchParamsFromForm(data, searchParams));
   });
 
   const handleClearFilters = () => {
-    reset();
-    setSearchParams({}, { replace: true });
+    // Empty strings for every filter field, not the parent's defaults.
+    const emptyValues = Object.fromEntries(
+      config.map((field) => [field.name, '']),
+    ) as TValues;
+    reset(emptyValues);
+
+    const nextParams = new URLSearchParams(searchParams);
+    config.forEach((field) => nextParams.delete(field.name));
+    setSearchParams(nextParams, { replace: true });
   };
 
   return (
-    <Container
-      onSubmit={handleApplyFilters}
+    <form
+      className={styles.container}
+      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+        void handleApplyFilters(event);
+      }}
       noValidate
     >
       <FormFieldsRenderer config={config} />
 
-      <ActionsBlock>
+      <div className={styles.actions}>
         <Button
           type="button"
           variant="secondary"
@@ -49,7 +70,7 @@ export function FiltersBlock({ config }: FiltersBlockProps) {
         >
           {SEARCH_BUTTON_LABEL}
         </Button>
-      </ActionsBlock>
-    </Container>
+      </div>
+    </form>
   );
 }

@@ -32,5 +32,5 @@ export interface SelectProps extends Omit<
    */
   lockIcon?: ReactNode;
   /** Options to render. */
-  options: SelectOption[];
+  options: readonly SelectOption[];
 }

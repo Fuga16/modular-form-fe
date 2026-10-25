@@ -1,39 +1,54 @@
-import { Circle, Icon, Item, List, StatusLabel, Title } from './Stepper.styles';
-import type { StepperProps } from './Stepper.types';
-import { createStepperSteps } from '@/utils/createStepperSteps';
-import { isModuleCompleted } from '@/utils/isModuleCompleted';
+import clsx from 'clsx';
 
+import { createStepperSteps } from '../../utils/createStepperSteps';
+import { isModuleCompleted } from '../../utils/isModuleCompleted';
+
+import styles from './Stepper.module.css';
+import type { StepperProps } from './Stepper.types';
+import { STEP_STATUS_LABELS } from './Stepper.variants';
+
+/**
+ * Progress list showing each step as completed, active, or locked.
+ *
+ * Statuses are derived from `data`: a step is completed when its section is
+ * complete, and the first unfinished step is active.
+ */
 export function Stepper({ data }: StepperProps) {
   const basicInfoCompleted = isModuleCompleted(data.basicInfo);
   const projectDetailsCompleted = isModuleCompleted(data.projectDetails);
   const steps = createStepperSteps(basicInfoCompleted, projectDetailsCompleted);
 
   return (
-    <List aria-label="Progress">
-      {steps.map(({ title, status, icon }) => (
-        <Item
+    <ol
+      aria-label="Progress"
+      className={styles.list}
+    >
+      {steps.map(({ title, description, status, icon }) => (
+        <li
           key={title}
-          $status={status}
+          className={styles.item}
         >
-          <Circle $status={status}>
-            <Icon
+          <div
+            className={clsx(styles.circle, styles[status])}
+            aria-hidden="true"
+          >
+            <img
               src={icon}
               alt=""
+              className={styles.icon}
             />
-          </Circle>
+          </div>
 
-          <Title>{title}</Title>
+          <p className={styles.title}>{title}</p>
 
-          <StatusLabel $status={status}>
-            {status === 'completed'
-              ? 'Completed'
-              : status === 'active'
-                ? 'In Progress'
-                : 'Locked'}
-          </StatusLabel>
-        </Item>
+          <p className={styles.description}>{description}</p>
+
+          <span className={clsx(styles.statusLabel, styles[`${status}Label`])}>
+            {STEP_STATUS_LABELS[status]}
+          </span>
+        </li>
       ))}
-    </List>
+    </ol>
   );
 }
 

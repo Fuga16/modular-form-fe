@@ -1,26 +1,34 @@
 import { DEFAULT_LOADING_MESSAGE } from './LoadingState.constants';
-import {
-  Container,
-  Message,
-  Spinner,
-  SpinnerWrapper,
-} from './LoadingState.styles';
+import styles from './LoadingState.module.css';
 import type { LoadingStateProps } from './LoadingState.types';
 
-export function LoadingState({
+/**
+ * Loading placeholder with a spinner and a status message.
+ *
+ * `role="status"` makes the message a polite live region, so screen readers
+ * announce it without moving focus. `aria-busy` tells assistive technology
+ * that the region is still updating.
+ */
+export const LoadingState = ({
   message = DEFAULT_LOADING_MESSAGE,
-}: LoadingStateProps) {
+}: LoadingStateProps) => {
   return (
-    <Container
+    <div
       role="status"
-      aria-live="polite"
       aria-busy="true"
+      className={styles.container}
     >
-      <SpinnerWrapper aria-hidden="true">
-        <Spinner />
-      </SpinnerWrapper>
+      <div
+        aria-hidden="true"
+        className={styles.spinnerWrapper}
+      >
+        <div
+          data-motion-essential
+          className={styles.spinner}
+        />
+      </div>
 
-      <Message>{message}</Message>
-    </Container>
+      <p className={styles.message}>{message}</p>
+    </div>
   );
-}
+};

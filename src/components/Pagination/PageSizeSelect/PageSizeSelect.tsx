@@ -1,21 +1,29 @@
-import { Container } from './PageSizeSelect.styles';
+import { Select } from '../../../design-system';
+import { ITEMS_PER_PAGE_ARIA_LABEL } from '../Pagination.constants';
+
+import styles from './PageSizeSelect.module.css';
 import type { PageSizeSelectProps } from './PageSizeSelect.types';
 import { PAGE_SIZE_OPTIONS } from './PageSizeSelect.variants';
-import { Select } from '@/design-system';
 
-/** Select control for choosing the number of items per page. */
+/** Options are built once at module load, not on every render. */
+const SELECT_OPTIONS = PAGE_SIZE_OPTIONS.map((size) => ({
+  value: String(size),
+  label: String(size),
+}));
+
+/**
+ * Select control for choosing the number of items per page.
+ * The value is passed to `onChange` as a number, so the parent does not parse strings.
+ */
 export function PageSizeSelect({ value, onChange }: PageSizeSelectProps) {
   return (
-    <Container>
+    <div className={styles.container}>
       <Select
         value={String(value)}
-        aria-label="Items per page"
-        options={PAGE_SIZE_OPTIONS.map((size) => ({
-          value: String(size),
-          label: String(size),
-        }))}
-        onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={ITEMS_PER_PAGE_ARIA_LABEL}
+        options={SELECT_OPTIONS}
+        onChange={(event) => onChange(Number(event.target.value))}
       />
-    </Container>
+    </div>
   );
 }

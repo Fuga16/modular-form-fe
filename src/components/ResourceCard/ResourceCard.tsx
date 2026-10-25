@@ -1,22 +1,19 @@
-import type { KeyboardEvent, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 
-import {
-  ActionButton,
-  Content,
-  Footer,
-  Header,
-  HeaderInfo,
-  IconBox,
-  Label,
-  Row,
-  StatusBadge,
-  StyledCard,
-  Title,
-  Value,
-} from './ResourceCard.styles';
+import clsx from 'clsx';
+
+import { Badge, Card } from '../../design-system';
+
+import styles from './ResourceCard.module.css';
 import type { ResourceCardProps } from './ResourceCard.types';
 
-/** Clickable summary card representing a single resource. */
+/**
+ * Summary card for a single resource.
+ *
+ * Mouse users can open the resource by clicking anywhere on the card.
+ * Keyboard users open it through the footer button, which is the only
+ * focusable element, so the card itself is not interactive for assistive technology.
+ */
 export function ResourceCard({
   title,
   information = [],
@@ -32,61 +29,58 @@ export function ResourceCard({
     }
   };
 
-  const handleActionClick = (e: MouseEvent) => {
-    e.stopPropagation();
+  const handleActionClick = (event: MouseEvent) => {
+    // Prevents the card click handler from opening the resource a second time.
+    event.stopPropagation();
     handleOpen();
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleOpen();
-    }
-  };
-
   return (
-    <StyledCard
+    <Card
       variant="outline"
-      $disabled={disabled}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}
+      className={clsx(styles.card, disabled && styles.disabled)}
       onClick={handleOpen}
-      onKeyDown={handleKeyDown}
     >
-      <Header>
-        <HeaderInfo>
-          <IconBox aria-hidden="true">{icon}</IconBox>
+      <div className={styles.headerInfo}>
+        <span
+          aria-hidden="true"
+          className={styles.iconBox}
+        >
+          {icon}
+        </span>
 
-          <div>
-            <Title>{title}</Title>
+        <div className={styles.titleGroup}>
+          <h3 className={styles.title}>{title}</h3>
 
-            <StatusBadge $completed={status}>
-              {status ? 'Completed' : 'Incomplete'}
-            </StatusBadge>
-          </div>
-        </HeaderInfo>
-      </Header>
+          <Badge variant={status ? 'success' : 'warning'}>
+            {status ? 'Completed' : 'Incomplete'}
+          </Badge>
+        </div>
+      </div>
 
-      <Content>
+      <div className={styles.content}>
         {information.filter(Boolean).map(({ label, value }) => (
-          <Row key={`${title}-${label}`}>
-            <Label>{label}</Label>
-            <Value>{value || '-'}</Value>
-          </Row>
+          <div
+            key={`${title}-${label}`}
+            className={styles.row}
+          >
+            <span className={styles.label}>{label}</span>
+            <span className={styles.value}>{value || '-'}</span>
+          </div>
         ))}
-      </Content>
+      </div>
 
-      <Footer>
-        <ActionButton
+      <div className={styles.footer}>
+        <button
           type="button"
+          className={styles.action}
           disabled={disabled}
           onClick={handleActionClick}
         >
           {actionLabel} →
-        </ActionButton>
-      </Footer>
-    </StyledCard>
+        </button>
+      </div>
+    </Card>
   );
 }
 

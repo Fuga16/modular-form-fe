@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
 
-import { Container } from './PageInput.styles.ts';
+import { Input } from '../../../design-system';
+import { PAGE_NUMBER_ARIA_LABEL } from '../Pagination.constants';
+
+import styles from './PageInput.module.css';
 import type { PageInputProps } from './PageInput.types';
-import { Input } from '@/design-system';
 
+/**
+ * Editable page number. The user types a page and commits it on blur or Enter.
+ *
+ * Non-digit characters are removed while typing. On commit the value is clamped
+ * to the valid range. If the result equals the current page, the field resets
+ * to the current page.
+ */
 export function PageInput({ page, totalPages, onChange }: PageInputProps) {
   const [value, setValue] = useState(String(page));
   const [prevPage, setPrevPage] = useState(page);
 
+  // Keeps the field in sync when the page changes from outside (buttons, URL).
   if (page !== prevPage) {
     setPrevPage(page);
     setValue(String(page));
@@ -25,24 +35,26 @@ export function PageInput({ page, totalPages, onChange }: PageInputProps) {
     }
   };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    if (e.key === 'Enter') {
-      e.currentTarget.blur();
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value.replace(/\D/g, ''));
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.currentTarget.blur();
     }
   };
 
   return (
-    <Container>
+    <div className={styles.container}>
       <Input
         value={value}
         inputMode="numeric"
-        aria-label="Page number"
-        onChange={(e) => setValue(e.target.value.replace(/\D/g, ''))}
+        aria-label={PAGE_NUMBER_ARIA_LABEL}
+        onChange={handleChange}
         onBlur={commit}
         onKeyDown={handleKeyDown}
       />
-    </Container>
+    </div>
   );
 }

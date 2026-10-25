@@ -1,8 +1,9 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
+import { Input } from '../../design-system';
+import { getRequiredRule } from '../../utils/getRequiredRule';
+
 import type { AdapterProps, InputField } from './FormFieldsRenderer.types';
-import { Input } from '@/design-system';
-import { getRequiredRule } from '@/utils/getRequiredRule';
 
 export function InputAdapter({ field }: AdapterProps<InputField>) {
   const { control } = useFormContext();

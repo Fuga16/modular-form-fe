@@ -1,13 +1,25 @@
 import { useSearchParams } from 'react-router-dom';
 
+import { Button } from '../../design-system';
+import { updateSearchParams } from '../../utils/updateSearchParams';
+
 import { PageInput } from './PageInput';
 import { PageSizeSelect } from './PageSizeSelect';
-import { Container, Status } from './Pagination.styles';
+import {
+  NEXT_BUTTON_LABEL,
+  PAGINATION_ARIA_LABEL,
+  PREV_BUTTON_LABEL,
+} from './Pagination.constants';
+import styles from './Pagination.module.css';
 import type { PaginationProps } from './Pagination.types';
-import { Button } from '@/design-system';
-import { updateSearchParams } from '@/utils/updateSearchParams';
 
-/** Pagination controls synced with URL search params. */
+/**
+ * Pagination controls synced with URL search params.
+ *
+ * Changing the page keeps every other parameter. Changing the page size also
+ * resets the page to the first one, because the old page number may not exist
+ * at the new size.
+ */
 export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -29,13 +41,17 @@ export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
   };
 
   return (
-    <Container aria-label="Pagination">
+    <nav
+      aria-label={PAGINATION_ARIA_LABEL}
+      className={styles.container}
+    >
       <Button
+        type="button"
         variant="secondary"
         disabled={page <= 1}
         onClick={() => updatePage(page - 1)}
       >
-        Prev
+        {PREV_BUTTON_LABEL}
       </Button>
 
       <PageInput
@@ -44,9 +60,12 @@ export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
         onChange={updatePage}
       />
 
-      <Status aria-live="polite">
+      <span
+        aria-live="polite"
+        className={styles.status}
+      >
         {page} / {totalPages}
-      </Status>
+      </span>
 
       <PageSizeSelect
         value={pageSize}
@@ -54,12 +73,13 @@ export function Pagination({ page, totalPages, pageSize }: PaginationProps) {
       />
 
       <Button
+        type="button"
         variant="secondary"
         disabled={page >= totalPages}
         onClick={() => updatePage(page + 1)}
       >
-        Next
+        {NEXT_BUTTON_LABEL}
       </Button>
-    </Container>
+    </nav>
   );
 }

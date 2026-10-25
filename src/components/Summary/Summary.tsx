@@ -1,112 +1,107 @@
-import {
-  SummaryBody,
-  SummaryCard,
-  SummaryGrid,
-  SummaryHeader,
-  SummaryLabel,
-  SummaryRow,
-  SummaryStatus,
-  SummaryTitle,
-  SummaryValue,
-} from './Summary.styles';
-import type { SummaryProps } from './Summary.types';
-import { isModuleCompleted } from '@/utils/isModuleCompleted';
+import clsx from 'clsx';
 
+import { isModuleCompleted } from '../../utils/isModuleCompleted';
+
+import styles from './Summary.module.css';
+import type { SummaryProps, SummaryStep } from './Summary.types';
+
+/** Placeholder for an empty value. */
+const EMPTY_VALUE = '-';
+
+/**
+ * Read-only summary of all modules of a resource, one card per module.
+ *
+ * Missing sections are treated as empty, so the component renders during loading
+ * or when a module has not been filled in yet.
+ */
 export function Summary({ resource }: SummaryProps) {
-  const basicInfoCompleted = isModuleCompleted(resource.basicInfo);
-  const projectDetailsCompleted = isModuleCompleted(resource.projectDetails);
+  const basicInfo = resource.basicInfo;
+  const projectDetails = resource.projectDetails;
 
-  const steps = [
+  const basicInfoCompleted = isModuleCompleted(basicInfo);
+  const projectDetailsCompleted = isModuleCompleted(projectDetails);
+  const allCompleted = basicInfoCompleted && projectDetailsCompleted;
+
+  const steps: SummaryStep[] = [
     {
       title: 'Basic Info',
-      status: basicInfoCompleted,
+      completed: basicInfoCompleted,
       information: [
-        {
-          label: 'Description',
-          value: resource.basicInfo.description,
-        },
-        {
-          label: 'Email',
-          value: resource.basicInfo.email,
-        },
-        {
-          label: 'Owner',
-          value: resource.basicInfo.owner,
-        },
-        {
-          label: 'Priority',
-          value: resource.basicInfo.priority,
-        },
-        {
-          label: 'Resource name',
-          value: resource.basicInfo.resourceName,
-        },
+        { label: 'Description', value: basicInfo?.description ?? '' },
+        { label: 'Email', value: basicInfo?.email ?? '' },
+        { label: 'Owner', value: basicInfo?.owner ?? '' },
+        { label: 'Priority', value: basicInfo?.priority ?? '' },
+        { label: 'Resource name', value: basicInfo?.resourceName ?? '' },
       ],
     },
     {
       title: 'Project Details',
-      status: projectDetailsCompleted,
+      completed: projectDetailsCompleted,
       information: [
-        {
-          label: 'Budget',
-          value: resource.projectDetails.budget,
-        },
-        {
-          label: 'Category',
-          value: resource.projectDetails.category,
-        },
+        { label: 'Budget', value: projectDetails?.budget ?? '' },
+        { label: 'Category', value: projectDetails?.category ?? '' },
         {
           label: 'Options',
-          value: resource.projectDetails.options.join(', '),
+          value: projectDetails?.options?.join(', ') ?? '',
         },
-        {
-          label: 'Project name',
-          value: resource.projectDetails.projectName,
-        },
+        { label: 'Project name', value: projectDetails?.projectName ?? '' },
       ],
     },
     {
       title: 'Provision Resource',
-      status: basicInfoCompleted && projectDetailsCompleted,
+      completed: allCompleted,
       information: [
         {
-          label: '',
-          value:
-            !basicInfoCompleted || !projectDetailsCompleted
-              ? 'Waiting for modules'
-              : resource.status === 'completed'
-                ? 'Resource has been Provisioned'
-                : 'Ready for Provisioning',
+          label: 'Status',
+          value: !allCompleted
+            ? 'Waiting for modules'
+            : resource.status === 'completed'
+              ? 'Resource has been Provisioned'
+              : 'Ready for Provisioning',
         },
       ],
     },
   ];
 
   return (
-    <SummaryGrid>
-      {steps.map(({ title, information, status }) => (
-        <SummaryCard key={title}>
-          <SummaryHeader>
-            <div>
-              <SummaryTitle>{title}</SummaryTitle>
+    <div className={styles.grid}>
+      {steps.map(({ title, completed, information }) => (
+        <section
+          key={title}
+          className={styles.card}
+          aria-labelledby={`summary-${title}`}
+        >
+          <header className={styles.header}>
+            <p
+              id={`summary-${title}`}
+              className={styles.title}
+            >
+              {title}
+            </p>
 
-              <SummaryStatus $completed={status}>
-                {status ? 'Completed' : 'Incomplete'}
-              </SummaryStatus>
-            </div>
-          </SummaryHeader>
+            <span
+              className={clsx(
+                styles.status,
+                completed ? styles.statusCompleted : styles.statusIncomplete,
+              )}
+            >
+              {completed ? 'Completed' : 'Incomplete'}
+            </span>
+          </header>
 
-          <SummaryBody>
+          <dl className={styles.body}>
             {information.map(({ label, value }) => (
-              <SummaryRow key={`${title}-${label}`}>
-                <SummaryLabel>{label}</SummaryLabel>
-
-                <SummaryValue>{value || '-'}</SummaryValue>
-              </SummaryRow>
+              <div
+                key={`${title}-${label}`}
+                className={styles.row}
+              >
+                <dt className={styles.label}>{label}</dt>
+                <dd className={styles.value}>{value || EMPTY_VALUE}</dd>
+              </div>
             ))}
-          </SummaryBody>
-        </SummaryCard>
+          </dl>
+        </section>
       ))}
-    </SummaryGrid>
+    </div>
   );
 }

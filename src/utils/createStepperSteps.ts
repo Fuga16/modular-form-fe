@@ -1,7 +1,8 @@
+import type { Step } from '../components/Stepper';
+
 import PositiveMark from '@/assets/positive-mark.svg';
 import Progress from '@/assets/spinner.svg';
 import WarningMark from '@/assets/warning-mark.svg';
-import type { Step } from '@/components/Stepper';
 
 export const createStepperSteps = (
   basicInfoCompleted: boolean,

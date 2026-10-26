@@ -9,10 +9,9 @@ import {
 
 import clsx from 'clsx';
 
-import { Checkbox, Tooltip } from '../../design-system';
-
 import styles from './MultiSelect.module.css';
 import type { MultiSelectProps } from './MultiSelect.types';
+import { Checkbox, Tooltip } from '@/design-system';
 
 /**
  * Multiple-choice dropdown with a checkbox per option.

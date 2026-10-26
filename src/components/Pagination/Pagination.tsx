@@ -1,8 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { Button } from '../../design-system';
-import { updateSearchParams } from '../../utils/updateSearchParams';
-
 import { PageInput } from './PageInput';
 import { PageSizeSelect } from './PageSizeSelect';
 import {
@@ -12,6 +9,8 @@ import {
 } from './Pagination.constants';
 import styles from './Pagination.module.css';
 import type { PaginationProps } from './Pagination.types';
+import { Button } from '@/design-system';
+import { updateSearchParams } from '@/utils/updateSearchParams';
 
 /**
  * Pagination controls synced with URL search params.

@@ -1,4 +1,4 @@
-import type { BreadcrumbItem } from '@/components/Breadcrumb/Breadcrumb.types';
+import type { BreadcrumbItem } from '@/components.types';
 
 export type BreadcrumbSection =
   'overview' | 'details' | 'basic-info' | 'project-details';

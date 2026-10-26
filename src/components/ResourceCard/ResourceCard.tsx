@@ -2,10 +2,9 @@ import type { MouseEvent } from 'react';
 
 import clsx from 'clsx';
 
-import { Badge, Card } from '../../design-system';
-
 import styles from './ResourceCard.module.css';
 import type { ResourceCardProps } from './ResourceCard.types';
+import { Badge, Card } from '@/design-system';
 
 /**
  * Summary card for a single resource.

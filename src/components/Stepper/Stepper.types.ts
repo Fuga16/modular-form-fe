@@ -1,4 +1,4 @@
-import type { BasicInfo, ProjectDetails } from '../../api/types';
+import type { BasicInfo, ProjectDetails } from '@/api/types';
 
 /**
  * Progress state of one step.

@@ -1,15 +1,21 @@
+import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 import { RESOURCE_PRIORITY_VALUES } from '@/constants/ResourcePriority';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import { mapToOptions } from '@/utils/mapToOptions';
 
+/** Characters removed from the description: letters, digits, spaces and hyphens are kept. */
 const INVALID_DESCRIPTION_CHARS = /[^A-Za-z0-9 -]/g;
+
+/** Characters removed from the owner: letters and spaces are kept. */
 const INVALID_OWNER_CHARS = /[^A-Za-z ]/g;
+
+/** Basic shape check for an email address. Not a full RFC validation. */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const { description, email, owner } = FIELD_TOOLTIPS;
 
-export const basicInfoFieldsConfig: FieldConfig[] = [
+export const basicInfoFieldsConfig: FieldConfig<BasicInfoFormValues>[] = [
   {
     label: 'Description',
     name: 'description',
@@ -39,5 +45,6 @@ export const basicInfoFieldsConfig: FieldConfig[] = [
     name: 'priority',
     type: 'select',
     options: mapToOptions(RESOURCE_PRIORITY_VALUES),
+    defaultValue: RESOURCE_PRIORITY_VALUES[0],
   },
 ];

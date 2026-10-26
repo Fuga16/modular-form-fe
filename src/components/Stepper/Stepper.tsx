@@ -1,11 +1,10 @@
 import clsx from 'clsx';
 
-import { createStepperSteps } from '../../utils/createStepperSteps';
-import { isModuleCompleted } from '../../utils/isModuleCompleted';
-
 import styles from './Stepper.module.css';
 import type { StepperProps } from './Stepper.types';
 import { STEP_STATUS_LABELS } from './Stepper.variants';
+import { createStepperSteps } from '@/utils/createStepperSteps';
+import { isModuleCompleted } from '@/utils/isModuleCompleted';
 
 /**
  * Progress list showing each step as completed, active, or locked.

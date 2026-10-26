@@ -1,4 +1,4 @@
-const DEFAULT_API_URL = 'http://localhost:5001';
+const DEFAULT_API_URL = 'http://localhost:8080/';
 const JSON_CONTENT_TYPE = 'application/json';
 
 export const API_URL = (

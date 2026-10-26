@@ -2,16 +2,15 @@ import { useSearchParams } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import { Button } from '../../design-system';
-import { getNestedValue } from '../../utils/getNestedValue';
-import { getNextSortOrder } from '../../utils/getNextSortOrder';
-
 import styles from './Table.module.css';
 import type { SortOrder, TableProps } from './Table.types';
 import DownArrowActive from '@/assets/triangle-down-active.svg';
 import DownArrow from '@/assets/triangle-down.svg';
 import TopArrowActive from '@/assets/triangle-top-active.svg';
 import TopArrow from '@/assets/triangle-top.svg';
+import { Button } from '@/design-system';
+import { getNestedValue } from '@/utils/getNestedValue';
+import { getNextSortOrder } from '@/utils/getNextSortOrder';
 
 /**
  * Formats a cell value for display. `0` and `false` are real values and are shown as-is.
@@ -59,15 +58,15 @@ export function Table<T>({
     setSearchParams(params);
   };
 
-  const colSpan = config.length + (onDeleteRow ? 1 : 0);
-  const isEmpty = data.length === 0;
+  const colSpan = config?.length + (onDeleteRow ? 1 : 0);
+  const isEmpty = data?.length === 0;
 
   return (
     <div className={styles.scroll}>
       <table className={styles.table}>
         <thead>
           <tr>
-            {config.map((column) => (
+            {config?.map((column) => (
               <th
                 key={column.fieldName}
                 scope="col"
@@ -167,7 +166,7 @@ export function Table<T>({
                 className={clsx(styles.row, onRowClick && styles.clickable)}
                 onClick={onRowClick ? () => onRowClick(item) : undefined}
               >
-                {config.map((column) => {
+                {config?.map((column) => {
                   const value = getNestedValue(
                     column.fieldName,
                     item as Record<string, unknown>,

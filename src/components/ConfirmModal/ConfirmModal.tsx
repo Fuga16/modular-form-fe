@@ -1,8 +1,6 @@
-import { Button } from '../../design-system';
-import { Modal } from '../../design-system/components/Modal';
-
 import styles from './ConfirmModal.module.css';
 import type { ConfirmModalProps } from './ConfirmModal.types';
+import { Button, Modal } from '@/design-system';
 
 /**
  * Confirmation dialog with a message and cancel and confirm actions.

@@ -4,27 +4,30 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import {
-  FormLayout,
-  PageHeader,
-  PageLayout,
-  PageTitle,
-  SectionCard,
-} from '../PageLayout.styles';
+import layout from '../PageLayout.module.css';
 
-import { ErrorBanner, SubmitError } from './ResourceBasicInfoPage.styles';
+import styles from './ResourceBasicInfoPage.module.css';
 import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types';
 import { basicInfoFieldsConfig } from './config';
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
-import { FormFieldsRenderer } from '@/components/FormFieldsRenderer/FormFieldsRenderer';
-import { LoadingState } from '@/components/LoadingState';
-import { Stepper } from '@/components/Stepper';
-import { Button } from '@/design-system';
+import {
+  Breadcrumb,
+  FormFieldsRenderer,
+  LoadingState,
+  Stepper,
+} from '@/components';
+import { Button, Card } from '@/design-system';
 import { usePatchBasicInfoMutation } from '@/hooks/queries/usePatchBasicInfoMutation';
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
+/**
+ * Basic info step of the resource wizard.
+ *
+ * A completed resource is edited locally and saved to the buffer, so changes are
+ * applied later. An editable resource is saved to the server and the user moves to
+ * the project details step.
+ */
 export function ResourceBasicInfoPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
@@ -40,6 +43,7 @@ export function ResourceBasicInfoPage() {
   const { data: resource, status: fetchStatus } = useResourceQuery(resourceId);
   const patchBasicInfoMutation = usePatchBasicInfoMutation(resourceId);
 
+  // Fills the form from the server data, or from the buffered draft if there is one.
   useEffect(() => {
     if (!resource || !resourceId) {
       return;
@@ -66,15 +70,18 @@ export function ResourceBasicInfoPage() {
 
   if (fetchStatus === 'error' || !resource) {
     return (
-      <PageLayout>
-        <ErrorBanner role="alert">
+      <div className={layout.page}>
+        <div
+          role="alert"
+          className={styles.errorBanner}
+        >
           Could not load this resource. Please try again.
-        </ErrorBanner>
+        </div>
 
         <Button onClick={() => navigate('/resources')}>
           Back to resources
         </Button>
-      </PageLayout>
+      </div>
     );
   }
 
@@ -109,8 +116,8 @@ export function ResourceBasicInfoPage() {
   const isSaving = formState.isSubmitting || patchBasicInfoMutation.isPending;
 
   return (
-    <PageLayout>
-      <PageTitle>Resource Management</PageTitle>
+    <div className={layout.page}>
+      <p className={layout.subtitle}>Resource Management</p>
 
       <Breadcrumb
         items={getBreadcrumbs({
@@ -120,26 +127,33 @@ export function ResourceBasicInfoPage() {
         })}
       />
 
-      <PageHeader>
-        <PageTitle>{resource.name}</PageTitle>
-      </PageHeader>
+      <header className={layout.header}>
+        <h1 className={layout.title}>{resource.name}</h1>
+      </header>
 
       <Stepper data={resource} />
 
-      <SectionCard>
+      <Card
+        variant="outline"
+        className={layout.section}
+      >
         <FormProvider {...form}>
-          <FormLayout
+          <form
+            className={layout.form}
             onSubmit={(event) => {
               void handleSubmit(onSubmit)(event);
             }}
           >
             <FormFieldsRenderer config={basicInfoFieldsConfig} />
 
-            {patchBasicInfoMutation.isError && (
-              <SubmitError role="alert">
+            {patchBasicInfoMutation.isError ? (
+              <p
+                role="alert"
+                className={styles.submitError}
+              >
                 Could not save changes. Please try again.
-              </SubmitError>
-            )}
+              </p>
+            ) : null}
 
             <Button
               type="submit"
@@ -147,10 +161,10 @@ export function ResourceBasicInfoPage() {
             >
               {patchBasicInfoMutation.isPending ? 'Saving…' : 'Submit'}
             </Button>
-          </FormLayout>
+          </form>
         </FormProvider>
-      </SectionCard>
-    </PageLayout>
+      </Card>
+    </div>
   );
 }
 

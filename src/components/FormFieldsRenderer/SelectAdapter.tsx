@@ -1,9 +1,8 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Select } from '../../design-system';
-import { getRequiredRule } from '../../utils/getRequiredRule';
-
 import type { AdapterProps, SelectField } from './FormFieldsRenderer.types';
+import { Select } from '@/design-system';
+import { getRequiredRule } from '@/utils/getRequiredRule';
 
 export function SelectAdapter({ field }: AdapterProps<SelectField>) {
   const { control } = useFormContext();

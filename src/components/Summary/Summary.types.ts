@@ -1,4 +1,4 @@
-import type { Resource } from '../../api/types';
+import type { Resource } from '@/api/types';
 
 /** One row of information in a summary card. */
 export interface SummaryInfoItem {

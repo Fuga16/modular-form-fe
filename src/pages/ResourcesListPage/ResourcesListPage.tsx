@@ -4,27 +4,24 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import {
-  PageActions,
-  PageHeader,
-  PageLayout,
-  PageTitle,
-  SectionCard,
-} from '@/pages/PageLayout.styles';
+import layout from '../PageLayout.module.css';
 
-import {
-  type ResourceTable,
-  toResourceTableRow,
+import type {
+  ResourceTable,
+  ResourcesFilters,
 } from './ResourcesListPage.types';
+import { toResourceTableRow } from './ResourcesListPage.types';
 import { filtersConfig, tableConfig } from './config';
-import { Breadcrumb } from '@/components/Breadcrumb';
-import { ConfirmModal } from '@/components/ConfirmModal';
-import { CreateResourceModal } from '@/components/CreateResourceModal';
-import { FiltersBlock } from '@/components/FiltersBlock';
-import { LoadingState } from '@/components/LoadingState';
-import { Pagination } from '@/components/Pagination/Pagination';
-import { Table } from '@/components/Table';
-import { Button } from '@/design-system';
+import {
+  Breadcrumb,
+  ConfirmModal,
+  CreateResourceModal,
+  FiltersBlock,
+  LoadingState,
+  Pagination,
+  Table,
+} from '@/components';
+import { Button, Card } from '@/design-system';
 import { useDeleteResourceMutation } from '@/hooks/queries/useDeleteResourceMutation';
 import { useResourcesListQuery } from '@/hooks/queries/useResourcesListQuery';
 import { getFilterValues } from '@/utils/getDefaultFilterValues';
@@ -32,14 +29,17 @@ import { getQueryParams } from '@/utils/getQueryParams';
 import { sanitizeSearchParams } from '@/utils/sanitizeSearchParams';
 import { updateSearchParams } from '@/utils/updateSearchParams';
 
+/**
+ * Resources list with filters, pagination, sorting, and create and delete actions.
+ *
+ * Filters, page, page size and sort order live in the URL, so the list survives
+ * a reload and can be shared. Deleting asks for confirmation first.
+ */
 export const ResourcesListPage = () => {
   const navigate = useNavigate();
 
   const [isModalOpen, setModalOpen] = useState(false);
-
-  const [rowToDelete, setRowToDelete] = useState<ReturnType<
-    typeof toResourceTableRow
-  > | null>(null);
+  const [rowToDelete, setRowToDelete] = useState<ResourceTable | null>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -53,7 +53,7 @@ export const ResourcesListPage = () => {
     [searchParams],
   );
 
-  const methods = useForm({
+  const methods = useForm<ResourcesFilters>({
     defaultValues: filterValues,
   });
 
@@ -92,12 +92,12 @@ export const ResourcesListPage = () => {
     const requestedPage = Number(query.page);
 
     if (
-      requestedPage > data.pagination.totalPages &&
-      requestedPage !== data.pagination.page
+      requestedPage > data.pagination?.totalPages &&
+      requestedPage !== data.pagination?.page
     ) {
       setSearchParams(
         updateSearchParams(searchParams, {
-          page: String(data.pagination.page),
+          page: String(data.pagination?.page),
         }),
         { replace: true },
       );
@@ -106,11 +106,11 @@ export const ResourcesListPage = () => {
   }, [data, query.page]);
 
   const rows = useMemo(
-    () => (data ? data.items.map(toResourceTableRow) : []),
+    () => (data ? data?.items?.map(toResourceTableRow) : []),
     [data],
   );
 
-  const handleRequestDelete = (row: ReturnType<typeof toResourceTableRow>) => {
+  const handleRequestDelete = (row: ResourceTable) => {
     setRowToDelete(row);
   };
 
@@ -129,17 +129,25 @@ export const ResourcesListPage = () => {
   }
 
   if (status === 'error' || !data) {
-    return <div>Failed to load resources</div>;
+    return (
+      <div
+        role="alert"
+        className={layout.errorBanner}
+      >
+        Failed to load resources
+      </div>
+    );
   }
 
   const { pagination } = data;
 
   return (
-    <PageLayout>
+    <div className={layout.page}>
       <CreateResourceModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
       />
+
       <ConfirmModal
         isOpen={Boolean(rowToDelete)}
         onClose={() => setRowToDelete(null)}
@@ -152,13 +160,15 @@ export const ResourcesListPage = () => {
         <strong>{rowToDelete?.resourceName}</strong>? This action cannot be
         undone.
       </ConfirmModal>
-      <PageHeader>
-        <PageTitle>Resource Management</PageTitle>
 
-        <PageActions>
+      <header className={layout.header}>
+        <h1 className={layout.title}>Resource Management</h1>
+
+        <div className={layout.actions}>
           <Button onClick={() => setModalOpen(true)}>Add Resource</Button>
-        </PageActions>
-      </PageHeader>
+        </div>
+      </header>
+
       <Breadcrumb
         items={[
           {
@@ -167,35 +177,49 @@ export const ResourcesListPage = () => {
           },
         ]}
       />
-      <SectionCard>
+
+      <Card
+        variant="outline"
+        className={layout.section}
+      >
         <FormProvider {...methods}>
-          <FiltersBlock config={filtersConfig} />
+          <FiltersBlock<ResourcesFilters> config={filtersConfig} />
         </FormProvider>
-      </SectionCard>
-      <SectionCard>
-        <Pagination
-          page={pagination.page}
-          totalPages={pagination.totalPages}
-          pageSize={pagination.pageSize}
-        />
-        <Table<ResourceTable>
-          data={rows}
-          config={tableConfig}
-          getRowId={(row) => String(row.resourceId)}
-          onRowClick={(row) => navigate(`/resources/${row.resourceId}`)}
-          onDeleteRow={handleRequestDelete}
-          emptyState={{
-            title: 'No resources found',
-            description: 'Try adjusting your filters.',
-          }}
-        />
-        <Pagination
-          page={pagination.page}
-          totalPages={pagination.totalPages}
-          pageSize={pagination.pageSize}
-        />
-      </SectionCard>
-    </PageLayout>
+      </Card>
+
+      <Card
+        variant="outline"
+        className={layout.section}
+      >
+        {pagination && (
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            pageSize={pagination.pageSize}
+          />
+        )}
+        {rows && rows.length && (
+          <Table<ResourceTable>
+            data={rows}
+            config={tableConfig}
+            getRowId={(row) => String(row.resourceId)}
+            onRowClick={(row) => navigate(`/resources/${row.resourceId}`)}
+            onDeleteRow={handleRequestDelete}
+            emptyState={{
+              title: 'No resources found',
+              description: 'Try adjusting your filters.',
+            }}
+          />
+        )}
+        {pagination && (
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            pageSize={pagination.pageSize}
+          />
+        )}
+      </Card>
+    </div>
   );
 };
 

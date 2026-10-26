@@ -1,33 +1,47 @@
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Card,
-  Container,
-  Description,
-  HomeButton,
-  Subtitle,
-  Title,
-} from './NotFoundPage.styles';
+import styles from './NotFoundPage.module.css';
+import { Button } from '@/design-system';
 
-const NotFoundPage = () => {
+/** Route for the "Go to Resources" action. */
+const RESOURCES_PATH = '/resources';
+
+/**
+ * Fallback page for unknown routes.
+ *
+ * The heading is the page title for assistive technology. The button navigates
+ * to the resources list, the main entry point of the app.
+ */
+export const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Container>
-      <Card>
-        <Subtitle>404</Subtitle>
+    <main className={styles.container}>
+      <section
+        className={styles.card}
+        aria-labelledby="not-found-title"
+      >
+        <span className={styles.code}>404</span>
 
-        <Title>Page Not Found</Title>
+        <h1
+          id="not-found-title"
+          className={styles.title}
+        >
+          Page Not Found
+        </h1>
 
-        <Description>
+        <p className={styles.description}>
           The page you are looking for does not exist or may have been moved.
-        </Description>
+        </p>
 
-        <HomeButton onClick={() => navigate('/resources')}>
+        <Button
+          variant="primary"
+          onClick={() => navigate(RESOURCES_PATH)}
+        >
           Go to Resources
-        </HomeButton>
-      </Card>
-    </Container>
+        </Button>
+      </section>
+    </main>
   );
 };
 

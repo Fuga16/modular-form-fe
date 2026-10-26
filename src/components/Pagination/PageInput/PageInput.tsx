@@ -1,10 +1,10 @@
 import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
 
-import { Input } from '../../../design-system';
 import { PAGE_NUMBER_ARIA_LABEL } from '../Pagination.constants';
 
 import styles from './PageInput.module.css';
 import type { PageInputProps } from './PageInput.types';
+import { Input } from '@/design-system';
 
 /**
  * Editable page number. The user types a page and commits it on blur or Enter.

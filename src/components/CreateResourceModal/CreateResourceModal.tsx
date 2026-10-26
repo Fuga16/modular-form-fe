@@ -4,10 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useForm, useWatch } from 'react-hook-form';
 
-import { Button, Input } from '../../design-system';
-import { Modal } from '../../design-system/components/Modal';
-import { useCreateResourceMutation } from '../../hooks/queries/useCreateResourceMutation';
-
 import {
   CANCEL_LABEL,
   CREATE_RESOURCE_ERROR,
@@ -29,6 +25,8 @@ import {
   getResourceNameStatus,
   resourceNameStatusContent,
 } from './CreateResourceModal.variants';
+import { Button, Input, Modal } from '@/design-system';
+import { useCreateResourceMutation } from '@/hooks/queries/useCreateResourceMutation';
 
 /**
  * Modal with a form for creating a resource.

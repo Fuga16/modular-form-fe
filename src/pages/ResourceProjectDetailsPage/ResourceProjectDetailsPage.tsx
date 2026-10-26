@@ -4,28 +4,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import {
-  FormLayout,
-  PageHeader,
-  PageLayout,
-  PageSubtitle,
-  PageTitle,
-  SectionCard,
-} from '../PageLayout.styles';
+import layout from '../PageLayout.module.css';
 
 import type { ProjectDetailsFormValues } from './ResourceProjectDetailsPage.types';
 import { projectDetailsConfig } from './config';
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
-import { FormFieldsRenderer } from '@/components/FormFieldsRenderer/FormFieldsRenderer';
-import { LoadingState } from '@/components/LoadingState';
-import Stepper from '@/components/Stepper/Stepper';
-import { Button } from '@/design-system';
+import {
+  Breadcrumb,
+  FormFieldsRenderer,
+  LoadingState,
+  Stepper,
+} from '@/components';
+import { Button, Card } from '@/design-system';
 import { usePatchProjectDetailsMutation } from '@/hooks/queries/usePatchProjectDetailsMutation';
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
 
+/** Form values before the resource is loaded. */
 const defaultValues: ProjectDetailsFormValues = {
   budget: '',
   category: '',
@@ -33,6 +29,13 @@ const defaultValues: ProjectDetailsFormValues = {
   projectName: '',
 };
 
+/**
+ * Project details step of the resource wizard.
+ *
+ * A completed resource is edited locally and saved to the buffer. An editable
+ * resource is saved to the server. If the basic info step is not complete yet,
+ * the user is sent back to it.
+ */
 export function ResourceProjectDetailsPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
@@ -49,6 +52,7 @@ export function ResourceProjectDetailsPage() {
   const patchProjectDetailsMutation =
     usePatchProjectDetailsMutation(resourceId);
 
+  // Fills the form from the server data, or from the buffered draft if there is one.
   useEffect(() => {
     if (!resource || !resourceId) {
       return;
@@ -68,22 +72,35 @@ export function ResourceProjectDetailsPage() {
     });
   }, [resource, resourceId, getBuffer, reset]);
 
+  // The project details step is available only after the basic info step.
   useEffect(() => {
     if (resource && !isModuleCompleted(resource.basicInfo)) {
       navigate(`/resources/${resourceId}/details`);
     }
   }, [navigate, resource, resourceId]);
 
+  if (!resourceId) {
+    return null;
+  }
+
   if (status === 'pending') {
     return <LoadingState />;
   }
 
-  if (status === 'error' || !resource) {
-    return <div>Failed to load resource</div>;
+  // A resource without basic info cannot be edited here, so it is treated as a load failure.
+  if (status === 'error' || !resource || !resource.basicInfo) {
+    return (
+      <div
+        role="alert"
+        className={layout.errorBanner}
+      >
+        Failed to load resource
+      </div>
+    );
   }
 
   const handleCompletedResource = (data: ProjectDetailsFormValues) => {
-    updateProjectDetails(resourceId!, data);
+    updateProjectDetails(resourceId, data);
     navigate(`/resources/${resourceId}`);
   };
 
@@ -96,10 +113,6 @@ export function ResourceProjectDetailsPage() {
   };
 
   const onSubmit = (data: ProjectDetailsFormValues) => {
-    if (!resourceId) {
-      return;
-    }
-
     if (resource.status === 'completed') {
       handleCompletedResource(data);
       return;
@@ -111,8 +124,8 @@ export function ResourceProjectDetailsPage() {
   const isSaving = patchProjectDetailsMutation.isPending;
 
   return (
-    <PageLayout>
-      <PageTitle>Resource Management</PageTitle>
+    <div className={layout.page}>
+      <p className={layout.subtitle}>Resource Management</p>
 
       <Breadcrumb
         items={getBreadcrumbs({
@@ -122,12 +135,12 @@ export function ResourceProjectDetailsPage() {
         })}
       />
 
-      <PageHeader>
+      <header className={layout.header}>
         <div>
-          <PageTitle>{resource.name}</PageTitle>
-          <PageSubtitle>Status: {resource.status}</PageSubtitle>
+          <h1 className={layout.title}>{resource.name}</h1>
+          <p className={layout.subtitle}>Status: {resource.status}</p>
         </div>
-      </PageHeader>
+      </header>
 
       <Stepper
         data={{
@@ -136,9 +149,13 @@ export function ResourceProjectDetailsPage() {
         }}
       />
 
-      <SectionCard>
+      <Card
+        variant="outline"
+        className={layout.section}
+      >
         <FormProvider {...form}>
-          <FormLayout
+          <form
+            className={layout.form}
             onSubmit={(event) => {
               void handleSubmit(onSubmit)(event);
             }}
@@ -151,10 +168,10 @@ export function ResourceProjectDetailsPage() {
             >
               {isSaving ? 'Saving…' : 'Submit'}
             </Button>
-          </FormLayout>
+          </form>
         </FormProvider>
-      </SectionCard>
-    </PageLayout>
+      </Card>
+    </div>
   );
 }
 

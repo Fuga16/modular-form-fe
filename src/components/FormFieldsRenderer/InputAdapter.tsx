@@ -1,10 +1,16 @@
+import type { ChangeEvent } from 'react';
+
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Input } from '../../design-system';
-import { getRequiredRule } from '../../utils/getRequiredRule';
-
 import type { AdapterProps, InputField } from './FormFieldsRenderer.types';
+import { Input } from '@/design-system';
+import { getRequiredRule } from '@/utils/getRequiredRule';
 
+/**
+ * Renders an `input` or `textarea` field bound to react-hook-form.
+ *
+ * `sanitize` runs on every change, before the value is written to the form.
+ */
 export function InputAdapter({ field }: AdapterProps<InputField>) {
   const { control } = useFormContext();
 
@@ -23,20 +29,34 @@ export function InputAdapter({ field }: AdapterProps<InputField>) {
             }
           : undefined,
       }}
-      render={({ field, fieldState }) => (
-        <Input
-          {...field}
-          label={label}
-          multiline={type === 'textarea'}
-          tooltip={tooltip}
-          error={fieldState.error?.message}
-          onChange={(e) => {
-            const value = sanitize ? sanitize(e.target.value) : e.target.value;
+      render={({ field: controllerField, fieldState }) => {
+        const handleChange = (
+          event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        ) => {
+          const value = sanitize
+            ? sanitize(event.target.value)
+            : event.target.value;
 
-            field.onChange(value);
-          }}
-        />
-      )}
+          controllerField.onChange(value);
+        };
+
+        const inputProps = {
+          ...controllerField,
+          label,
+          tooltip,
+          error: fieldState.error?.message,
+          onChange: handleChange,
+        };
+
+        return type === 'textarea' ? (
+          <Input
+            multiline
+            {...inputProps}
+          />
+        ) : (
+          <Input {...inputProps} />
+        );
+      }}
     />
   );
 }

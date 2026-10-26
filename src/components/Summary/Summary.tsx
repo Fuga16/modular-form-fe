@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 
-import { isModuleCompleted } from '../../utils/isModuleCompleted';
-
 import styles from './Summary.module.css';
 import type { SummaryProps, SummaryStep } from './Summary.types';
+import { isModuleCompleted } from '@/utils/isModuleCompleted';
 
 /** Placeholder for an empty value. */
 const EMPTY_VALUE = '-';

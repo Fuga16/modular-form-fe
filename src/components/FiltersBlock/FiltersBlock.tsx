@@ -4,8 +4,6 @@ import { useSearchParams } from 'react-router-dom';
 
 import { type FieldValues, useFormContext } from 'react-hook-form';
 
-import { Button } from '../../design-system';
-import { createSearchParamsFromForm } from '../../utils/createSearchParamsFromForm';
 import { FormFieldsRenderer } from '../FormFieldsRenderer/FormFieldsRenderer';
 
 import {
@@ -14,6 +12,8 @@ import {
 } from './FiltersBlock.constants';
 import styles from './FiltersBlock.module.css';
 import type { FiltersBlockProps } from './FiltersBlock.types';
+import { Button } from '@/design-system';
+import { createSearchParamsFromForm } from '@/utils/createSearchParamsFromForm';
 
 /**
  * Filter panel rendered from a field config.

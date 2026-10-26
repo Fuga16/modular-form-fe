@@ -1,4 +1,4 @@
-import type { BasicInfo, ProjectDetails } from '../../api/types';
+import type { BasicInfo, ProjectDetails } from '@/api/types';
 
 /** Unsaved changes for one resource. Each section is a partial of its full type. */
 export type ResourceBufferItem = {

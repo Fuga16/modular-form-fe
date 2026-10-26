@@ -1,27 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
-import {
-  PageActions,
-  PageHeader,
-  PageLayout,
-  PageSubtitle,
-  PageTitle,
-} from '../PageLayout.styles';
+import layout from '../PageLayout.module.css';
 
-import {
-  ActionsRow,
-  ErrorBanner,
-  UnsavedBanner,
-} from './ResourceOverviewPage.styles';
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
-import { LoadingState } from '@/components/LoadingState';
-import { Summary } from '@/components/Summary';
+import styles from './ResourceOverviewPage.module.css';
+import { Breadcrumb, LoadingState, Summary } from '@/components';
 import { Button } from '@/design-system';
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useUpdateResourceMutation } from '@/hooks/queries/useUpdateResourceMutation';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
+/**
+ * Overview of a resource: status, summary of all modules, and actions.
+ *
+ * When a completed resource has unsaved edits in the buffer, the page shows a
+ * banner and a save action. The buffer is cleared only after the save succeeds.
+ */
 export function ResourceOverviewPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
@@ -41,23 +35,25 @@ export function ResourceOverviewPage() {
 
   if (fetchStatus === 'error' || !resource) {
     return (
-      <PageLayout>
-        <ErrorBanner role="alert">
+      <div className={layout.page}>
+        <div
+          role="alert"
+          className={styles.errorBanner}
+        >
           Could not load this resource. Please try again.
-        </ErrorBanner>
+        </div>
 
-        <ActionsRow>
+        <div className={styles.actionsRow}>
           <Button onClick={() => navigate('/resources')}>
             Back to resources
           </Button>
-        </ActionsRow>
-      </PageLayout>
+        </div>
+      </div>
     );
   }
 
   const draft = getBuffer(resourceId);
   const hasUnsavedChanges = resource.status === 'completed' && Boolean(draft);
-
   const isSaving = updateResourceMutation.isPending;
 
   const handleSaveChanges = () => {
@@ -86,8 +82,8 @@ export function ResourceOverviewPage() {
   };
 
   return (
-    <PageLayout>
-      <PageTitle>Resource Management</PageTitle>
+    <div className={layout.page}>
+      <p className={layout.subtitle}>Resource Management</p>
 
       <Breadcrumb
         items={getBreadcrumbs({
@@ -97,34 +93,39 @@ export function ResourceOverviewPage() {
         })}
       />
 
-      <PageHeader>
+      <header className={layout.header}>
         <div>
-          <PageTitle>{resource.name}</PageTitle>
-          <PageSubtitle>Status: {resource.status}</PageSubtitle>
+          <h1 className={layout.title}>{resource.name}</h1>
+          <p className={layout.subtitle}>Status: {resource.status}</p>
         </div>
 
-        <PageActions>
+        <div className={layout.actions}>
           <Button onClick={() => navigate(`/resources/${resourceId}/details`)}>
             View details
           </Button>
 
-          {hasUnsavedChanges && (
+          {hasUnsavedChanges ? (
             <Button
               onClick={handleSaveChanges}
               disabled={isSaving}
             >
               {isSaving ? 'Saving…' : 'Save Changes'}
             </Button>
-          )}
-        </PageActions>
-      </PageHeader>
+          ) : null}
+        </div>
+      </header>
 
-      {hasUnsavedChanges && (
-        <UnsavedBanner role="status">You have unsaved changes.</UnsavedBanner>
-      )}
+      {hasUnsavedChanges ? (
+        <div
+          role="status"
+          className={styles.unsavedBanner}
+        >
+          You have unsaved changes.
+        </div>
+      ) : null}
 
       <Summary resource={resource} />
-    </PageLayout>
+    </div>
   );
 }
 

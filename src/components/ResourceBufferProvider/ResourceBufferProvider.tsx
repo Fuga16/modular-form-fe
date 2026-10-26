@@ -1,12 +1,11 @@
 import { type PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
-import type { BasicInfo, ProjectDetails } from '../../api/types';
-import { ResourceBufferContext } from '../../context/ResourceBufferContext';
-
 import type {
   ResourceBuffer,
   ResourceBufferContextValue,
 } from './ResourceBufferProvider.types';
+import type { BasicInfo, ProjectDetails } from '@/api/types';
+import { ResourceBufferContext } from '@/context/ResourceBufferContext';
 
 /**
  * Keeps unsaved edits for resources outside of the form that is currently mounted,

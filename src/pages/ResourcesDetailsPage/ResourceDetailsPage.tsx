@@ -2,25 +2,25 @@ import { useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import {
-  CardGrid,
-  PageHeader,
-  PageLayout,
-  PageSubtitle,
-  PageTitle,
-} from '../PageLayout.styles';
+import layout from '../PageLayout.module.css';
 
 import { buildDetailsCards } from './ResourceDetailsPage.cards';
-import { CardContainer } from './ResourceDetailsPage.styles';
-import { Breadcrumb } from '@/components/Breadcrumb/Breadcrumb';
-import { ConfirmModal } from '@/components/ConfirmModal';
-import { LoadingState } from '@/components/LoadingState';
-import { ResourceCard } from '@/components/ResourceCard';
-import { Stepper } from '@/components/Stepper';
+import styles from './ResourceDetailsPage.module.css';
+import {
+  Breadcrumb,
+  ConfirmModal,
+  LoadingState,
+  ResourceCard,
+  Stepper,
+} from '@/components';
 import { useProvisionResourceMutation } from '@/hooks/queries/useProvisionResourceMutation';
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
+/**
+ * Details page of a resource: the status of each module, the provisioning action,
+ * and a confirmation dialog before provisioning starts.
+ */
 export function ResourceDetailsPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
@@ -39,7 +39,14 @@ export function ResourceDetailsPage() {
   }
 
   if (status === 'error' || !resource) {
-    return <div>Failed to load resource</div>;
+    return (
+      <div
+        role="alert"
+        className={styles.errorBanner}
+      >
+        Failed to load resource
+      </div>
+    );
   }
 
   const handleOpenProvisionModal = () => {
@@ -67,8 +74,8 @@ export function ResourceDetailsPage() {
   });
 
   return (
-    <PageLayout>
-      <PageTitle>Resource Management</PageTitle>
+    <div className={layout.page}>
+      <p className={layout.subtitle}>Resource Management</p>
 
       <Breadcrumb
         items={getBreadcrumbs({
@@ -78,12 +85,12 @@ export function ResourceDetailsPage() {
         })}
       />
 
-      <PageHeader>
+      <header className={layout.header}>
         <div>
-          <PageTitle>{resource.name}</PageTitle>
-          <PageSubtitle>Status: {resource.status}</PageSubtitle>
+          <h1 className={layout.title}>{resource.name}</h1>
+          <p className={layout.subtitle}>Status: {resource.status}</p>
         </div>
-      </PageHeader>
+      </header>
 
       <Stepper
         data={{
@@ -92,16 +99,16 @@ export function ResourceDetailsPage() {
         }}
       />
 
-      <CardGrid>
-        <CardContainer>
+      <div className={layout.grid}>
+        <div className={styles.cards}>
           {cards.map((card) => (
             <ResourceCard
               key={card.title}
               {...card}
             />
           ))}
-        </CardContainer>
-      </CardGrid>
+        </div>
+      </div>
 
       <ConfirmModal
         isOpen={isProvisionModalOpen}
@@ -115,7 +122,7 @@ export function ResourceDetailsPage() {
         <strong>{resource.basicInfo.resourceName}</strong>? This will start the
         provisioning process for this resource.
       </ConfirmModal>
-    </PageLayout>
+    </div>
   );
 }
 

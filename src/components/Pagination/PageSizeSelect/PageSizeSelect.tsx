@@ -1,9 +1,9 @@
-import { Select } from '../../../design-system';
 import { ITEMS_PER_PAGE_ARIA_LABEL } from '../Pagination.constants';
 
 import styles from './PageSizeSelect.module.css';
 import type { PageSizeSelectProps } from './PageSizeSelect.types';
 import { PAGE_SIZE_OPTIONS } from './PageSizeSelect.variants';
+import { Select } from '@/design-system';
 
 /** Options are built once at module load, not on every render. */
 const SELECT_OPTIONS = PAGE_SIZE_OPTIONS.map((size) => ({

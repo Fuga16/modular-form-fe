@@ -1,28 +1,27 @@
-import { defineSelectField } from '../../components/FormFieldsRenderer/FormFieldsRenderer.fields';
-import type { FieldConfig } from '../../components/FormFieldsRenderer/FormFieldsRenderer.types';
-import type { TableColumn } from '../../components/Table';
-import { FIELD_TOOLTIPS } from '../../constants/tooltips';
-import { formatIsoDate } from '../../utils/formatIsoDate';
+import type {
+  ResourceTable,
+  ResourcesFilters,
+} from './ResourcesListPage.types';
+import { defineSelectField } from '@/components/FormFieldsRenderer/FormFieldsRenderer.fields';
+import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
+import type { TableColumn } from '@/components/Table';
+import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import { formatIsoDate } from '@/utils/formatIsoDate';
 
-import type { ResourceTable } from './ResourcesListPage.types';
-
+/** Characters removed from the name filter: letters, digits, spaces and hyphens are kept. */
 const INVALID_RESOURCE_NAME_CHARS = /[^A-Za-z0-9 -]/g;
 
-type ResourcesFilters = {
-  status: string;
-  type: string;
-};
-
+/** Formats a date value for the table. Non-string values are converted with `String` first. */
 const isoDateConverter = (value: unknown) =>
   formatIsoDate(typeof value === 'string' ? value : String(value));
 
-export const filtersConfig: FieldConfig[] = [
+/** Filter fields rendered above the table. */
+export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
   {
     label: 'Name',
     name: 'name',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.projectName,
-    required: false,
     sanitize: (value: string) => value.replace(INVALID_RESOURCE_NAME_CHARS, ''),
   },
   defineSelectField<ResourcesFilters, 'active' | 'archived'>({
@@ -37,6 +36,7 @@ export const filtersConfig: FieldConfig[] = [
   }),
 ];
 
+/** Columns of the resources table. */
 export const tableConfig: TableColumn<ResourceTable>[] = [
   {
     title: 'Technical Name',

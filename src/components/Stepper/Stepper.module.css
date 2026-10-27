@@ -1,0 +1,90 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--control-height-lg) + var(--space-2));
+  height: calc(var(--control-height-lg) + var(--space-2));
+  margin-bottom: var(--space-4);
+  border-radius: 50%;
+}
+
+.completed {
+  background-color: var(--color-success);
+  color: var(--color-text-on-accent);
+}
+
+.active {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+}
+
+.locked {
+  background-color: var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+.icon {
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.description {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.statusLabel {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.completedLabel {
+  color: var(--color-success-text);
+}
+
+.activeLabel {
+  color: var(--color-accent-text);
+}
+
+.lockedLabel {
+  color: var(--color-text-muted);
+}
+
+@media (--mobile) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}

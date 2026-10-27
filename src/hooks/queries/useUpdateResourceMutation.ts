@@ -1,15 +1,20 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { updateResource } from "../../api/resources";
-import { useApiMutation } from "../useApiMutation";
+import { useQueryClient } from '@tanstack/react-query';
 
-export function useUpdateResourceMutation() {
+import { updateResource } from '@/api/resources';
+import type { ResourcePayload } from '@/api/types';
+import { useApiMutation } from '@/hooks/useApiMutation';
+
+export function useUpdateResourceMutation(resourceId: string | undefined) {
   const queryClient = useQueryClient();
 
   return useApiMutation({
-    mutationFn: (resourceId, payload: any) =>
+    mutationFn: (payload: ResourcePayload) =>
       updateResource(resourceId!, payload),
-    onSuccess: (resourceId, updated) => {
-      queryClient.setQueryData(["resource", resourceId], updated);
+
+    successMessage: 'Resource updated successfully.',
+
+    onSuccess: (updated) => {
+      queryClient.setQueryData(['resource', resourceId], updated);
     },
   });
 }

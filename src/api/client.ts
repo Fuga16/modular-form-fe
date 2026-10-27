@@ -1,11 +1,11 @@
-const DEFAULT_API_URL = "http://localhost:8080";
-const JSON_CONTENT_TYPE = "application/json";
+const DEFAULT_API_URL = 'http://localhost:8080/';
+const JSON_CONTENT_TYPE = 'application/json';
 
 export const API_URL = (
   import.meta.env.VITE_API_URL ?? DEFAULT_API_URL
-).replace(/\/$/, "");
+).replace(/\/$/, '');
 
-type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 type QueryValue = string | number | boolean | null | undefined;
 type QueryParams = Record<string, QueryValue>;
@@ -22,7 +22,7 @@ export class ApiError extends Error {
   constructor(status: number, message: string, details?: unknown) {
     super(message);
 
-    this.name = "ApiError";
+    this.name = 'ApiError';
     this.status = status;
     this.details = details;
   }
@@ -43,7 +43,7 @@ function buildUrl(path: string, query?: QueryParams): string {
   }
 
   for (const [key, value] of Object.entries(query)) {
-    if (value !== undefined && value !== null && value !== "") {
+    if (value !== undefined && value !== null && value !== '') {
       url.searchParams.set(key, String(value));
     }
   }
@@ -56,7 +56,7 @@ async function parseResponse(response: Response): Promise<unknown> {
     return undefined;
   }
 
-  const contentType = response.headers.get("content-type");
+  const contentType = response.headers.get('content-type');
 
   if (contentType?.includes(JSON_CONTENT_TYPE)) {
     return response.json();
@@ -67,10 +67,10 @@ async function parseResponse(response: Response): Promise<unknown> {
 
 function isApiErrorBody(payload: unknown): payload is ApiErrorBody {
   return (
-    typeof payload === "object" &&
+    typeof payload === 'object' &&
     payload !== null &&
-    "message" in payload &&
-    typeof payload.message === "string"
+    'message' in payload &&
+    typeof payload.message === 'string'
   );
 }
 
@@ -86,14 +86,15 @@ export async function request<TResponse, TBody = unknown>(
   path: string,
   options: RequestOptions<TBody> = {},
 ): Promise<TResponse> {
-  const { method = "GET", body, query, signal } = options;
+  const { method = 'GET', body, query, signal } = options;
+
   const response = await fetch(buildUrl(path, query), {
     method,
     signal,
     headers:
       body !== undefined
         ? {
-            "Content-Type": JSON_CONTENT_TYPE,
+            'Content-Type': JSON_CONTENT_TYPE,
           }
         : undefined,
     body: body !== undefined ? JSON.stringify(body) : undefined,

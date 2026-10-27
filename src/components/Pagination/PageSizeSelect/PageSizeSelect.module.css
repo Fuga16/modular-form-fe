@@ -1,0 +1,3 @@
+.container {
+  max-width: calc(var(--control-height-lg) * 2);
+}

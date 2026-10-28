@@ -7,7 +7,7 @@ export function useCreateResourceMutation() {
   const queryClient = useQueryClient();
 
   return useApiMutation({
-    mutationFn: (resourceName: string) => createResource(resourceName.trim()),
+    mutationFn: (name: string) => createResource(name.trim()),
 
     successMessage: 'Resource created successfully.',
 

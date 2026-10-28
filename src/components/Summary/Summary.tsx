@@ -30,7 +30,7 @@ export function Summary({ resource }: SummaryProps) {
         { label: 'Email', value: basicInfo?.email ?? '' },
         { label: 'Owner', value: basicInfo?.owner ?? '' },
         { label: 'Priority', value: basicInfo?.priority ?? '' },
-        { label: 'Resource name', value: basicInfo?.resourceName ?? '' },
+        { label: 'Resource name', value: basicInfo?.name ?? '' },
       ],
     },
     {

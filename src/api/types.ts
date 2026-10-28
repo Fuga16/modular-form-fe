@@ -5,7 +5,7 @@ import type { TeamMember } from '@/constants/TeamOptions';
 export type ResourceStatus = 'draft' | 'completed';
 
 export interface BasicInfo {
-  resourceName: string;
+  name: string;
   owner: string;
   email: string;
   description: string;
@@ -20,7 +20,7 @@ export interface ProjectDetails {
 }
 
 export interface Resource {
-  resourceId: number;
+  id: number;
   _id?: string;
 
   name: string;
@@ -47,7 +47,7 @@ export interface Pagination {
 }
 
 export interface ListResourcesResponse {
-  items: Resource[];
+  data: Resource[];
   pagination: Pagination;
 }
 
@@ -57,6 +57,7 @@ export interface ListResourcesQuery {
 
   status?: ResourceStatus;
   name?: string;
+  email?: string;
 
   sortOrder?: 'asc' | 'desc';
 }

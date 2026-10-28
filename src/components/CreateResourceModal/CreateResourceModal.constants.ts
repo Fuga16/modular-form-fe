@@ -1,7 +1,7 @@
 import type { CreateResourceFormValues } from './CreateResourceModal.types';
 
 export const DEFAULT_VALUES: CreateResourceFormValues = {
-  resourceName: '',
+  name: '',
 };
 
 export const MODAL_TITLE = 'Add Resource';

@@ -1,4 +1,4 @@
-import type { ResourceNameStatus } from './CreateResourceModal.types';
+import type { NameStatus } from './CreateResourceModal.types';
 
 interface StatusContent {
   emoji: string;
@@ -8,10 +8,7 @@ interface StatusContent {
 
 export const INVALID_CHARS_REGEX = /[^A-Za-z0-9 ]/g;
 
-export const resourceNameStatusContent: Record<
-  ResourceNameStatus,
-  StatusContent
-> = {
+export const nameStatusContent: Record<NameStatus, StatusContent> = {
   empty: {
     emoji: '😶',
     text: 'Waiting for a title',
@@ -24,6 +21,6 @@ export const resourceNameStatusContent: Record<
   },
 };
 
-export function getResourceNameStatus(resourceName = ''): ResourceNameStatus {
-  return resourceName.trim() ? 'ready' : 'empty';
+export function getNameStatus(name = ''): NameStatus {
+  return name.trim() ? 'ready' : 'empty';
 }

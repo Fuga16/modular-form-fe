@@ -93,7 +93,7 @@ export function ResourceBasicInfoPage() {
   const handleEditableResource = (data: BasicInfoFormValues) => {
     patchBasicInfoMutation.mutate(
       {
-        resourceName: resource.basicInfo.resourceName,
+        name: resource.basicInfo.name,
         ...data,
       },
       {
@@ -122,7 +122,7 @@ export function ResourceBasicInfoPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          resourceName: resource.basicInfo.resourceName,
+          name: resource.basicInfo.name,
           section: 'basic-info',
         })}
       />

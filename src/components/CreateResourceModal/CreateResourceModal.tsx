@@ -22,8 +22,8 @@ import type {
 } from './CreateResourceModal.types';
 import {
   INVALID_CHARS_REGEX,
-  getResourceNameStatus,
-  resourceNameStatusContent,
+  getNameStatus,
+  nameStatusContent,
 } from './CreateResourceModal.variants';
 import { Button, Input, Modal } from '@/design-system';
 import { useCreateResourceMutation } from '@/hooks/queries/useCreateResourceMutation';
@@ -58,12 +58,12 @@ export function CreateResourceModal({
     reValidateMode: 'onChange',
   });
 
-  const resourceName = useWatch({
+  const name = useWatch({
     control,
-    name: 'resourceName',
+    name: 'name',
   });
 
-  const status = resourceNameStatusContent[getResourceNameStatus(resourceName)];
+  const status = nameStatusContent[getNameStatus(name)];
 
   // Latest `isOpen` for callbacks that outlive the render they were created in.
   const isOpenRef = useRef(isOpen);
@@ -79,13 +79,13 @@ export function CreateResourceModal({
   useEffect(() => {
     if (!isPending && shouldRefocusRef.current) {
       shouldRefocusRef.current = false;
-      setFocus('resourceName');
+      setFocus('name');
     }
   }, [isPending, setFocus]);
 
   useEffect(() => {
     if (isOpen) {
-      setFocus('resourceName');
+      setFocus('name');
     }
   }, [isOpen, setFocus]);
 
@@ -95,8 +95,8 @@ export function CreateResourceModal({
     onClose();
   };
 
-  const onSubmit = ({ resourceName }: CreateResourceFormValues) => {
-    createResourceMutation.mutate(resourceName, {
+  const onSubmit = ({ name }: CreateResourceFormValues) => {
+    createResourceMutation.mutate(name, {
       onSuccess: ({ resourceId }) => {
         navigate(`/resources/${resourceId}`);
         handleClose();
@@ -104,7 +104,7 @@ export function CreateResourceModal({
       onError: () => {
         if (!isOpenRef.current) return;
 
-        setError('resourceName', {
+        setError('name', {
           type: 'server',
           message: CREATE_RESOURCE_ERROR,
         });
@@ -133,9 +133,9 @@ export function CreateResourceModal({
           label={RESOURCE_NAME_LABEL}
           placeholder={RESOURCE_NAME_PLACEHOLDER}
           tooltip={RESOURCE_NAME_TOOLTIP}
-          error={errors.resourceName?.message}
+          error={errors.name?.message}
           disabled={isPending}
-          {...register('resourceName', {
+          {...register('name', {
             validate: (value) =>
               value.trim() !== '' || RESOURCE_NAME_REQUIRED_ERROR,
             setValueAs: (value: string) => value.trim(),

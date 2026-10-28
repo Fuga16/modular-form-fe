@@ -1,17 +1,17 @@
-import type { BreadcrumbItem } from '@/components.types';
+import type { BreadcrumbItem } from '@/components';
 
 export type BreadcrumbSection =
   'overview' | 'details' | 'basic-info' | 'project-details';
 
 interface GetBreadcrumbsParams {
   resourceId?: string;
-  resourceName?: string;
+  name?: string;
   section?: BreadcrumbSection;
 }
 
 export const getBreadcrumbs = ({
   resourceId,
-  resourceName,
+  name,
   section,
 }: GetBreadcrumbsParams): BreadcrumbItem[] => {
   const items: BreadcrumbItem[] = [
@@ -21,17 +21,17 @@ export const getBreadcrumbs = ({
     },
   ];
 
-  if (!resourceId || !resourceName) {
+  if (!resourceId || !name) {
     return items;
   }
 
   const overviewItem: BreadcrumbItem = {
-    label: `Resource Overview: ${resourceName}`,
+    label: `Resource Overview: ${name}`,
     href: `/resources/${resourceId}`,
   };
 
   const detailsItem: BreadcrumbItem = {
-    label: `Resource Details: ${resourceName}`,
+    label: `Resource Details: ${name}`,
     href: `/resources/${resourceId}/details`,
   };
 

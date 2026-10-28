@@ -4,9 +4,9 @@ import type { ResourcePriority } from '@/constants/ResourcePriority';
 /** One row of the resources table. */
 export interface ResourceTable {
   /** Unique id of the resource. */
-  resourceId: number;
+  id: number;
   /** Technical name taken from basic info. */
-  resourceName: string;
+  name: string;
   /** Description taken from basic info. */
   description: string;
   /** Email taken from basic info. */
@@ -29,22 +29,24 @@ export interface ResourcesFilters {
   name: string;
   /** Selected status filter. */
   status: string;
+  /** Part of the resource email to search for. */
+  email: string;
 }
 
 /** Maps a resource from the API to a row of the table. */
 export const toResourceTableRow = ({
-  resourceId,
+  id,
   status,
   createdAt,
   updatedAt,
   basicInfo,
 }: Resource): ResourceTable => ({
-  resourceId,
-  resourceName: basicInfo.resourceName,
-  description: basicInfo.description,
-  email: basicInfo.email,
-  owner: basicInfo.owner,
-  priority: basicInfo.priority,
+  id,
+  name: basicInfo?.name,
+  description: basicInfo?.description,
+  email: basicInfo?.email,
+  owner: basicInfo?.owner,
+  priority: basicInfo?.priority,
   status,
   createdAt,
   updatedAt,

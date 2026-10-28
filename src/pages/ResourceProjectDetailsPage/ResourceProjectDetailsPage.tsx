@@ -130,7 +130,7 @@ export function ResourceProjectDetailsPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          resourceName: resource.basicInfo.resourceName,
+          name: resource.basicInfo.name,
           section: 'project-details',
         })}
       />

@@ -12,7 +12,7 @@ export interface CreateResourceModalProps {
 /** Values of the create resource form. */
 export interface CreateResourceFormValues {
   /** Name entered by the user. Trimmed before it is submitted. */
-  resourceName: string;
+  name: string;
 }
 
 /**
@@ -20,4 +20,4 @@ export interface CreateResourceFormValues {
  * - `empty`: no visible characters entered.
  * - `ready`: the name can be submitted.
  */
-export type ResourceNameStatus = 'empty' | 'ready';
+export type NameStatus = 'empty' | 'ready';

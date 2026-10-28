@@ -88,7 +88,7 @@ export function ResourceOverviewPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          resourceName: resource.basicInfo.resourceName,
+          name: resource.basicInfo.name,
           section: 'overview',
         })}
       />

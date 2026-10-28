@@ -18,29 +18,39 @@ const isoDateConverter = (value: unknown) =>
 /** Filter fields rendered above the table. */
 export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
   {
-    label: 'Name',
+    label: 'Technical Name',
     name: 'name',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.projectName,
     sanitize: (value: string) => value.replace(INVALID_RESOURCE_NAME_CHARS, ''),
+    required: false,
   },
   defineSelectField<ResourcesFilters, 'active' | 'archived'>({
     name: 'status',
-    label: 'Статус',
+    label: 'Technical Status',
     type: 'select',
     options: [
-      { value: 'active', label: 'Активные' },
-      { value: 'archived', label: 'Архивные' },
+      { value: 'active', label: 'Technical Active' },
+      { value: 'archived', label: 'Technical Archived' },
     ],
     defaultValue: 'active',
+    required: false,
   }),
+  {
+    label: 'Technical Email',
+    name: 'email',
+    type: 'input',
+    tooltip: FIELD_TOOLTIPS.email,
+    sanitize: (value: string) => value.replace(INVALID_RESOURCE_NAME_CHARS, ''),
+    required: false,
+  },
 ];
 
 /** Columns of the resources table. */
 export const tableConfig: TableColumn<ResourceTable>[] = [
   {
     title: 'Technical Name',
-    fieldName: 'resourceName',
+    fieldName: 'name',
   },
   {
     title: 'Technical description',

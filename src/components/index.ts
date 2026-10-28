@@ -1,5 +1,5 @@
 export { Breadcrumb } from './Breadcrumb';
-export type { BreadcrumbProps } from './Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb';
 export { ConfirmModal } from './ConfirmModal';
 export type { ConfirmModalProps } from './ConfirmModal';
 export { CreateResourceModal } from './CreateResourceModal';

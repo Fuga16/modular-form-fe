@@ -56,11 +56,11 @@ export function getResource(
   });
 }
 
-export function createResource(resourceName: string): Promise<Resource> {
+export function createResource(name: string): Promise<Resource> {
   return request<Resource>(BASE_PATH, {
     method: 'POST',
     body: {
-      resourceName,
+      name,
     },
   });
 }

@@ -1,5 +1,5 @@
 export const FIELD_TOOLTIPS = {
-  resourceName: 'Name of the resource; letters, digits and spaces only.',
+  name: 'Name of the resource; letters, digits and spaces only.',
   description: 'Brief resource description, up to 500 characters.',
   email: 'Contact email of the resource owner.',
   owner:

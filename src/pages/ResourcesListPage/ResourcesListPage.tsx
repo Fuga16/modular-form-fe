@@ -22,6 +22,7 @@ import {
   Table,
 } from '@/components';
 import { Button, Card } from '@/design-system';
+import { ThemeSwitcher } from '@/design-system/components/ThemeSwitcher/ThemeSwitcher';
 import { useDeleteResourceMutation } from '@/hooks/queries/useDeleteResourceMutation';
 import { useResourcesListQuery } from '@/hooks/queries/useResourcesListQuery';
 import { getFilterValues } from '@/utils/getDefaultFilterValues';
@@ -106,7 +107,7 @@ export const ResourcesListPage = () => {
   }, [data, query.page]);
 
   const rows = useMemo(
-    () => (data ? data?.items?.map(toResourceTableRow) : []),
+    () => (data ? data?.data?.map(toResourceTableRow) : []),
     [data],
   );
 
@@ -117,7 +118,7 @@ export const ResourcesListPage = () => {
   const handleConfirmDelete = () => {
     if (!rowToDelete) return;
 
-    deleteResourceMutation.mutate(String(rowToDelete.resourceId), {
+    deleteResourceMutation.mutate(String(rowToDelete.id), {
       onSuccess: () => {
         setRowToDelete(null);
       },
@@ -143,6 +144,7 @@ export const ResourcesListPage = () => {
 
   return (
     <div className={layout.page}>
+      <ThemeSwitcher />
       <CreateResourceModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
@@ -156,9 +158,8 @@ export const ResourcesListPage = () => {
         confirmLabel="Delete"
         isConfirming={deleteResourceMutation.isPending}
       >
-        Are you sure you want to delete{' '}
-        <strong>{rowToDelete?.resourceName}</strong>? This action cannot be
-        undone.
+        Are you sure you want to delete <strong>{rowToDelete?.name}</strong>?
+        This action cannot be undone.
       </ConfirmModal>
 
       <header className={layout.header}>
@@ -191,33 +192,27 @@ export const ResourcesListPage = () => {
         variant="outline"
         className={layout.section}
       >
-        {pagination && (
-          <Pagination
-            page={pagination.page}
-            totalPages={pagination.totalPages}
-            pageSize={pagination.pageSize}
-          />
-        )}
-        {rows && rows.length && (
-          <Table<ResourceTable>
-            data={rows}
-            config={tableConfig}
-            getRowId={(row) => String(row.resourceId)}
-            onRowClick={(row) => navigate(`/resources/${row.resourceId}`)}
-            onDeleteRow={handleRequestDelete}
-            emptyState={{
-              title: 'No resources found',
-              description: 'Try adjusting your filters.',
-            }}
-          />
-        )}
-        {pagination && (
-          <Pagination
-            page={pagination.page}
-            totalPages={pagination.totalPages}
-            pageSize={pagination.pageSize}
-          />
-        )}
+        <Pagination
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          pageSize={pagination.pageSize}
+        />
+        <Table<ResourceTable>
+          data={rows}
+          config={tableConfig}
+          getRowId={(row) => String(row.id)}
+          onRowClick={(row) => navigate(`/resources/${row.id}`)}
+          onDeleteRow={handleRequestDelete}
+          emptyState={{
+            title: 'No resources found',
+            description: 'Try adjusting your filters.',
+          }}
+        />
+        <Pagination
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          pageSize={pagination.pageSize}
+        />
       </Card>
     </div>
   );

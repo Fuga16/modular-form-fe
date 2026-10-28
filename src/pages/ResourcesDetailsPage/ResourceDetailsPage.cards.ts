@@ -41,7 +41,7 @@ export function buildDetailsCards({
         { label: 'Email', value: resource.basicInfo.email },
         { label: 'Owner', value: resource.basicInfo.owner },
         { label: 'Priority', value: resource.basicInfo.priority },
-        { label: 'Resource name', value: resource.basicInfo.resourceName },
+        { label: 'Resource name', value: resource.basicInfo.name },
       ],
       onOpen: () => navigate(`/resources/${resourceId}/basic-info`),
     },

@@ -80,7 +80,7 @@ export function ResourceDetailsPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          resourceName: resource.basicInfo.resourceName,
+          name: resource.basicInfo.name,
           section: 'details',
         })}
       />
@@ -119,7 +119,7 @@ export function ResourceDetailsPage() {
         isConfirming={provisionMutation.isPending}
       >
         Are you sure you want to provision{' '}
-        <strong>{resource.basicInfo.resourceName}</strong>? This will start the
+        <strong>{resource.basicInfo.name}</strong>? This will start the
         provisioning process for this resource.
       </ConfirmModal>
     </div>

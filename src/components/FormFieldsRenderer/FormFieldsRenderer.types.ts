@@ -25,6 +25,8 @@ export type InputField<TValues extends FieldValues = FieldValues> =
       pattern: RegExp;
       message: string;
     };
+    /** Placeholder text shown when the field is empty. */
+    placeholder?: string;
   };
 
 /** Single-choice dropdown. `TValue` is the union of option values. */

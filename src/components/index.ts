@@ -3,7 +3,10 @@ export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb';
 export { ConfirmModal } from './ConfirmModal';
 export type { ConfirmModalProps } from './ConfirmModal';
 export { CreateResourceModal } from './CreateResourceModal';
-export type { CreateResourceModalProps } from './CreateResourceModal';
+export type {
+  CreateResourceModalProps,
+  CreateResourceFormValues,
+} from './CreateResourceModal';
 export { FiltersBlock } from './FiltersBlock';
 export type { FiltersBlockProps } from './FiltersBlock';
 export { FormFieldsRenderer } from './FormFieldsRenderer';

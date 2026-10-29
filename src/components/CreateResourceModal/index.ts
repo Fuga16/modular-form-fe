@@ -1,2 +1,5 @@
 export { CreateResourceModal } from './CreateResourceModal';
-export type { CreateResourceModalProps } from './CreateResourceModal.types';
+export type {
+  CreateResourceModalProps,
+  CreateResourceFormValues,
+} from './CreateResourceModal.types';

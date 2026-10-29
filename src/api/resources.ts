@@ -7,6 +7,7 @@ import type {
   Resource,
   ResourcePayload,
 } from './types';
+import type { CreateResourceFormValues } from '@/components';
 
 const BASE_PATH = '/api/resources';
 
@@ -56,12 +57,12 @@ export function getResource(
   });
 }
 
-export function createResource(name: string): Promise<Resource> {
+export function createResource(
+  body: CreateResourceFormValues,
+): Promise<Resource> {
   return request<Resource>(BASE_PATH, {
     method: 'POST',
-    body: {
-      name,
-    },
+    body,
   });
 }
 

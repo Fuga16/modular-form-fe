@@ -6,10 +6,11 @@ import { defineSelectField } from '@/components/FormFieldsRenderer/FormFieldsRen
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 import type { TableColumn } from '@/components/Table';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import {
+  EMAIL_REGEX,
+  INVALID_RESOURCE_NAME_CHARS,
+} from '@/constants/validation';
 import { formatIsoDate } from '@/utils/formatIsoDate';
-
-/** Characters removed from the name filter: letters, digits, spaces and hyphens are kept. */
-const INVALID_RESOURCE_NAME_CHARS = /[^A-Za-z0-9 -]/g;
 
 /** Formats a date value for the table. Non-string values are converted with `String` first. */
 const isoDateConverter = (value: unknown) =>
@@ -41,7 +42,7 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
     name: 'email',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.email,
-    sanitize: (value: string) => value.replace(INVALID_RESOURCE_NAME_CHARS, ''),
+    sanitize: (value: string) => value.replace(EMAIL_REGEX, ''),
     required: false,
   },
 ];

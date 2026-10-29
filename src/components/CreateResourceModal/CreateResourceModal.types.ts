@@ -13,6 +13,10 @@ export interface CreateResourceModalProps {
 export interface CreateResourceFormValues {
   /** Name entered by the user. Trimmed before it is submitted. */
   name: string;
+  /** Email address entered by the user. */
+  email: string;
+  /** Priority selected by the user. */
+  priority: string;
 }
 
 /**

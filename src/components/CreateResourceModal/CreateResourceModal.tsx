@@ -2,30 +2,30 @@ import { useEffect, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
-import {
-  CANCEL_LABEL,
-  CREATE_RESOURCE_ERROR,
-  CREATING_LABEL,
-  DEFAULT_VALUES,
-  MODAL_TITLE,
-  RESOURCE_NAME_LABEL,
-  RESOURCE_NAME_PLACEHOLDER,
-  RESOURCE_NAME_REQUIRED_ERROR,
-  RESOURCE_NAME_TOOLTIP,
-} from './CreateResourceModal.constants';
+import layout from '@/pages/PageLayout.module.css';
+
+import { FormFieldsRenderer } from '../FormFieldsRenderer';
+
 import styles from './CreateResourceModal.module.css';
 import type {
   CreateResourceFormValues,
   CreateResourceModalProps,
 } from './CreateResourceModal.types';
 import {
-  INVALID_CHARS_REGEX,
   getNameStatus,
   nameStatusContent,
 } from './CreateResourceModal.variants';
-import { Button, Input, Modal } from '@/design-system';
+import {
+  CANCEL_LABEL,
+  CREATE_RESOURCE_ERROR,
+  CREATING_LABEL,
+  DEFAULT_VALUES,
+  MODAL_TITLE,
+  fieldsConfig,
+} from './config';
+import { Button, Card, Modal } from '@/design-system';
 import { useCreateResourceMutation } from '@/hooks/queries/useCreateResourceMutation';
 
 /**
@@ -44,19 +44,13 @@ export function CreateResourceModal({
   const createResourceMutation = useCreateResourceMutation();
   const isPending = createResourceMutation.isPending;
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setFocus,
-    setError,
-    formState: { errors },
-    control,
-  } = useForm<CreateResourceFormValues>({
+  const methods = useForm<CreateResourceFormValues>({
     defaultValues: DEFAULT_VALUES,
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   });
+
+  const { handleSubmit, reset, setFocus, setError, control } = methods;
 
   const name = useWatch({
     control,
@@ -95,22 +89,28 @@ export function CreateResourceModal({
     onClose();
   };
 
-  const onSubmit = ({ name }: CreateResourceFormValues) => {
-    createResourceMutation.mutate(name, {
-      onSuccess: ({ resourceId }) => {
-        navigate(`/resources/${resourceId}`);
-        handleClose();
+  const onSubmit = ({ name, email, priority }: CreateResourceFormValues) => {
+    createResourceMutation.mutate(
+      {
+        name: name.trim(),
+        email: email.trim(),
+        priority,
       },
-      onError: () => {
-        if (!isOpenRef.current) return;
-
-        setError('name', {
-          type: 'server',
-          message: CREATE_RESOURCE_ERROR,
-        });
-        shouldRefocusRef.current = true;
+      {
+        onSuccess: ({ id }) => {
+          navigate(`/resources/${id}`);
+          handleClose();
+        },
+        onError: () => {
+          if (!isOpenRef.current) return;
+          setError('name', {
+            type: 'server',
+            message: CREATE_RESOURCE_ERROR,
+          });
+          shouldRefocusRef.current = true;
+        },
       },
-    });
+    );
   };
 
   return (
@@ -123,50 +123,39 @@ export function CreateResourceModal({
         <span className={styles.statusEmoji}>{status.emoji}</span>
         <span className={styles.statusText}>{status.text}</span>
       </div>
-
-      <form
-        onSubmit={(event) => {
-          void handleSubmit(onSubmit)(event);
-        }}
-      >
-        <Input
-          label={RESOURCE_NAME_LABEL}
-          placeholder={RESOURCE_NAME_PLACEHOLDER}
-          tooltip={RESOURCE_NAME_TOOLTIP}
-          error={errors.name?.message}
-          disabled={isPending}
-          {...register('name', {
-            validate: (value) =>
-              value.trim() !== '' || RESOURCE_NAME_REQUIRED_ERROR,
-            setValueAs: (value: string) => value.trim(),
-            onChange: (event) => {
-              event.target.value = event.target.value.replace(
-                INVALID_CHARS_REGEX,
-                '',
-              );
-            },
-          })}
-        />
-
-        <div className={styles.actions}>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={handleClose}
-            disabled={isPending}
+      <FormProvider {...methods}>
+        <form
+          onSubmit={(event) => {
+            void handleSubmit(onSubmit)(event);
+          }}
+        >
+          <Card
+            variant="outline"
+            className={layout.section}
           >
-            {CANCEL_LABEL}
-          </Button>
+            <FormFieldsRenderer config={fieldsConfig} />
+          </Card>
 
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={isPending}
-          >
-            {isPending ? CREATING_LABEL : status.submitLabel}
-          </Button>
-        </div>
-      </form>
+          <div className={styles.actions}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleClose}
+              disabled={isPending}
+            >
+              {CANCEL_LABEL}
+            </Button>
+
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isPending}
+            >
+              {isPending ? CREATING_LABEL : status.submitLabel}
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </Modal>
   );
 }

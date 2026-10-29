@@ -14,7 +14,8 @@ import { getRequiredRule } from '@/utils/getRequiredRule';
 export function InputAdapter({ field }: AdapterProps<InputField>) {
   const { control } = useFormContext();
 
-  const { label, type, name, required, sanitize, rules, tooltip } = field;
+  const { label, type, name, required, sanitize, rules, tooltip, placeholder } =
+    field;
 
   return (
     <Controller
@@ -44,6 +45,7 @@ export function InputAdapter({ field }: AdapterProps<InputField>) {
           ...controllerField,
           label,
           tooltip,
+          placeholder,
           error: fieldState.error?.message,
           onChange: handleChange,
         };

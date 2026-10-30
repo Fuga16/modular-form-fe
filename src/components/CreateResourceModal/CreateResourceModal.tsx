@@ -52,12 +52,12 @@ export function CreateResourceModal({
 
   const { handleSubmit, reset, setFocus, setError, control } = methods;
 
-  const name = useWatch({
+  const [name, email] = useWatch({
     control,
-    name: 'name',
+    name: ['name', 'email'],
   });
 
-  const status = nameStatusContent[getNameStatus(name)];
+  const status = nameStatusContent[getNameStatus(name, email)];
 
   // Latest `isOpen` for callbacks that outlive the render they were created in.
   const isOpenRef = useRef(isOpen);

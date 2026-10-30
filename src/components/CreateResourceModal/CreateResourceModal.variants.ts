@@ -1,4 +1,5 @@
 import type { NameStatus } from './CreateResourceModal.types';
+import { EMAIL_FORMAT_REGEX } from '@/constants/validation';
 
 interface StatusContent {
   emoji: string;
@@ -21,6 +22,6 @@ export const nameStatusContent: Record<NameStatus, StatusContent> = {
   },
 };
 
-export function getNameStatus(name = ''): NameStatus {
-  return name.trim() ? 'ready' : 'empty';
+export function getNameStatus(name = '', email = ''): NameStatus {
+  return name.trim() && EMAIL_FORMAT_REGEX.test(email) ? 'ready' : 'empty';
 }

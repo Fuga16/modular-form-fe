@@ -28,7 +28,6 @@ export function Modal({ title, isOpen, onClose, children }: ModalProps) {
         <motion.div
           {...getOverlayAnimation()}
           className={styles.overlay}
-          onClick={onClose}
         >
           <motion.div
             {...getPanelAnimation()}

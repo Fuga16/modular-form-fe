@@ -7,8 +7,8 @@ import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRend
 import type { TableColumn } from '@/components/Table';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import {
-  EMAIL_REGEX,
-  INVALID_RESOURCE_NAME_CHARS,
+  EMAIL_FORMAT_REGEX,
+  LETTERS_AND_NUMBERS_REGEX,
 } from '@/constants/validation';
 import { formatIsoDate } from '@/utils/formatIsoDate';
 
@@ -23,7 +23,7 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
     name: 'name',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.projectName,
-    sanitize: (value: string) => value.replace(INVALID_RESOURCE_NAME_CHARS, ''),
+    sanitize: (value: string) => value.replace(LETTERS_AND_NUMBERS_REGEX, ''),
     required: false,
   },
   defineSelectField<ResourcesFilters, 'active' | 'archived'>({
@@ -42,7 +42,7 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
     name: 'email',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.email,
-    sanitize: (value: string) => value.replace(EMAIL_REGEX, ''),
+    sanitize: (value: string) => value.replace(EMAIL_FORMAT_REGEX, ''),
     required: false,
   },
 ];

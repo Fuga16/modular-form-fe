@@ -59,7 +59,7 @@ export function buildDetailsCards({
       icon: '🚧',
       information: [
         { label: 'Budget', value: projectDetails?.budget },
-        { label: 'Category', value: projectDetails?.category },
+        { label: 'Category', value: projectDetails?.projectCategory },
         {
           label: 'Options',
           value: projectDetails?.options.join(', '),

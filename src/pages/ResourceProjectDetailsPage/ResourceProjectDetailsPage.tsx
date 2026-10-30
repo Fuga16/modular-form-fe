@@ -24,7 +24,7 @@ import { isModuleCompleted } from '@/utils/isModuleCompleted';
 /** Form values before the resource is loaded. */
 const defaultValues: ProjectDetailsFormValues = {
   budget: '',
-  category: '',
+  projectCategory: '',
   options: [],
   projectName: '',
 };
@@ -61,14 +61,17 @@ export function ResourceProjectDetailsPage() {
     const draft = getBuffer(resourceId);
 
     reset({
-      budget: draft?.projectDetails?.budget ?? resource.projectDetails.budget,
-      category:
-        draft?.projectDetails?.category ?? resource.projectDetails.category,
+      budget: draft?.projectDetails?.budget ?? resource.projectDetails?.budget,
+      projectCategory:
+        draft?.projectDetails?.projectCategory ??
+        resource.projectDetails?.projectCategory,
       options:
-        draft?.projectDetails?.options ?? resource.projectDetails.options ?? [],
+        draft?.projectDetails?.options ??
+        resource.projectDetails?.options ??
+        [],
       projectName:
         draft?.projectDetails?.projectName ??
-        resource.projectDetails.projectName,
+        resource.projectDetails?.projectName,
     });
   }, [resource, resourceId, getBuffer, reset]);
 

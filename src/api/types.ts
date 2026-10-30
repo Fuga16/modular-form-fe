@@ -1,5 +1,5 @@
-import type { ResourceCategory } from '@/constants/ResourceCategory';
 import type { ResourcePriority } from '@/constants/ResourcePriority';
+import type { ResourceProjectCategory } from '@/constants/ResourceProjectCategory';
 import type { TeamMember } from '@/constants/TeamOptions';
 
 export type ResourceStatus = 'draft' | 'completed';
@@ -15,7 +15,7 @@ export interface GeneralInfo {
 export interface ProjectDetails {
   projectName: string;
   budget: string;
-  category: ResourceCategory | '';
+  projectCategory: ResourceProjectCategory | '';
   options: TeamMember[];
 }
 

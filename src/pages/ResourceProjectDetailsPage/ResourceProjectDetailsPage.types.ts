@@ -1,9 +1,9 @@
-import type { ResourceCategory } from '@/constants/ResourceCategory';
+import type { ResourceProjectCategory } from '@/constants/ResourceProjectCategory';
 import type { TeamMember } from '@/constants/TeamOptions';
 
 export interface ProjectDetailsFormValues {
   budget: string;
-  category: ResourceCategory | '';
+  projectCategory: ResourceProjectCategory | '';
   options: TeamMember[];
   projectName: string;
 }

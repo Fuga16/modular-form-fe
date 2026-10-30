@@ -21,7 +21,7 @@ export function Summary({ data }: SummaryProps) {
   const projectDetailsCompleted = isModuleCompleted(projectDetails);
   const allCompleted = basicInfoCompleted && projectDetailsCompleted;
   const { description, email, owner, priority, name } = generalInfo ?? {};
-  const { budget, category, options, projectName } = projectDetails ?? {};
+  const { budget, projectCategory, options, projectName } = projectDetails ?? {};
 
   const steps: SummaryStep[] = [
     {
@@ -40,7 +40,7 @@ export function Summary({ data }: SummaryProps) {
       completed: projectDetailsCompleted,
       information: [
         { label: 'Budget', value: budget ?? '' },
-        { label: 'Category', value: category ?? '' },
+        { label: 'Category', value: projectCategory ?? '' },
         {
           label: 'Options',
           value: options?.join(', ') ?? '',

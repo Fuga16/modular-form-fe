@@ -1,0 +1,21 @@
+.errorBanner {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  color: var(--color-warning-text);
+}
+
+.unsavedBanner {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  background-color: var(--color-accent-subtle);
+  color: var(--color-warning-text);
+  font-size: var(--text-sm);
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+}

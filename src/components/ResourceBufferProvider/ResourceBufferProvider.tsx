@@ -1,10 +1,16 @@
-import { type PropsWithChildren, useCallback, useMemo, useState } from 'react';
+import {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import type {
   ResourceBuffer,
   ResourceBufferContextValue,
 } from './ResourceBufferProvider.types';
-import type { BasicInfo, ProjectDetails } from '@/api/types';
+import type { GeneralInfo, ProjectDetails } from '@/api/types';
 import { ResourceBufferContext } from '@/context/ResourceBufferContext';
 
 /**
@@ -22,16 +28,13 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
     [buffer],
   );
 
-  const updateBasicInfo = useCallback(
-    (resourceId: string, data: Partial<BasicInfo>) => {
+  const updateGeneralInfo = useCallback(
+    (resourceId: string, data: Partial<GeneralInfo>) => {
       setBuffer((prev) => ({
         ...prev,
         [resourceId]: {
           ...prev[resourceId],
-          basicInfo: {
-            ...prev[resourceId]?.basicInfo,
-            ...data,
-          },
+          ...data,
         },
       }));
     },
@@ -67,11 +70,11 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
     () => ({
       buffer,
       getBuffer,
-      updateBasicInfo,
+      updateGeneralInfo,
       updateProjectDetails,
       clearBuffer,
     }),
-    [buffer, getBuffer, updateBasicInfo, updateProjectDetails, clearBuffer],
+    [buffer, getBuffer, updateGeneralInfo, updateProjectDetails, clearBuffer],
   );
 
   return (

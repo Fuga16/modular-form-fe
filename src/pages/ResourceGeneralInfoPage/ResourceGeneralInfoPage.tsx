@@ -6,8 +6,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import layout from '../PageLayout.module.css';
 
-import styles from './ResourceBasicInfoPage.module.css';
-import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types';
+import styles from './ResourceGeneralInfoPage.module.css';
+import type { GeneralInfoFormValues } from './ResourceGeneralInfoPage.types';
 import { basicInfoFieldsConfig } from './config';
 import {
   Breadcrumb,
@@ -22,19 +22,19 @@ import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 
 /**
- * Basic info step of the resource wizard.
+ * General information step of the resource wizard.
  *
  * A completed resource is edited locally and saved to the buffer, so changes are
  * applied later. An editable resource is saved to the server and the user moves to
  * the project details step.
  */
-export function ResourceBasicInfoPage() {
+export function ResourceGeneralInfoPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
 
-  const { updateBasicInfo, getBuffer } = useResourceBuffer();
+  const { updateGeneralInfo, getBuffer } = useResourceBuffer();
 
-  const form = useForm<BasicInfoFormValues>({
+  const form = useForm<GeneralInfoFormValues>({
     mode: 'onChange',
   });
 
@@ -52,11 +52,10 @@ export function ResourceBasicInfoPage() {
     const draft = getBuffer(resourceId);
 
     reset({
-      description:
-        draft?.basicInfo?.description ?? resource.basicInfo.description,
-      email: draft?.basicInfo?.email ?? resource.basicInfo.email,
-      owner: draft?.basicInfo?.owner ?? resource.basicInfo.owner,
-      priority: draft?.basicInfo?.priority ?? resource.basicInfo.priority,
+      description: draft?.generalInfo?.description ?? resource.description,
+      email: draft?.generalInfo?.email ?? resource.email,
+      owner: draft?.generalInfo?.owner ?? resource.owner,
+      priority: draft?.generalInfo?.priority ?? resource.priority,
     });
   }, [resource, resourceId, getBuffer, reset]);
 
@@ -85,15 +84,15 @@ export function ResourceBasicInfoPage() {
     );
   }
 
-  const handleCompletedResource = (data: BasicInfoFormValues) => {
-    updateBasicInfo(resourceId, data);
+  const handleCompletedResource = (data: GeneralInfoFormValues) => {
+    updateGeneralInfo(resourceId, data);
     navigate(`/resources/${resourceId}`);
   };
 
-  const handleEditableResource = (data: BasicInfoFormValues) => {
+  const handleEditableResource = (data: GeneralInfoFormValues) => {
     patchBasicInfoMutation.mutate(
       {
-        name: resource.basicInfo.name,
+        name: resource.name,
         ...data,
       },
       {
@@ -104,7 +103,7 @@ export function ResourceBasicInfoPage() {
     );
   };
 
-  const onSubmit = (data: BasicInfoFormValues) => {
+  const onSubmit = (data: GeneralInfoFormValues) => {
     if (resource.status === 'completed') {
       handleCompletedResource(data);
       return;
@@ -122,8 +121,8 @@ export function ResourceBasicInfoPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
-          section: 'basic-info',
+          name: resource.name,
+          section: 'general-info',
         })}
       />
 
@@ -168,4 +167,4 @@ export function ResourceBasicInfoPage() {
   );
 }
 
-export default ResourceBasicInfoPage;
+export default ResourceGeneralInfoPage;

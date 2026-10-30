@@ -1,11 +1,11 @@
 import { patchBasicInfo } from '@/api/resources';
-import type { BasicInfo } from '@/api/types';
+import type { GeneralInfo } from '@/api/types';
 import { useApiMutation } from '@/hooks/useApiMutation';
 
 export function usePatchBasicInfoMutation(resourceId: string | undefined) {
   return useApiMutation({
-    mutationFn: (payload: BasicInfo) => patchBasicInfo(resourceId!, payload),
+    mutationFn: (payload: GeneralInfo) => patchBasicInfo(resourceId!, payload),
 
-    successMessage: 'Basic information saved successfully.',
+    successMessage: 'General information saved successfully.',
   });
 }

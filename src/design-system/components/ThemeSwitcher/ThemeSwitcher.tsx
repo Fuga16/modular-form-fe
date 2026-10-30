@@ -1,6 +1,6 @@
-import { useTheme } from '../../hooks/useTheme';
-import type { ThemePreference } from '../../theme/ThemeContext';
-import { Button } from '../Button';
+import { Button } from '@/design-system';
+import { useTheme } from '@/design-system/hooks/useTheme';
+import type { ThemePreference } from '@/design-system/theme/ThemeContext';
 
 const OPTIONS: { value: ThemePreference; label: string }[] = [
   { value: 'light', label: 'Светлая' },

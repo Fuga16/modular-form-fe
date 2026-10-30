@@ -1,4 +1,4 @@
-import type { BasicInfo, ProjectDetails } from '@/api/types';
+import type { Resource } from '@/api/types';
 
 /**
  * Progress state of one step.
@@ -20,16 +20,8 @@ export interface Step {
   icon: string;
 }
 
-/** Data the progress is calculated from. Each section is optional until it is loaded. */
-export interface StepperData {
-  /** Basic info section, if it has been loaded. */
-  basicInfo?: BasicInfo;
-  /** Project details section, if it has been loaded. */
-  projectDetails?: ProjectDetails;
-}
-
 /** Props for the Stepper component. */
 export interface StepperProps {
   /** Source data for the step statuses. */
-  data: StepperData;
+  data: Resource;
 }

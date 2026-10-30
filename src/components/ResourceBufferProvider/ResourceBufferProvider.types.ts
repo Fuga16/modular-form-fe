@@ -1,9 +1,9 @@
-import type { BasicInfo, ProjectDetails } from '@/api/types';
+import type { GeneralInfo, ProjectDetails } from '@/api/types';
 
 /** Unsaved changes for one resource. Each section is a partial of its full type. */
 export type ResourceBufferItem = {
-  /** Pending edits to the basic info section. */
-  basicInfo?: Partial<BasicInfo>;
+  /** Pending edits to the general information section. */
+  generalInfo?: Partial<GeneralInfo>;
   /** Pending edits to the project details section. */
   projectDetails?: Partial<ProjectDetails>;
 };
@@ -20,10 +20,10 @@ export interface ResourceBufferContextValue {
   getBuffer: (resourceId: string) => ResourceBufferItem | undefined;
 
   /**
-   * Merges the given fields into the resource's basic info buffer.
+   * Merges the given fields into the resource's general information buffer.
    * Fields not passed are kept from earlier updates.
    */
-  updateBasicInfo: (resourceId: string, data: Partial<BasicInfo>) => void;
+  updateGeneralInfo: (resourceId: string, data: Partial<GeneralInfo>) => void;
 
   /**
    * Merges the given fields into the resource's project details buffer.

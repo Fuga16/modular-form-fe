@@ -1,7 +1,7 @@
-import type { BasicInfo, ProjectDetails } from '@/api/types';
+import type { GeneralInfo, ProjectDetails } from '@/api/types';
 
 /** Any module whose completion is checked. */
-export type ModuleCompletionInput = BasicInfo | ProjectDetails;
+export type ModuleCompletionInput = GeneralInfo | ProjectDetails;
 
 /**
  * Returns true when the module has data for every required field.

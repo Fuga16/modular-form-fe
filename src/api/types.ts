@@ -4,7 +4,7 @@ import type { TeamMember } from '@/constants/TeamOptions';
 
 export type ResourceStatus = 'draft' | 'completed';
 
-export interface BasicInfo {
+export interface GeneralInfo {
   name: string;
   owner: string;
   email: string;
@@ -19,26 +19,19 @@ export interface ProjectDetails {
   options: TeamMember[];
 }
 
-export interface Resource {
+export interface ResourceFields extends GeneralInfo {
+  projectDetails: ProjectDetails;
+}
+
+export interface Resource extends ResourceFields {
   id: number;
   _id?: string;
-
-  name: string;
   status: ResourceStatus;
-
-  basicInfo: BasicInfo;
-  projectDetails: ProjectDetails;
-
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface ResourcePayload {
-  name: string;
-  basicInfo: BasicInfo;
-  projectDetails: ProjectDetails;
-}
-
+export type ResourcePayload = ResourceFields;
 export interface Pagination {
   page: number;
   pageSize: number;

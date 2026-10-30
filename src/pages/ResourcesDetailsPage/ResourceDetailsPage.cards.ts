@@ -17,9 +17,9 @@ interface BuildDetailsCardsParams {
 }
 
 /**
- * Builds the three cards of the details page: basic info, project details and provisioning.
+ * Builds the three cards of the details page: general information, project details and provisioning.
  *
- * Project details is locked until basic info is complete. Provisioning is locked
+ * Project details is locked until general information is complete. Provisioning is locked
  * until both sections are complete, and is closed once the resource is completed.
  */
 export function buildDetailsCards({
@@ -28,48 +28,57 @@ export function buildDetailsCards({
   navigate,
   onProvision,
 }: BuildDetailsCardsParams): DetailCardConfig[] {
-  const basicInfoCompleted = isModuleCompleted(resource.basicInfo);
-  const projectDetailsCompleted = isModuleCompleted(resource.projectDetails);
-  const isCompleted = resource.status === 'completed';
+  const { name, owner, description, email, priority, projectDetails, status } =
+    resource;
+  const generalInfoCompleted = isModuleCompleted({
+    name,
+    owner,
+    description,
+    email,
+    priority,
+  });
+  const projectDetailsCompleted = isModuleCompleted(projectDetails);
+  const isCompleted = status === 'completed';
 
   return [
     {
-      title: 'Basic Info',
-      status: basicInfoCompleted,
+      title: 'General Information',
+      status: generalInfoCompleted,
       information: [
-        { label: 'Description', value: resource.basicInfo.description },
-        { label: 'Email', value: resource.basicInfo.email },
-        { label: 'Owner', value: resource.basicInfo.owner },
-        { label: 'Priority', value: resource.basicInfo.priority },
-        { label: 'Resource name', value: resource.basicInfo.name },
+        { label: 'Description', value: description },
+        { label: 'Email', value: email },
+        { label: 'Owner', value: owner },
+        { label: 'Priority', value: priority },
+        { label: 'Resource name', value: name },
       ],
-      onOpen: () => navigate(`/resources/${resourceId}/basic-info`),
+      onOpen: () => navigate(`/resources/${resourceId}/general-info`),
     },
     {
       title: 'Project Details',
       status: projectDetailsCompleted,
       icon: '🚧',
       information: [
-        { label: 'Budget', value: resource.projectDetails.budget },
-        { label: 'Category', value: resource.projectDetails.category },
+        { label: 'Budget', value: projectDetails?.budget },
+        { label: 'Category', value: projectDetails?.category },
         {
           label: 'Options',
-          value: resource.projectDetails.options.join(', '),
+          value: projectDetails?.options.join(', '),
         },
         {
           label: 'Project name',
-          value: resource.projectDetails.projectName,
+          value: projectDetails?.projectName,
         },
       ],
       onOpen: () => navigate(`/resources/${resourceId}/project-details`),
-      disabled: !basicInfoCompleted,
+      disabled: !generalInfoCompleted,
     },
     {
       title: 'Provisioning',
       status: isCompleted,
       icon: '✅',
       onOpen: onProvision,
-      disabled: !basicInfoCompleted || !projectDetailsCompleted || isCompleted,
+      disabled:
+        !generalInfoCompleted || !projectDetailsCompleted || isCompleted,
       actionLabel: 'Provision Resource',
     },
   ];

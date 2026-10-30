@@ -10,7 +10,6 @@ import type {
   ResourceTable,
   ResourcesFilters,
 } from './ResourcesListPage.types';
-import { toResourceTableRow } from './ResourcesListPage.types';
 import { filtersConfig, tableConfig } from './config';
 import {
   Breadcrumb,
@@ -22,7 +21,6 @@ import {
   Table,
 } from '@/components';
 import { Button, Card } from '@/design-system';
-import { ThemeSwitcher } from '@/design-system/components/ThemeSwitcher/ThemeSwitcher';
 import { useDeleteResourceMutation } from '@/hooks/queries/useDeleteResourceMutation';
 import { useResourcesListQuery } from '@/hooks/queries/useResourcesListQuery';
 import { getFilterValues } from '@/utils/getDefaultFilterValues';
@@ -106,10 +104,7 @@ export const ResourcesListPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- react only to fetched data/page changing, not every searchParams/setSearchParams identity
   }, [data, query.page]);
 
-  const rows = useMemo(
-    () => (data ? data?.data?.map(toResourceTableRow) : []),
-    [data],
-  );
+  const rows = data?.data ?? [];
 
   const handleRequestDelete = (row: ResourceTable) => {
     setRowToDelete(row);
@@ -144,7 +139,6 @@ export const ResourcesListPage = () => {
 
   return (
     <div className={layout.page}>
-      <ThemeSwitcher />
       <CreateResourceModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}

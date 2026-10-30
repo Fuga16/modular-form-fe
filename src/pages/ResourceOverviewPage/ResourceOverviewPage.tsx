@@ -51,9 +51,10 @@ export function ResourceOverviewPage() {
       </div>
     );
   }
-
+  const { status, name, owner, email, description, priority, projectDetails } =
+    resource;
   const draft = getBuffer(resourceId);
-  const hasUnsavedChanges = resource.status === 'completed' && Boolean(draft);
+  const hasUnsavedChanges = status === 'completed' && Boolean(draft);
   const isSaving = updateResourceMutation.isPending;
 
   const handleSaveChanges = () => {
@@ -63,13 +64,10 @@ export function ResourceOverviewPage() {
 
     updateResourceMutation.mutate(
       {
-        name: resource.name,
-        basicInfo: {
-          ...resource.basicInfo,
-          ...draft.basicInfo,
-        },
+        ...resource,
+        ...draft,
         projectDetails: {
-          ...resource.projectDetails,
+          ...projectDetails,
           ...draft.projectDetails,
         },
       },
@@ -88,7 +86,7 @@ export function ResourceOverviewPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
+          name,
           section: 'overview',
         })}
       />
@@ -124,7 +122,19 @@ export function ResourceOverviewPage() {
         </div>
       ) : null}
 
-      <Summary resource={resource} />
+      <Summary
+        data={{
+          generalInfo: {
+            name,
+            owner,
+            email,
+            description,
+            priority,
+          },
+          projectDetails,
+          status,
+        }}
+      />
     </div>
   );
 }

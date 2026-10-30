@@ -33,7 +33,7 @@ const defaultValues: ProjectDetailsFormValues = {
  * Project details step of the resource wizard.
  *
  * A completed resource is edited locally and saved to the buffer. An editable
- * resource is saved to the server. If the basic info step is not complete yet,
+ * resource is saved to the server. If the general information step is not complete yet,
  * the user is sent back to it.
  */
 export function ResourceProjectDetailsPage() {
@@ -48,7 +48,7 @@ export function ResourceProjectDetailsPage() {
 
   const { reset, handleSubmit } = form;
 
-  const { data: resource, status } = useResourceQuery(resourceId);
+  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId);
   const patchProjectDetailsMutation =
     usePatchProjectDetailsMutation(resourceId);
 
@@ -72,9 +72,27 @@ export function ResourceProjectDetailsPage() {
     });
   }, [resource, resourceId, getBuffer, reset]);
 
-  // The project details step is available only after the basic info step.
+  // TODO REFACTOR IT 30102026-1
+  const { name, status, owner, email, description, priority } = resource ?? {
+    name: '',
+    status: '',
+    owner: '',
+    email: '',
+    description: '',
+    priority: '',
+  };
+
+  const generalInfo = {
+    name,
+    owner,
+    email,
+    description,
+    priority,
+  };
+
+  // The project details step is available only after the general information step.
   useEffect(() => {
-    if (resource && !isModuleCompleted(resource.basicInfo)) {
+    if (resource && !isModuleCompleted(generalInfo)) {
       navigate(`/resources/${resourceId}/details`);
     }
   }, [navigate, resource, resourceId]);
@@ -83,12 +101,12 @@ export function ResourceProjectDetailsPage() {
     return null;
   }
 
-  if (status === 'pending') {
+  if (fetchStatus === 'pending') {
     return <LoadingState />;
   }
 
-  // A resource without basic info cannot be edited here, so it is treated as a load failure.
-  if (status === 'error' || !resource || !resource.basicInfo) {
+  // A resource without general information cannot be edited here, so it is treated as a load failure.
+  if (fetchStatus === 'error' || !resource || !generalInfo) {
     return (
       <div
         role="alert"
@@ -130,24 +148,19 @@ export function ResourceProjectDetailsPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
+          name,
           section: 'project-details',
         })}
       />
 
       <header className={layout.header}>
         <div>
-          <h1 className={layout.title}>{resource.name}</h1>
-          <p className={layout.subtitle}>Status: {resource.status}</p>
+          <h1 className={layout.title}>{name}</h1>
+          <p className={layout.subtitle}>Status: {status}</p>
         </div>
       </header>
 
-      <Stepper
-        data={{
-          basicInfo: resource.basicInfo,
-          projectDetails: resource.projectDetails,
-        }}
-      />
+      <Stepper data={resource} />
 
       <Card
         variant="outline"

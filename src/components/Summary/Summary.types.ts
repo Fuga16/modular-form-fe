@@ -1,3 +1,5 @@
+import type { JSX } from 'react/jsx-runtime';
+
 import type { GeneralInfo, ProjectDetails, ResourceStatus } from '@/api/types';
 
 /** One row of information in a summary card. */
@@ -5,7 +7,7 @@ export interface SummaryInfoItem {
   /** Name of the field. An empty label renders the row without a label. */
   label: string;
   /** Value of the field. An empty value renders as `-`. */
-  value: string;
+  value: JSX.Element | string;
 }
 
 /** Summary card for one module of the resource. */

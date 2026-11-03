@@ -9,6 +9,7 @@ import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useUpdateResourceMutation } from '@/hooks/queries/useUpdateResourceMutation';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
+import { hasResourceChanges } from '@/utils/hasResourceChanges';
 
 /**
  * Overview of a resource: status, summary of all modules, and actions.
@@ -58,25 +59,15 @@ export function ResourceOverviewPage() {
   const isSaving = updateResourceMutation.isPending;
 
   const handleSaveChanges = () => {
-    if (!draft) {
+    if (!draft || !hasResourceChanges(draft)) {
       return;
     }
 
-    updateResourceMutation.mutate(
-      {
-        ...resource,
-        ...draft,
-        projectDetails: {
-          ...projectDetails,
-          ...draft.projectDetails,
-        },
+    updateResourceMutation.mutate(draft, {
+      onSuccess: () => {
+        clearBuffer(resourceId);
       },
-      {
-        onSuccess: () => {
-          clearBuffer(resourceId);
-        },
-      },
-    );
+    });
   };
 
   return (
@@ -103,12 +94,21 @@ export function ResourceOverviewPage() {
           </Button>
 
           {hasUnsavedChanges ? (
-            <Button
-              onClick={handleSaveChanges}
-              disabled={isSaving}
-            >
-              {isSaving ? 'Saving…' : 'Save Changes'}
-            </Button>
+            <>
+              <Button
+                onClick={handleSaveChanges}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving…' : 'Save Changes'}
+              </Button>
+              <Button
+                onClick={() => clearBuffer(resourceId)}
+                disabled={isSaving}
+                variant="secondary"
+              >
+                Clear Changes
+              </Button>
+            </>
           ) : null}
         </div>
       </header>

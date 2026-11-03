@@ -39,6 +39,10 @@ export interface Pagination {
   totalPages: number;
 }
 
+export type UpdateResourcePayload = Partial<GeneralInfo> & {
+  projectDetails?: Partial<ProjectDetails>;
+};
+
 export interface ListResourcesResponse {
   data: Resource[];
   pagination: Pagination;

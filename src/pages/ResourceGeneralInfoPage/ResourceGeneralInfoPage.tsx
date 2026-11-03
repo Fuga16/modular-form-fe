@@ -20,6 +20,8 @@ import { usePatchBasicInfoMutation } from '@/hooks/queries/usePatchBasicInfoMuta
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
+import { getChangedFields } from '@/utils/getChangedFields';
+import { updateResourceBuffer } from '@/utils/updateResourceBuffer';
 
 /**
  * General information step of the resource wizard.
@@ -32,7 +34,7 @@ export function ResourceGeneralInfoPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
 
-  const { updateGeneralInfo, getBuffer } = useResourceBuffer();
+  const { setResourceChanges, getBuffer } = useResourceBuffer();
 
   const form = useForm<GeneralInfoFormValues>({
     mode: 'onChange',
@@ -52,10 +54,10 @@ export function ResourceGeneralInfoPage() {
     const draft = getBuffer(resourceId);
 
     reset({
-      description: draft?.generalInfo?.description ?? resource.description,
-      email: draft?.generalInfo?.email ?? resource.email,
-      owner: draft?.generalInfo?.owner ?? resource.owner,
-      priority: draft?.generalInfo?.priority ?? resource.priority,
+      description: draft?.description ?? resource.description,
+      email: draft?.email ?? resource.email,
+      owner: draft?.owner ?? resource.owner,
+      priority: draft?.priority ?? resource.priority,
     });
   }, [resource, resourceId, getBuffer, reset]);
 
@@ -85,7 +87,25 @@ export function ResourceGeneralInfoPage() {
   }
 
   const handleCompletedResource = (data: GeneralInfoFormValues) => {
-    updateGeneralInfo(resourceId, data);
+    const currentBuffer = getBuffer(resourceId);
+
+    const originalGeneralInfo = {
+      owner: resource.owner ?? '',
+      email: resource.email ?? '',
+      description: resource.description ?? [],
+      priority: resource.priority ?? '',
+    };
+
+    const changes = getChangedFields(originalGeneralInfo, data);
+
+    const nextBuffer = updateResourceBuffer({
+      section: 'generalInfo',
+      currentBuffer,
+      changes,
+    });
+
+    setResourceChanges(resourceId, nextBuffer);
+
     navigate(`/resources/${resourceId}`);
   };
 

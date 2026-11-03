@@ -19,7 +19,9 @@ import { usePatchProjectDetailsMutation } from '@/hooks/queries/usePatchProjectD
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
+import { getChangedFields } from '@/utils/getChangedFields';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
+import { updateResourceBuffer } from '@/utils/updateResourceBuffer';
 
 /** Form values before the resource is loaded. */
 const defaultValues: ProjectDetailsFormValues = {
@@ -40,7 +42,7 @@ export function ResourceProjectDetailsPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
 
-  const { updateProjectDetails, getBuffer } = useResourceBuffer();
+  const { setResourceChanges, getBuffer } = useResourceBuffer();
 
   const form = useForm<ProjectDetailsFormValues>({
     defaultValues,
@@ -121,7 +123,25 @@ export function ResourceProjectDetailsPage() {
   }
 
   const handleCompletedResource = (data: ProjectDetailsFormValues) => {
-    updateProjectDetails(resourceId, data);
+    const currentBuffer = getBuffer(resourceId);
+
+    const originalProjectDetails = {
+      budget: resource.projectDetails?.budget ?? '',
+      projectCategory: resource.projectDetails?.projectCategory ?? '',
+      options: resource.projectDetails?.options ?? [],
+      projectName: resource.projectDetails?.projectName ?? '',
+    };
+
+    const changes = getChangedFields(originalProjectDetails, data);
+
+    const nextBuffer = updateResourceBuffer({
+      section: 'projectDetails',
+      currentBuffer,
+      changes,
+    });
+
+    setResourceChanges(resourceId, nextBuffer);
+
     navigate(`/resources/${resourceId}`);
   };
 

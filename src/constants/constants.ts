@@ -3,3 +3,5 @@ export const DEFAULT_QUERY_PARAMS = {
   pageSize: '10',
   sortOrder: 'desc',
 } as const;
+
+export const EMPTY_VALUE = '-';

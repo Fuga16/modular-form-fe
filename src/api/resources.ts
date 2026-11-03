@@ -5,7 +5,7 @@ import type {
   ListResourcesResponse,
   ProjectDetails,
   Resource,
-  ResourcePayload,
+  UpdateResourcePayload,
 } from './types';
 import type { CreateResourceFormValues } from '@/components';
 
@@ -66,7 +66,7 @@ export function createResource(
   });
 }
 
-export function patchBasicInfo(
+export function patchGeneralInfo(
   id: ResourceId,
   data: GeneralInfo,
 ): Promise<Resource> {
@@ -88,10 +88,10 @@ export function provisionResource(id: ResourceId): Promise<ProvisionResponse> {
 
 export function updateResource(
   id: ResourceId,
-  data: ResourcePayload,
+  data: UpdateResourcePayload,
 ): Promise<Resource> {
   return request<Resource>(getResourcePath(id), {
-    method: 'PUT',
+    method: 'PATCH',
     body: data,
   });
 }

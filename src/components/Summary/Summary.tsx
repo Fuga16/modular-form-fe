@@ -1,11 +1,14 @@
+import { useParams } from 'react-router-dom';
+
 import clsx from 'clsx';
+
+import { DraftValue } from '../DraftValue';
 
 import styles from './Summary.module.css';
 import type { SummaryProps, SummaryStep } from './Summary.types';
+import { EMPTY_VALUE } from '@/constants/constants';
+import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
-
-/** Placeholder for an empty value. */
-const EMPTY_VALUE = '-';
 
 /**
  * Read-only summary of all modules of a resource, one card per module.
@@ -14,36 +17,111 @@ const EMPTY_VALUE = '-';
  * or when a module has not been filled in yet.
  */
 export function Summary({ data }: SummaryProps) {
+  const { resourceId } = useParams();
+
   const generalInfo = data.generalInfo;
   const projectDetails = data.projectDetails;
 
   const basicInfoCompleted = isModuleCompleted(generalInfo);
   const projectDetailsCompleted = isModuleCompleted(projectDetails);
   const allCompleted = basicInfoCompleted && projectDetailsCompleted;
+
   const { description, email, owner, priority, name } = generalInfo ?? {};
-  const { budget, projectCategory, options, projectName } = projectDetails ?? {};
+
+  const { budget, projectCategory, options, projectName } =
+    projectDetails ?? {};
+
+  const { getBuffer } = useResourceBuffer();
+
+  const draft = getBuffer(resourceId ?? '');
+
+  const generalInfoDraft = draft;
+  const projectDetailsDraft = draft?.projectDetails;
 
   const steps: SummaryStep[] = [
     {
       title: 'General Information',
       completed: basicInfoCompleted,
       information: [
-        { label: 'Description', value: description ?? '' },
-        { label: 'Email', value: email ?? '' },
-        { label: 'Owner', value: owner ?? '' },
-        { label: 'Priority', value: priority ?? '' },
-        { label: 'Resource name', value: name ?? '' },
+        {
+          label: 'Description',
+          value: (
+            <DraftValue
+              draft={generalInfoDraft}
+              field="description"
+              originalValue={description}
+            />
+          ),
+        },
+        {
+          label: 'Email',
+          value: (
+            <DraftValue
+              draft={generalInfoDraft}
+              field="email"
+              originalValue={email}
+            />
+          ),
+        },
+        {
+          label: 'Owner',
+          value: (
+            <DraftValue
+              draft={generalInfoDraft}
+              field="owner"
+              originalValue={owner}
+            />
+          ),
+        },
+        {
+          label: 'Priority',
+          value: (
+            <DraftValue
+              draft={generalInfoDraft}
+              field="priority"
+              originalValue={priority}
+            />
+          ),
+        },
+        {
+          label: 'Resource name',
+          value: name ?? '',
+        },
       ],
     },
     {
       title: 'Project Details',
       completed: projectDetailsCompleted,
       information: [
-        { label: 'Budget', value: budget ?? '' },
-        { label: 'Category', value: projectCategory ?? '' },
+        {
+          label: 'Budget',
+          value: (
+            <DraftValue
+              draft={projectDetailsDraft}
+              field="budget"
+              originalValue={budget}
+            />
+          ),
+        },
+        {
+          label: 'Category',
+          value: (
+            <DraftValue
+              draft={projectDetailsDraft}
+              field="projectCategory"
+              originalValue={projectCategory}
+            />
+          ),
+        },
         {
           label: 'Options',
-          value: options?.join(', ') ?? '',
+          value: (
+            <DraftValue
+              draft={projectDetailsDraft}
+              field="options"
+              originalValue={options}
+            />
+          ),
         },
         { label: 'Project name', value: projectName ?? '' },
       ],

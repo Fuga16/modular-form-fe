@@ -1,11 +1,13 @@
-import type { Resource } from '@/api/types';
+import type { JSX } from 'react/jsx-runtime';
+
+import type { GeneralInfo, ProjectDetails, ResourceStatus } from '@/api/types';
 
 /** One row of information in a summary card. */
 export interface SummaryInfoItem {
   /** Name of the field. An empty label renders the row without a label. */
   label: string;
   /** Value of the field. An empty value renders as `-`. */
-  value: string;
+  value: JSX.Element | string;
 }
 
 /** Summary card for one module of the resource. */
@@ -18,8 +20,16 @@ export interface SummaryStep {
   information: SummaryInfoItem[];
 }
 
+export interface SummaryData {
+  /** General information section, if it has been loaded. */
+  generalInfo?: GeneralInfo;
+  /** Project details section, if it has been loaded. */
+  projectDetails?: ProjectDetails;
+  status: ResourceStatus;
+}
+
 /** Props for the Summary component. */
 export interface SummaryProps {
-  /** Resource whose sections are summarized. */
-  resource: Resource;
+  /** Source data for the step statuses. */
+  data: SummaryData;
 }

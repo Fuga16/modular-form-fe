@@ -27,18 +27,18 @@ export function ResourceDetailsPage() {
 
   const [isProvisionModalOpen, setProvisionModalOpen] = useState(false);
 
-  const { data: resource, status } = useResourceQuery(resourceId);
+  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId);
   const provisionMutation = useProvisionResourceMutation(resourceId);
 
   if (!resourceId) {
     return null;
   }
 
-  if (status === 'pending') {
+  if (fetchStatus === 'pending') {
     return <LoadingState />;
   }
 
-  if (status === 'error' || !resource) {
+  if (fetchStatus === 'error' || !resource) {
     return (
       <div
         role="alert"
@@ -73,6 +73,8 @@ export function ResourceDetailsPage() {
     onProvision: handleOpenProvisionModal,
   });
 
+  const { name, status } = resource;
+
   return (
     <div className={layout.page}>
       <p className={layout.subtitle}>Resource Management</p>
@@ -80,24 +82,19 @@ export function ResourceDetailsPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
+          name,
           section: 'details',
         })}
       />
 
       <header className={layout.header}>
         <div>
-          <h1 className={layout.title}>{resource.name}</h1>
-          <p className={layout.subtitle}>Status: {resource.status}</p>
+          <h1 className={layout.title}>{name}</h1>
+          <p className={layout.subtitle}>Status: {status}</p>
         </div>
       </header>
 
-      <Stepper
-        data={{
-          basicInfo: resource.basicInfo,
-          projectDetails: resource.projectDetails,
-        }}
-      />
+      <Stepper data={resource} />
 
       <div className={layout.grid}>
         <div className={styles.cards}>
@@ -118,9 +115,8 @@ export function ResourceDetailsPage() {
         confirmLabel="Provision"
         isConfirming={provisionMutation.isPending}
       >
-        Are you sure you want to provision{' '}
-        <strong>{resource.basicInfo.name}</strong>? This will start the
-        provisioning process for this resource.
+        Are you sure you want to provision <strong>{name}</strong>? This will
+        start the provisioning process for this resource.
       </ConfirmModal>
     </div>
   );

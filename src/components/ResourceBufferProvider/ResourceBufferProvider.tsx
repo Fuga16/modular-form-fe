@@ -3,8 +3,8 @@ import { type PropsWithChildren, useCallback, useMemo, useState } from 'react';
 import type {
   ResourceBuffer,
   ResourceBufferContextValue,
+  ResourceBufferItem,
 } from './ResourceBufferProvider.types';
-import type { BasicInfo, ProjectDetails } from '@/api/types';
 import { ResourceBufferContext } from '@/context/ResourceBufferContext';
 
 /**
@@ -22,43 +22,30 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
     [buffer],
   );
 
-  const updateBasicInfo = useCallback(
-    (resourceId: string, data: Partial<BasicInfo>) => {
-      setBuffer((prev) => ({
-        ...prev,
-        [resourceId]: {
-          ...prev[resourceId],
-          basicInfo: {
-            ...prev[resourceId]?.basicInfo,
-            ...data,
-          },
-        },
-      }));
-    },
-    [],
-  );
+  const setResourceChanges = useCallback(
+    (resourceId: string, changes: ResourceBufferItem) => {
+      setBuffer((prev) => {
+        if (Object.keys(changes).length === 0) {
+          const next = { ...prev };
+          delete next[resourceId];
 
-  const updateProjectDetails = useCallback(
-    (resourceId: string, data: Partial<ProjectDetails>) => {
-      setBuffer((prev) => ({
-        ...prev,
-        [resourceId]: {
-          ...prev[resourceId],
-          projectDetails: {
-            ...prev[resourceId]?.projectDetails,
-            ...data,
-          },
-        },
-      }));
+          return next;
+        }
+
+        return {
+          ...prev,
+          [resourceId]: changes,
+        };
+      });
     },
     [],
   );
 
   const clearBuffer = useCallback((resourceId: string) => {
     setBuffer((prev) => {
-      // Copy first so the previous state object is not mutated.
       const next = { ...prev };
       delete next[resourceId];
+
       return next;
     });
   }, []);
@@ -67,11 +54,10 @@ export function ResourceBufferProvider({ children }: PropsWithChildren) {
     () => ({
       buffer,
       getBuffer,
-      updateBasicInfo,
-      updateProjectDetails,
+      setResourceChanges,
       clearBuffer,
     }),
-    [buffer, getBuffer, updateBasicInfo, updateProjectDetails, clearBuffer],
+    [buffer, getBuffer, setResourceChanges, clearBuffer],
   );
 
   return (

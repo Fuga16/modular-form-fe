@@ -1,10 +1,10 @@
-import type { ResourceCategory } from '@/constants/ResourceCategory';
 import type { ResourcePriority } from '@/constants/ResourcePriority';
+import type { ResourceProjectCategory } from '@/constants/ResourceProjectCategory';
 import type { TeamMember } from '@/constants/TeamOptions';
 
 export type ResourceStatus = 'draft' | 'completed';
 
-export interface BasicInfo {
+export interface GeneralInfo {
   name: string;
   owner: string;
   email: string;
@@ -15,36 +15,33 @@ export interface BasicInfo {
 export interface ProjectDetails {
   projectName: string;
   budget: string;
-  category: ResourceCategory | '';
+  projectCategory: ResourceProjectCategory | '';
   options: TeamMember[];
 }
 
-export interface Resource {
+export interface ResourceFields extends GeneralInfo {
+  projectDetails: ProjectDetails;
+}
+
+export interface Resource extends ResourceFields {
   id: number;
   _id?: string;
-
-  name: string;
   status: ResourceStatus;
-
-  basicInfo: BasicInfo;
-  projectDetails: ProjectDetails;
-
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface ResourcePayload {
-  name: string;
-  basicInfo: BasicInfo;
-  projectDetails: ProjectDetails;
-}
-
+export type ResourcePayload = ResourceFields;
 export interface Pagination {
   page: number;
   pageSize: number;
   totalItems: number;
   totalPages: number;
 }
+
+export type UpdateResourcePayload = Partial<GeneralInfo> & {
+  projectDetails?: Partial<ProjectDetails>;
+};
 
 export interface ListResourcesResponse {
   data: Resource[];

@@ -1,7 +1,7 @@
 import type { BreadcrumbItem } from '@/components';
 
 export type BreadcrumbSection =
-  'overview' | 'details' | 'basic-info' | 'project-details';
+  'overview' | 'details' | 'general-info' | 'project-details';
 
 interface GetBreadcrumbsParams {
   resourceId?: string;
@@ -44,10 +44,10 @@ export const getBreadcrumbs = ({
       items.push(overviewItem, detailsItem);
       break;
 
-    case 'basic-info':
+    case 'general-info':
       items.push(overviewItem, detailsItem, {
-        label: 'Basic Info',
-        href: `/resources/${resourceId}/basic-info`,
+        label: 'General Information',
+        href: `/resources/${resourceId}/general-info`,
       });
       break;
 

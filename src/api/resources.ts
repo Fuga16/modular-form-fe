@@ -1,11 +1,11 @@
 import { request } from './client';
 import type {
-  BasicInfo,
+  GeneralInfo,
   ListResourcesQuery,
   ListResourcesResponse,
   ProjectDetails,
   Resource,
-  ResourcePayload,
+  UpdateResourcePayload,
 } from './types';
 import type { CreateResourceFormValues } from '@/components';
 
@@ -13,10 +13,10 @@ const BASE_PATH = '/api/resources';
 
 type ResourceId = string | number;
 
-type ResourceSection = 'basic-info' | 'project-details';
+type ResourceSection = 'general-info' | 'project-details';
 
 const RESOURCE_SECTIONS = {
-  BASIC_INFO: 'basic-info',
+  GENERAL_INFO: 'general-info',
   PROJECT_DETAILS: 'project-details',
 } as const;
 
@@ -66,11 +66,11 @@ export function createResource(
   });
 }
 
-export function patchBasicInfo(
+export function patchGeneralInfo(
   id: ResourceId,
-  data: BasicInfo,
+  data: GeneralInfo,
 ): Promise<Resource> {
-  return patchResourceSection(id, RESOURCE_SECTIONS.BASIC_INFO, data);
+  return patchResourceSection(id, RESOURCE_SECTIONS.GENERAL_INFO, data);
 }
 
 export function patchProjectDetails(
@@ -88,10 +88,10 @@ export function provisionResource(id: ResourceId): Promise<ProvisionResponse> {
 
 export function updateResource(
   id: ResourceId,
-  data: ResourcePayload,
+  data: UpdateResourcePayload,
 ): Promise<Resource> {
   return request<Resource>(getResourcePath(id), {
-    method: 'PUT',
+    method: 'PATCH',
     body: data,
   });
 }

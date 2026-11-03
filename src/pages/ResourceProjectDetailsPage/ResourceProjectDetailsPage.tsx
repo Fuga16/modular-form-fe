@@ -19,12 +19,14 @@ import { usePatchProjectDetailsMutation } from '@/hooks/queries/usePatchProjectD
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
+import { getChangedFields } from '@/utils/getChangedFields';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
+import { updateResourceBuffer } from '@/utils/updateResourceBuffer';
 
 /** Form values before the resource is loaded. */
 const defaultValues: ProjectDetailsFormValues = {
   budget: '',
-  category: '',
+  projectCategory: '',
   options: [],
   projectName: '',
 };
@@ -33,14 +35,14 @@ const defaultValues: ProjectDetailsFormValues = {
  * Project details step of the resource wizard.
  *
  * A completed resource is edited locally and saved to the buffer. An editable
- * resource is saved to the server. If the basic info step is not complete yet,
+ * resource is saved to the server. If the general information step is not complete yet,
  * the user is sent back to it.
  */
 export function ResourceProjectDetailsPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
 
-  const { updateProjectDetails, getBuffer } = useResourceBuffer();
+  const { setResourceChanges, getBuffer } = useResourceBuffer();
 
   const form = useForm<ProjectDetailsFormValues>({
     defaultValues,
@@ -48,7 +50,7 @@ export function ResourceProjectDetailsPage() {
 
   const { reset, handleSubmit } = form;
 
-  const { data: resource, status } = useResourceQuery(resourceId);
+  const { data: resource, status: fetchStatus } = useResourceQuery(resourceId);
   const patchProjectDetailsMutation =
     usePatchProjectDetailsMutation(resourceId);
 
@@ -61,20 +63,41 @@ export function ResourceProjectDetailsPage() {
     const draft = getBuffer(resourceId);
 
     reset({
-      budget: draft?.projectDetails?.budget ?? resource.projectDetails.budget,
-      category:
-        draft?.projectDetails?.category ?? resource.projectDetails.category,
+      budget: draft?.projectDetails?.budget ?? resource.projectDetails?.budget,
+      projectCategory:
+        draft?.projectDetails?.projectCategory ??
+        resource.projectDetails?.projectCategory,
       options:
-        draft?.projectDetails?.options ?? resource.projectDetails.options ?? [],
+        draft?.projectDetails?.options ??
+        resource.projectDetails?.options ??
+        [],
       projectName:
         draft?.projectDetails?.projectName ??
-        resource.projectDetails.projectName,
+        resource.projectDetails?.projectName,
     });
   }, [resource, resourceId, getBuffer, reset]);
 
-  // The project details step is available only after the basic info step.
+  // TODO REFACTOR IT 30102026-1
+  const { name, status, owner, email, description, priority } = resource ?? {
+    name: '',
+    status: '',
+    owner: '',
+    email: '',
+    description: '',
+    priority: '',
+  };
+
+  const generalInfo = {
+    name,
+    owner,
+    email,
+    description,
+    priority,
+  };
+
+  // The project details step is available only after the general information step.
   useEffect(() => {
-    if (resource && !isModuleCompleted(resource.basicInfo)) {
+    if (resource && !isModuleCompleted(generalInfo)) {
       navigate(`/resources/${resourceId}/details`);
     }
   }, [navigate, resource, resourceId]);
@@ -83,12 +106,12 @@ export function ResourceProjectDetailsPage() {
     return null;
   }
 
-  if (status === 'pending') {
+  if (fetchStatus === 'pending') {
     return <LoadingState />;
   }
 
-  // A resource without basic info cannot be edited here, so it is treated as a load failure.
-  if (status === 'error' || !resource || !resource.basicInfo) {
+  // A resource without general information cannot be edited here, so it is treated as a load failure.
+  if (fetchStatus === 'error' || !resource || !generalInfo) {
     return (
       <div
         role="alert"
@@ -100,7 +123,25 @@ export function ResourceProjectDetailsPage() {
   }
 
   const handleCompletedResource = (data: ProjectDetailsFormValues) => {
-    updateProjectDetails(resourceId, data);
+    const currentBuffer = getBuffer(resourceId);
+
+    const originalProjectDetails = {
+      budget: resource.projectDetails?.budget ?? '',
+      projectCategory: resource.projectDetails?.projectCategory ?? '',
+      options: resource.projectDetails?.options ?? [],
+      projectName: resource.projectDetails?.projectName ?? '',
+    };
+
+    const changes = getChangedFields(originalProjectDetails, data);
+
+    const nextBuffer = updateResourceBuffer({
+      section: 'projectDetails',
+      currentBuffer,
+      changes,
+    });
+
+    setResourceChanges(resourceId, nextBuffer);
+
     navigate(`/resources/${resourceId}`);
   };
 
@@ -130,24 +171,19 @@ export function ResourceProjectDetailsPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
+          name,
           section: 'project-details',
         })}
       />
 
       <header className={layout.header}>
         <div>
-          <h1 className={layout.title}>{resource.name}</h1>
-          <p className={layout.subtitle}>Status: {resource.status}</p>
+          <h1 className={layout.title}>{name}</h1>
+          <p className={layout.subtitle}>Status: {status}</p>
         </div>
       </header>
 
-      <Stepper
-        data={{
-          basicInfo: resource.basicInfo,
-          projectDetails: resource.projectDetails,
-        }}
-      />
+      <Stepper data={resource} />
 
       <Card
         variant="outline"

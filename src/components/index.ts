@@ -31,3 +31,5 @@ export { Summary } from './Summary';
 export type { SummaryProps } from './Summary';
 export { Table } from './Table';
 export type { TableProps } from './Table';
+export { DraftValue } from './DraftValue';
+export type { DraftValueProps } from './DraftValue';

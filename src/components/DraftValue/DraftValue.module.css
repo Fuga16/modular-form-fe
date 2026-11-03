@@ -1,0 +1,6 @@
+.updated_value {
+  color: var(--color-success);
+}
+.original_value {
+  color: var(--color-danger);
+}

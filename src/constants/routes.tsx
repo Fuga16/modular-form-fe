@@ -1,7 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
-import { ResourceBasicInfoPage } from '@/pages/ResourceBasicInfoPage';
+import { ResourceGeneralInfoPage } from '@/pages/ResourceGeneralInfoPage';
 import { ResourceOverviewPage } from '@/pages/ResourceOverviewPage';
 import { ResourceProjectDetailsPage } from '@/pages/ResourceProjectDetailsPage';
 import { ResourceDetailsPage } from '@/pages/ResourcesDetailsPage';
@@ -35,8 +35,8 @@ export const router = createBrowserRouter([
             element: <ResourceOverviewPage />,
           },
           {
-            path: 'basic-info',
-            element: <ResourceBasicInfoPage />,
+            path: 'general-info',
+            element: <ResourceGeneralInfoPage />,
           },
           {
             path: 'project-details',

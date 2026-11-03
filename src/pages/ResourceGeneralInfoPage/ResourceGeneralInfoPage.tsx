@@ -6,8 +6,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import layout from '../PageLayout.module.css';
 
-import styles from './ResourceBasicInfoPage.module.css';
-import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types';
+import styles from './ResourceGeneralInfoPage.module.css';
+import type { GeneralInfoFormValues } from './ResourceGeneralInfoPage.types';
 import { basicInfoFieldsConfig } from './config';
 import {
   Breadcrumb,
@@ -20,21 +20,23 @@ import { usePatchBasicInfoMutation } from '@/hooks/queries/usePatchBasicInfoMuta
 import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
+import { getChangedFields } from '@/utils/getChangedFields';
+import { updateResourceBuffer } from '@/utils/updateResourceBuffer';
 
 /**
- * Basic info step of the resource wizard.
+ * General information step of the resource wizard.
  *
  * A completed resource is edited locally and saved to the buffer, so changes are
  * applied later. An editable resource is saved to the server and the user moves to
  * the project details step.
  */
-export function ResourceBasicInfoPage() {
+export function ResourceGeneralInfoPage() {
   const { resourceId } = useParams();
   const navigate = useNavigate();
 
-  const { updateBasicInfo, getBuffer } = useResourceBuffer();
+  const { setResourceChanges, getBuffer } = useResourceBuffer();
 
-  const form = useForm<BasicInfoFormValues>({
+  const form = useForm<GeneralInfoFormValues>({
     mode: 'onChange',
   });
 
@@ -52,11 +54,10 @@ export function ResourceBasicInfoPage() {
     const draft = getBuffer(resourceId);
 
     reset({
-      description:
-        draft?.basicInfo?.description ?? resource.basicInfo.description,
-      email: draft?.basicInfo?.email ?? resource.basicInfo.email,
-      owner: draft?.basicInfo?.owner ?? resource.basicInfo.owner,
-      priority: draft?.basicInfo?.priority ?? resource.basicInfo.priority,
+      description: draft?.description ?? resource.description,
+      email: draft?.email ?? resource.email,
+      owner: draft?.owner ?? resource.owner,
+      priority: draft?.priority ?? resource.priority,
     });
   }, [resource, resourceId, getBuffer, reset]);
 
@@ -85,15 +86,33 @@ export function ResourceBasicInfoPage() {
     );
   }
 
-  const handleCompletedResource = (data: BasicInfoFormValues) => {
-    updateBasicInfo(resourceId, data);
+  const handleCompletedResource = (data: GeneralInfoFormValues) => {
+    const currentBuffer = getBuffer(resourceId);
+
+    const originalGeneralInfo = {
+      owner: resource.owner ?? '',
+      email: resource.email ?? '',
+      description: resource.description ?? [],
+      priority: resource.priority ?? '',
+    };
+
+    const changes = getChangedFields(originalGeneralInfo, data);
+
+    const nextBuffer = updateResourceBuffer({
+      section: 'generalInfo',
+      currentBuffer,
+      changes,
+    });
+
+    setResourceChanges(resourceId, nextBuffer);
+
     navigate(`/resources/${resourceId}`);
   };
 
-  const handleEditableResource = (data: BasicInfoFormValues) => {
+  const handleEditableResource = (data: GeneralInfoFormValues) => {
     patchBasicInfoMutation.mutate(
       {
-        name: resource.basicInfo.name,
+        name: resource.name,
         ...data,
       },
       {
@@ -104,7 +123,7 @@ export function ResourceBasicInfoPage() {
     );
   };
 
-  const onSubmit = (data: BasicInfoFormValues) => {
+  const onSubmit = (data: GeneralInfoFormValues) => {
     if (resource.status === 'completed') {
       handleCompletedResource(data);
       return;
@@ -122,8 +141,8 @@ export function ResourceBasicInfoPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
-          section: 'basic-info',
+          name: resource.name,
+          section: 'general-info',
         })}
       />
 
@@ -168,4 +187,4 @@ export function ResourceBasicInfoPage() {
   );
 }
 
-export default ResourceBasicInfoPage;
+export default ResourceGeneralInfoPage;

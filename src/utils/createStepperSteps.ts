@@ -9,7 +9,7 @@ export const createStepperSteps = (
   projectDetailsCompleted: boolean,
 ): Step[] => [
   {
-    title: 'Basic Info',
+    title: 'General Information',
     description: basicInfoCompleted ? 'Completed' : 'Fill required information',
     status: basicInfoCompleted ? 'completed' : 'active',
     icon: basicInfoCompleted ? PositiveMark : Progress,
@@ -17,7 +17,7 @@ export const createStepperSteps = (
   {
     title: 'Project Details',
     description: !basicInfoCompleted
-      ? 'Waiting for Basic Info module'
+      ? 'Waiting for General Information module'
       : projectDetailsCompleted
         ? 'Completed'
         : 'Fill required information',

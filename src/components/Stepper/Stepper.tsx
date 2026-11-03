@@ -13,8 +13,15 @@ import { isModuleCompleted } from '@/utils/isModuleCompleted';
  * complete, and the first unfinished step is active.
  */
 export function Stepper({ data }: StepperProps) {
-  const basicInfoCompleted = isModuleCompleted(data.basicInfo);
-  const projectDetailsCompleted = isModuleCompleted(data.projectDetails);
+  const { name, owner, email, description, priority, projectDetails } = data;
+  const basicInfoCompleted = isModuleCompleted({
+    name,
+    owner,
+    email,
+    description,
+    priority,
+  });
+  const projectDetailsCompleted = isModuleCompleted(projectDetails);
   const steps = createStepperSteps(basicInfoCompleted, projectDetailsCompleted);
 
   return (

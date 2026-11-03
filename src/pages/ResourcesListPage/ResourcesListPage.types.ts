@@ -1,19 +1,19 @@
-import type { Resource, ResourceStatus } from '@/api/types';
+import type { ResourceStatus } from '@/api/types';
 import type { ResourcePriority } from '@/constants/ResourcePriority';
 
 /** One row of the resources table. */
 export interface ResourceTable {
   /** Unique id of the resource. */
   id: number;
-  /** Technical name taken from basic info. */
+  /** Technical name taken from general information. */
   name: string;
-  /** Description taken from basic info. */
+  /** Description taken from general information. */
   description: string;
-  /** Email taken from basic info. */
+  /** Email taken from general information. */
   email: string;
-  /** Owner taken from basic info. */
+  /** Owner taken from general information. */
   owner: string;
-  /** Priority taken from basic info. Empty when it is not set. */
+  /** Priority taken from general information. Empty when it is not set. */
   priority: ResourcePriority | '';
   /** Current status of the resource. */
   status: ResourceStatus;
@@ -32,22 +32,3 @@ export interface ResourcesFilters {
   /** Part of the resource email to search for. */
   email: string;
 }
-
-/** Maps a resource from the API to a row of the table. */
-export const toResourceTableRow = ({
-  id,
-  status,
-  createdAt,
-  updatedAt,
-  basicInfo,
-}: Resource): ResourceTable => ({
-  id,
-  name: basicInfo?.name,
-  description: basicInfo?.description,
-  email: basicInfo?.email,
-  owner: basicInfo?.owner,
-  priority: basicInfo?.priority,
-  status,
-  createdAt,
-  updatedAt,
-});

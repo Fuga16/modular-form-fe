@@ -1,6 +1,6 @@
 import type { ProjectDetailsFormValues } from './ResourceProjectDetailsPage.types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
-import { RESOURCE_CATEGORY_VALUES } from '@/constants/ResourceCategory';
+import { RESOURCE_PROJECT_CATEGORY_VALUES } from '@/constants/ResourceProjectCategory';
 import { SELECT_TEAM_OPTIONS } from '@/constants/TeamOptions';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import { mapToOptions } from '@/utils/mapToOptions';
@@ -24,9 +24,9 @@ export const projectDetailsConfig: FieldConfig<ProjectDetailsFormValues>[] = [
   },
   {
     label: 'Category',
-    name: 'category',
+    name: 'projectCategory',
     type: 'select',
-    options: mapToOptions(RESOURCE_CATEGORY_VALUES),
+    options: mapToOptions(RESOURCE_PROJECT_CATEGORY_VALUES),
     defaultValue: '',
   },
   {

@@ -9,6 +9,7 @@ import { useResourceQuery } from '@/hooks/queries/useResourceQuery';
 import { useUpdateResourceMutation } from '@/hooks/queries/useUpdateResourceMutation';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
+import { hasResourceChanges } from '@/utils/hasResourceChanges';
 
 /**
  * Overview of a resource: status, summary of all modules, and actions.
@@ -51,34 +52,22 @@ export function ResourceOverviewPage() {
       </div>
     );
   }
-
+  const { status, name, owner, email, description, priority, projectDetails } =
+    resource;
   const draft = getBuffer(resourceId);
-  const hasUnsavedChanges = resource.status === 'completed' && Boolean(draft);
+  const hasUnsavedChanges = status === 'completed' && Boolean(draft);
   const isSaving = updateResourceMutation.isPending;
 
   const handleSaveChanges = () => {
-    if (!draft) {
+    if (!draft || !hasResourceChanges(draft)) {
       return;
     }
 
-    updateResourceMutation.mutate(
-      {
-        name: resource.name,
-        basicInfo: {
-          ...resource.basicInfo,
-          ...draft.basicInfo,
-        },
-        projectDetails: {
-          ...resource.projectDetails,
-          ...draft.projectDetails,
-        },
+    updateResourceMutation.mutate(draft, {
+      onSuccess: () => {
+        clearBuffer(resourceId);
       },
-      {
-        onSuccess: () => {
-          clearBuffer(resourceId);
-        },
-      },
-    );
+    });
   };
 
   return (
@@ -88,7 +77,7 @@ export function ResourceOverviewPage() {
       <Breadcrumb
         items={getBreadcrumbs({
           resourceId,
-          name: resource.basicInfo.name,
+          name,
           section: 'overview',
         })}
       />
@@ -105,12 +94,21 @@ export function ResourceOverviewPage() {
           </Button>
 
           {hasUnsavedChanges ? (
-            <Button
-              onClick={handleSaveChanges}
-              disabled={isSaving}
-            >
-              {isSaving ? 'Saving…' : 'Save Changes'}
-            </Button>
+            <>
+              <Button
+                onClick={handleSaveChanges}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving…' : 'Save Changes'}
+              </Button>
+              <Button
+                onClick={() => clearBuffer(resourceId)}
+                disabled={isSaving}
+                variant="secondary"
+              >
+                Clear Changes
+              </Button>
+            </>
           ) : null}
         </div>
       </header>
@@ -124,7 +122,19 @@ export function ResourceOverviewPage() {
         </div>
       ) : null}
 
-      <Summary resource={resource} />
+      <Summary
+        data={{
+          generalInfo: {
+            name,
+            owner,
+            email,
+            description,
+            priority,
+          },
+          projectDetails,
+          status,
+        }}
+      />
     </div>
   );
 }

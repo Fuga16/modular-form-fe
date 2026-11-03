@@ -1,4 +1,4 @@
-import type { BasicInfoFormValues } from './ResourceBasicInfoPage.types';
+import type { GeneralInfoFormValues } from './ResourceGeneralInfoPage.types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 import { RESOURCE_PRIORITY_VALUES } from '@/constants/ResourcePriority';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
@@ -15,7 +15,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const { description, email, owner } = FIELD_TOOLTIPS;
 
-export const basicInfoFieldsConfig: FieldConfig<BasicInfoFormValues>[] = [
+export const basicInfoFieldsConfig: FieldConfig<GeneralInfoFormValues>[] = [
   {
     label: 'Description',
     name: 'description',

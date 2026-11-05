@@ -52,8 +52,7 @@ export function ResourceOverviewPage() {
       </div>
     );
   }
-  const { status, name, owner, email, description, priority, projectDetails } =
-    resource;
+  const { status, name } = resource;
   const draft = getBuffer(resourceId);
   const hasUnsavedChanges = status === 'completed' && Boolean(draft);
   const isSaving = updateResourceMutation.isPending;
@@ -122,19 +121,7 @@ export function ResourceOverviewPage() {
         </div>
       ) : null}
 
-      <Summary
-        data={{
-          generalInfo: {
-            name,
-            owner,
-            email,
-            description,
-            priority,
-          },
-          projectDetails,
-          status,
-        }}
-      />
+      <Summary data={resource} />
     </div>
   );
 }

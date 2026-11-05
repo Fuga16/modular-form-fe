@@ -66,6 +66,50 @@ export function createResource(
   });
 }
 
+export interface AuthResponse {
+  accessToken: string;
+  tokenType: 'Bearer';
+  expiresIn: number;
+  role: UserRole;
+}
+
+export type UserRole = 'USER' | 'ADMIN';
+
+export interface CurrentUser {
+  id: string;
+  email: string;
+  role: UserRole;
+}
+
+export interface AuthCredentials {
+  email: string;
+  password: string;
+}
+
+export function createUser(
+  credentials: AuthCredentials,
+): Promise<AuthResponse> {
+  return request<AuthResponse, AuthCredentials>('/api/auth/register', {
+    method: 'POST',
+    body: credentials,
+  });
+}
+
+export function loginUser(credentials: AuthCredentials): Promise<AuthResponse> {
+  return request<AuthResponse, AuthCredentials>('/api/auth/login', {
+    method: 'POST',
+    body: credentials,
+  });
+}
+
+export function logoutUser(): Promise<void> {
+  return request<void>('/api/auth/logout', { method: 'POST' });
+}
+
+export function getCurrentUser(): Promise<CurrentUser> {
+  return request<CurrentUser>('/api/auth/me');
+}
+
 export function patchGeneralInfo(
   id: ResourceId,
   data: GeneralInfo,

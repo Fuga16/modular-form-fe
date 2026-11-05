@@ -19,14 +19,18 @@ import { isModuleCompleted } from '@/utils/isModuleCompleted';
 export function Summary({ data }: SummaryProps) {
   const { resourceId } = useParams();
 
-  const generalInfo = data.generalInfo;
-  const projectDetails = data.projectDetails;
+  const { description, email, owner, priority, name, projectDetails } =
+    data ?? {};
 
-  const basicInfoCompleted = isModuleCompleted(generalInfo);
+  const basicInfoCompleted = isModuleCompleted({
+    description,
+    email,
+    owner,
+    priority,
+    name,
+  });
   const projectDetailsCompleted = isModuleCompleted(projectDetails);
   const allCompleted = basicInfoCompleted && projectDetailsCompleted;
-
-  const { description, email, owner, priority, name } = generalInfo ?? {};
 
   const { budget, projectCategory, options, projectName } =
     projectDetails ?? {};

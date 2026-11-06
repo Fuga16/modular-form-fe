@@ -1,6 +1,6 @@
 import type { GeneralInfoFormValues } from './ResourceGeneralInfoPage.types';
+import { RESOURCE_PRIORITY_VALUES } from '@/api/types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
-import { RESOURCE_PRIORITY_VALUES } from '@/constants/ResourcePriority';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import { mapToOptions } from '@/utils/mapToOptions';
 

@@ -23,7 +23,7 @@ import {
 import { Button, Card } from '@/design-system';
 import { useDeleteResourceMutation } from '@/hooks/queries/useDeleteResourceMutation';
 import { useResourcesListQuery } from '@/hooks/queries/useResourcesListQuery';
-import { getFilterValues } from '@/utils/getDefaultFilterValues';
+import { getDefaultFilterValues } from '@/utils/getDefaultFilterValues';
 import { getQueryParams } from '@/utils/getQueryParams';
 import { sanitizeSearchParams } from '@/utils/sanitizeSearchParams';
 import { updateSearchParams } from '@/utils/updateSearchParams';
@@ -43,10 +43,9 @@ export const ResourcesListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const filterValues = useMemo(
-    () => getFilterValues(searchParams, filtersConfig),
+    () => getDefaultFilterValues(searchParams, filtersConfig),
     [searchParams],
   );
-
   const query = useMemo(
     () => getQueryParams(searchParams, filtersConfig),
     [searchParams],
@@ -70,7 +69,6 @@ export const ResourcesListPage = () => {
 
   useEffect(() => {
     const sanitized = sanitizeSearchParams(searchParams, filtersConfig);
-
     if (sanitized.toString() !== searchParams.toString()) {
       setSearchParams(sanitized, {
         replace: true,

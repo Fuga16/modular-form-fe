@@ -1,4 +1,4 @@
-import type { ResourceProjectCategory } from '@/constants/ResourceProjectCategory';
+import type { ResourceProjectCategory } from '@/api/types';
 import type { TeamMember } from '@/constants/TeamOptions';
 
 export interface ProjectDetailsFormValues {

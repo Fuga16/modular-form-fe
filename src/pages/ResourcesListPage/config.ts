@@ -2,13 +2,14 @@ import type {
   ResourceTable,
   ResourcesFilters,
 } from './ResourcesListPage.types';
+import type { ResourceStatus } from '@/api/types';
 import { defineSelectField } from '@/components/FormFieldsRenderer/FormFieldsRenderer.fields';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 import type { TableColumn } from '@/components/Table';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import {
-  EMAIL_FORMAT_REGEX,
-  LETTERS_AND_NUMBERS_REGEX,
+  SANITIZE_EMAIL_FORMAT_REGEX,
+  SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX,
 } from '@/constants/validation';
 import { formatIsoDate } from '@/utils/formatIsoDate';
 
@@ -22,19 +23,20 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
     label: 'Technical Name',
     name: 'name',
     type: 'input',
-    tooltip: FIELD_TOOLTIPS.projectName,
-    sanitize: (value: string) => value.replace(LETTERS_AND_NUMBERS_REGEX, ''),
+    tooltip: FIELD_TOOLTIPS.name,
+    sanitize: (value: string) =>
+      value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
     required: false,
   },
-  defineSelectField<ResourcesFilters, 'active' | 'archived'>({
+  defineSelectField<ResourcesFilters, ResourceStatus>({
     name: 'status',
     label: 'Technical Status',
     type: 'select',
     options: [
-      { value: 'active', label: 'Technical Active' },
-      { value: 'archived', label: 'Technical Archived' },
+      { value: 'PROCESSING', label: 'Technical Processing' },
+      { value: 'COMPLETED', label: 'Technical Completed' },
     ],
-    defaultValue: 'active',
+    defaultValue: 'PROCESSING',
     required: false,
   }),
   {
@@ -42,7 +44,44 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
     name: 'email',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.email,
-    sanitize: (value: string) => value.replace(EMAIL_FORMAT_REGEX, ''),
+    sanitize: (value: string) => value.replace(SANITIZE_EMAIL_FORMAT_REGEX, ''),
+    required: false,
+  },
+  {
+    label: 'Resource Owner',
+    name: 'owner',
+    type: 'input',
+    tooltip: FIELD_TOOLTIPS.owner,
+    sanitize: (value: string) =>
+      value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
+    required: false,
+  },
+  defineSelectField<ResourcesFilters, 'HIGH' | 'MIDDLE' | 'LOW'>({
+    name: 'priority',
+    label: 'Technical priority',
+    type: 'select',
+    options: [
+      { value: 'HIGH', label: 'High priority' },
+      { value: 'MIDDLE', label: 'Middle priority' },
+      { value: 'LOW', label: 'Low priority' },
+    ],
+    defaultValue: 'HIGH',
+    required: false,
+  }),
+  {
+    label: 'Created At',
+    type: 'daterange',
+    from: 'createdAtFrom',
+    to: 'createdAtTo',
+    tooltip: FIELD_TOOLTIPS.createdAtRange,
+    required: false,
+  },
+  {
+    label: 'Updated At',
+    type: 'daterange',
+    from: 'updatedAtFrom',
+    to: 'updatedAtTo',
+    tooltip: FIELD_TOOLTIPS.updatedAtRange,
     required: false,
   },
 ];

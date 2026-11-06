@@ -10,6 +10,7 @@ import { useUpdateResourceMutation } from '@/hooks/queries/useUpdateResourceMuta
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 import { hasResourceChanges } from '@/utils/hasResourceChanges';
+import { ResourceStatus } from '@/api/types';
 
 /**
  * Overview of a resource: status, summary of all modules, and actions.
@@ -54,7 +55,7 @@ export function ResourceOverviewPage() {
   }
   const { status, name } = resource;
   const draft = getBuffer(resourceId);
-  const hasUnsavedChanges = status === 'completed' && Boolean(draft);
+  const hasUnsavedChanges = status === ResourceStatus.COMPLETED && Boolean(draft);
   const isSaving = updateResourceMutation.isPending;
 
   const handleSaveChanges = () => {

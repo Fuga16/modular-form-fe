@@ -6,6 +6,7 @@ import { DraftValue } from '../DraftValue';
 
 import styles from './Summary.module.css';
 import type { SummaryProps, SummaryStep } from './Summary.types';
+import { ResourceStatus } from '@/api/types';
 import { EMPTY_VALUE } from '@/constants/constants';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
@@ -138,7 +139,7 @@ export function Summary({ data }: SummaryProps) {
           label: 'Status',
           value: !allCompleted
             ? 'Waiting for modules'
-            : data.status === 'completed'
+            : data.status === ResourceStatus.COMPLETED
               ? 'Resource has been Provisioned'
               : 'Ready for Provisioning',
         },

@@ -8,8 +8,33 @@ import styles from './Summary.module.css';
 import type { SummaryProps, SummaryStep } from './Summary.types';
 import { ResourceStatus } from '@/api/types';
 import { EMPTY_VALUE } from '@/constants/constants';
+import { FIELD_NAMES } from '@/constants/fieldNames';
+import { FIELD_LABELS } from '@/constants/labels';
 import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
+
+const {
+  DESCRIPTION_LABEL,
+  EMAIL_LABEL,
+  OWNER_LABEL,
+  PRIORITY_LABEL,
+  BUDGET_LABEL,
+  CATEGORY_LABEL,
+  OPTIONS_LABEL,
+  PROJECT_NAME_LABEL,
+  SUMMARY_STATUS_LABEL,
+  RESOURCE_NAME_LABEL,
+} = FIELD_LABELS;
+
+const {
+  DESCRIPTION_FIELD_NAME,
+  EMAIL_FIELD_NAME,
+  OWNER_FIELD_NAME,
+  PRIORITY_FIELD_NAME,
+  BUDGET_FIELD_NAME,
+  PROJECT_CATEGORY_FIELD_NAME,
+  OPTIONS_FIELD_NAME,
+} = FIELD_NAMES;
 
 /**
  * Read-only summary of all modules of a resource, one card per module.
@@ -49,47 +74,47 @@ export function Summary({ data }: SummaryProps) {
       completed: basicInfoCompleted,
       information: [
         {
-          label: 'Description',
+          label: DESCRIPTION_LABEL,
           value: (
             <DraftValue
               draft={generalInfoDraft}
-              field="description"
+              field={DESCRIPTION_FIELD_NAME}
               originalValue={description}
             />
           ),
         },
         {
-          label: 'Email',
+          label: EMAIL_LABEL,
           value: (
             <DraftValue
               draft={generalInfoDraft}
-              field="email"
+              field={EMAIL_FIELD_NAME}
               originalValue={email}
             />
           ),
         },
         {
-          label: 'Owner',
+          label: OWNER_LABEL,
           value: (
             <DraftValue
               draft={generalInfoDraft}
-              field="owner"
+              field={OWNER_FIELD_NAME}
               originalValue={owner}
             />
           ),
         },
         {
-          label: 'Priority',
+          label: PRIORITY_LABEL,
           value: (
             <DraftValue
               draft={generalInfoDraft}
-              field="priority"
+              field={PRIORITY_FIELD_NAME}
               originalValue={priority}
             />
           ),
         },
         {
-          label: 'Resource name',
+          label: RESOURCE_NAME_LABEL,
           value: name ?? '',
         },
       ],
@@ -99,36 +124,39 @@ export function Summary({ data }: SummaryProps) {
       completed: projectDetailsCompleted,
       information: [
         {
-          label: 'Budget',
+          label: BUDGET_LABEL,
           value: (
             <DraftValue
               draft={projectDetailsDraft}
-              field="budget"
+              field={BUDGET_FIELD_NAME}
               originalValue={budget}
             />
           ),
         },
         {
-          label: 'Category',
+          label: CATEGORY_LABEL,
           value: (
             <DraftValue
               draft={projectDetailsDraft}
-              field="projectCategory"
+              field={PROJECT_CATEGORY_FIELD_NAME}
               originalValue={projectCategory}
             />
           ),
         },
         {
-          label: 'Options',
+          label: OPTIONS_LABEL,
           value: (
             <DraftValue
               draft={projectDetailsDraft}
-              field="options"
+              field={OPTIONS_FIELD_NAME}
               originalValue={options}
             />
           ),
         },
-        { label: 'Project name', value: projectName ?? '' },
+        {
+          label: PROJECT_NAME_LABEL,
+          value: projectName ?? '',
+        },
       ],
     },
     {
@@ -136,7 +164,7 @@ export function Summary({ data }: SummaryProps) {
       completed: allCompleted,
       information: [
         {
-          label: 'Status',
+          label: SUMMARY_STATUS_LABEL,
           value: !allCompleted
             ? 'Waiting for modules'
             : data.status === ResourceStatus.COMPLETED

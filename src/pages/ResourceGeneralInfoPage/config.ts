@@ -1,50 +1,59 @@
 import type { GeneralInfoFormValues } from './ResourceGeneralInfoPage.types';
-import { RESOURCE_PRIORITY_VALUES } from '@/api/types';
+import { RESOURCE_PRIORITY, RESOURCE_PRIORITY_VALUES } from '@/api/types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
+import { FIELD_NAMES } from '@/constants/fieldNames';
+import { FIELD_LABELS } from '@/constants/labels';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import {
+  ALLOWED_EMAIL_FORMAT_REGEX,
+  SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX,
+} from '@/constants/validation';
+import { FIELD_WARNINGS } from '@/constants/warnings';
 import { mapToOptions } from '@/utils/mapToOptions';
 
-/** Characters removed from the description: letters, digits, spaces and hyphens are kept. */
-const INVALID_DESCRIPTION_CHARS = /[^A-Za-z0-9 -]/g;
-
-/** Characters removed from the owner: letters and spaces are kept. */
-const INVALID_OWNER_CHARS = /[^A-Za-z ]/g;
-
-/** Basic shape check for an email address. Not a full RFC validation. */
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const { description, email, owner } = FIELD_TOOLTIPS;
+const { DESCRIPTION, EMAIL, OWNER } = FIELD_TOOLTIPS;
+const { EMAIL_WARNING } = FIELD_WARNINGS;
+const { DESCRIPTION_LABEL, EMAIL_LABEL, OWNER_LABEL, PRIORITY_LABEL } =
+  FIELD_LABELS;
+const {
+  DESCRIPTION_FIELD_NAME,
+  EMAIL_FIELD_NAME,
+  OWNER_FIELD_NAME,
+  PRIORITY_FIELD_NAME,
+} = FIELD_NAMES;
 
 export const basicInfoFieldsConfig: FieldConfig<GeneralInfoFormValues>[] = [
   {
-    label: 'Description',
-    name: 'description',
+    label: DESCRIPTION_LABEL,
+    name: DESCRIPTION_FIELD_NAME,
     type: 'textarea',
-    tooltip: description,
-    sanitize: (value: string) => value.replace(INVALID_DESCRIPTION_CHARS, ''),
+    tooltip: DESCRIPTION,
+    sanitize: (value: string) =>
+      value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
   },
   {
-    label: 'Email',
-    name: 'email',
+    label: EMAIL_LABEL,
+    name: EMAIL_FIELD_NAME,
     type: 'input',
-    tooltip: email,
+    tooltip: EMAIL,
     rules: {
-      pattern: EMAIL_PATTERN,
-      message: 'Please enter a valid email address.',
+      pattern: ALLOWED_EMAIL_FORMAT_REGEX,
+      message: EMAIL_WARNING,
     },
   },
   {
-    label: 'Owner',
-    name: 'owner',
+    label: OWNER_LABEL,
+    name: OWNER_FIELD_NAME,
     type: 'input',
-    tooltip: owner,
-    sanitize: (value: string) => value.replace(INVALID_OWNER_CHARS, ''),
+    tooltip: OWNER,
+    sanitize: (value: string) =>
+      value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
   },
   {
-    label: 'Priority',
-    name: 'priority',
+    label: PRIORITY_LABEL,
+    name: PRIORITY_FIELD_NAME,
     type: 'select',
     options: mapToOptions(RESOURCE_PRIORITY_VALUES),
-    defaultValue: RESOURCE_PRIORITY_VALUES[0],
+    defaultValue: RESOURCE_PRIORITY.LOW,
   },
 ];

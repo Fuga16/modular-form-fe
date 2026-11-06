@@ -17,16 +17,13 @@ import {
   getNameStatus,
   nameStatusContent,
 } from './CreateResourceModal.variants';
-import {
-  CANCEL_LABEL,
-  CREATE_RESOURCE_ERROR,
-  CREATING_LABEL,
-  DEFAULT_VALUES,
-  MODAL_TITLE,
-  fieldsConfig,
-} from './config';
+import { CREATE_RESOURCE_ERROR, DEFAULT_VALUES, fieldsConfig } from './config';
+import { LABELS } from '@/constants/labels';
 import { Button, Card, Modal } from '@/design-system';
 import { useCreateResourceMutation } from '@/hooks/queries/useCreateResourceMutation';
+
+const { MODAL_TITLE, CANCEL_LABEL, CREATING_LABEL } =
+  LABELS.CREATE_RESOURCE_MODAL;
 
 /**
  * Modal with a form for creating a resource.

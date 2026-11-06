@@ -1,0 +1,33 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--badge-height);
+  padding: 0 var(--badge-padding-x);
+  font-family: var(--font-sans);
+  font-size: var(--badge-font-size);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: var(--badge-radius);
+}
+
+.neutral {
+  background-color: var(--color-bg-muted);
+  color: var(--color-text-muted);
+}
+
+.info {
+  background-color: var(--color-info-subtle);
+  color: var(--color-info-text);
+}
+
+.success {
+  background-color: var(--color-success-subtle);
+  color: var(--color-success-text);
+}
+
+.warning {
+  background-color: var(--color-warning-subtle);
+  color: var(--color-warning-text);
+}

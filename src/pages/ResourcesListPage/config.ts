@@ -6,6 +6,8 @@ import type { ResourceStatus } from '@/api/types';
 import { defineSelectField } from '@/components/FormFieldsRenderer/FormFieldsRenderer.fields';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 import type { TableColumn } from '@/components/Table';
+import { FIELD_NAMES } from '@/constants/fieldNames';
+import { FIELD_LABELS } from '@/constants/labels';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import {
   SANITIZE_EMAIL_FORMAT_REGEX,
@@ -17,48 +19,77 @@ import { formatIsoDate } from '@/utils/formatIsoDate';
 const isoDateConverter = (value: unknown) =>
   formatIsoDate(typeof value === 'string' ? value : String(value));
 
+const { PROJECT_NAME, EMAIL, OWNER, CREATED_AT_RANGE, UPDATED_AT_RANGE } =
+  FIELD_TOOLTIPS;
+
+const {
+  RESOURCE_NAME_LABEL,
+  EMAIL_LABEL,
+  PRIORITY_LABEL,
+  STATUS_LABEL,
+  OWNER_LABEL,
+  CREATED_DATE_LABEL,
+  UPDATED_DATE_LABEL,
+  DESCRIPTION_LABEL,
+} = FIELD_LABELS;
+
+const {
+  RESOURCE_NAME_FIELD_NAME,
+  EMAIL_FIELD_NAME,
+  OWNER_FIELD_NAME,
+  PRIORITY_FIELD_NAME,
+  STATUS_FIELD_NAME,
+  CREATED_AT_FROM_FIELD_NAME,
+  CREATED_AT_TO_FIELD_NAME,
+  UPDATED_AT_FROM_FIELD_NAME,
+  UPDATED_AT_TO_FIELD_NAME,
+  DESCRIPTION_FIELD_NAME,
+  CREATED_AT_FIELD_NAME,
+  UPDATED_AT_FIELD_NAME,
+} = FIELD_NAMES;
+
 /** Filter fields rendered above the table. */
 export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
   {
-    label: 'Technical Name',
-    name: 'name',
+    label: RESOURCE_NAME_LABEL,
+    name: RESOURCE_NAME_FIELD_NAME,
     type: 'input',
-    tooltip: FIELD_TOOLTIPS.name,
+    tooltip: PROJECT_NAME,
     sanitize: (value: string) =>
       value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
     required: false,
   },
   defineSelectField<ResourcesFilters, ResourceStatus>({
-    name: 'status',
-    label: 'Technical Status',
+    name: STATUS_FIELD_NAME,
+    label: STATUS_LABEL,
     type: 'select',
     options: [
-      { value: 'PROCESSING', label: 'Technical Processing' },
-      { value: 'COMPLETED', label: 'Technical Completed' },
+      { value: 'PROCESSING', label: 'Processing' },
+      { value: 'COMPLETED', label: 'Completed' },
     ],
     defaultValue: 'PROCESSING',
     required: false,
   }),
   {
-    label: 'Technical Email',
-    name: 'email',
+    label: EMAIL_LABEL,
+    name: EMAIL_FIELD_NAME,
     type: 'input',
-    tooltip: FIELD_TOOLTIPS.email,
+    tooltip: EMAIL,
     sanitize: (value: string) => value.replace(SANITIZE_EMAIL_FORMAT_REGEX, ''),
     required: false,
   },
   {
-    label: 'Resource Owner',
-    name: 'owner',
+    label: OWNER_LABEL,
+    name: OWNER_FIELD_NAME,
     type: 'input',
-    tooltip: FIELD_TOOLTIPS.owner,
+    tooltip: OWNER,
     sanitize: (value: string) =>
       value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
     required: false,
   },
   defineSelectField<ResourcesFilters, 'HIGH' | 'MIDDLE' | 'LOW'>({
-    name: 'priority',
-    label: 'Technical priority',
+    name: PRIORITY_FIELD_NAME,
+    label: PRIORITY_LABEL,
     type: 'select',
     options: [
       { value: 'HIGH', label: 'High priority' },
@@ -69,19 +100,19 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
     required: false,
   }),
   {
-    label: 'Created At',
+    label: CREATED_DATE_LABEL,
     type: 'daterange',
-    from: 'createdAtFrom',
-    to: 'createdAtTo',
-    tooltip: FIELD_TOOLTIPS.createdAtRange,
+    from: CREATED_AT_FROM_FIELD_NAME,
+    to: CREATED_AT_TO_FIELD_NAME,
+    tooltip: CREATED_AT_RANGE,
     required: false,
   },
   {
-    label: 'Updated At',
+    label: UPDATED_DATE_LABEL,
     type: 'daterange',
-    from: 'updatedAtFrom',
-    to: 'updatedAtTo',
-    tooltip: FIELD_TOOLTIPS.updatedAtRange,
+    from: UPDATED_AT_FROM_FIELD_NAME,
+    to: UPDATED_AT_TO_FIELD_NAME,
+    tooltip: UPDATED_AT_RANGE,
     required: false,
   },
 ];
@@ -89,38 +120,38 @@ export const filtersConfig: FieldConfig<ResourcesFilters>[] = [
 /** Columns of the resources table. */
 export const tableConfig: TableColumn<ResourceTable>[] = [
   {
-    title: 'Technical Name',
-    fieldName: 'name',
+    title: RESOURCE_NAME_LABEL,
+    fieldName: RESOURCE_NAME_FIELD_NAME,
   },
   {
-    title: 'Technical description',
-    fieldName: 'description',
+    title: DESCRIPTION_LABEL,
+    fieldName: DESCRIPTION_FIELD_NAME,
   },
   {
-    title: 'Technical email',
-    fieldName: 'email',
+    title: EMAIL_LABEL,
+    fieldName: EMAIL_FIELD_NAME,
   },
   {
-    title: 'Technical owner',
-    fieldName: 'owner',
+    title: OWNER_LABEL,
+    fieldName: OWNER_FIELD_NAME,
   },
   {
-    title: 'Technical priority',
-    fieldName: 'priority',
+    title: PRIORITY_LABEL,
+    fieldName: PRIORITY_FIELD_NAME,
   },
   {
-    title: 'Technical status',
-    fieldName: 'status',
+    title: STATUS_LABEL,
+    fieldName: STATUS_FIELD_NAME,
   },
   {
-    title: 'Start date',
-    fieldName: 'createdAt',
+    title: CREATED_DATE_LABEL,
+    fieldName: CREATED_AT_FIELD_NAME,
     converter: isoDateConverter,
     sortable: true,
   },
   {
-    title: 'Last Activity',
-    fieldName: 'updatedAt',
+    title: UPDATED_DATE_LABEL,
+    fieldName: UPDATED_AT_FIELD_NAME,
     converter: isoDateConverter,
   },
 ];

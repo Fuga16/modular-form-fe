@@ -1,0 +1,18 @@
+export const FIELD_NAMES = {
+  RESOURCE_NAME_FIELD_NAME: 'name',
+  EMAIL_FIELD_NAME: 'email',
+  OWNER_FIELD_NAME: 'owner',
+  PRIORITY_FIELD_NAME: 'priority',
+  DESCRIPTION_FIELD_NAME: 'description',
+  BUDGET_FIELD_NAME: 'budget',
+  PROJECT_CATEGORY_FIELD_NAME: 'projectCategory',
+  OPTIONS_FIELD_NAME: 'options',
+  PROJECT_NAME_FIELD_NAME: 'projectName',
+  STATUS_FIELD_NAME: 'status',
+  CREATED_AT_FIELD_NAME: 'createdAt',
+  UPDATED_AT_FIELD_NAME: 'updatedAt',
+  CREATED_AT_FROM_FIELD_NAME: 'createdAtFrom',
+  CREATED_AT_TO_FIELD_NAME: 'createdAtTo',
+  UPDATED_AT_FROM_FIELD_NAME: 'updatedAtFrom',
+  UPDATED_AT_TO_FIELD_NAME: 'updatedAtTo',
+} as const;

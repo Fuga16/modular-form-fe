@@ -1,46 +1,58 @@
 import type { ProjectDetailsFormValues } from './ResourceProjectDetailsPage.types';
-import { RESOURCE_PROJECT_CATEGORY_VALUES } from '@/api/types';
+import {
+  RESOURCE_PROJECT_CATEGORY,
+  RESOURCE_PROJECT_CATEGORY_VALUES,
+} from '@/api/types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 import { SELECT_TEAM_OPTIONS } from '@/constants/TeamOptions';
+import { FIELD_NAMES } from '@/constants/fieldNames';
+import { FIELD_LABELS } from '@/constants/labels';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
+import {
+  SANITIZE_DIGITS_REGEX,
+  SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX,
+} from '@/constants/validation';
 import { mapToOptions } from '@/utils/mapToOptions';
 
-/** Characters removed from the budget: only digits are kept. */
-const DIGITS_ONLY = /\D/g;
-
-/** Characters removed from the project name: letters, digits, spaces and hyphens are kept. */
-const INVALID_PROJECT_NAME_CHARS = /[^A-Za-z0-9 -]/g;
-
-const { budget, projectName } = FIELD_TOOLTIPS;
+const { BUDGET, PROJECT_NAME } = FIELD_TOOLTIPS;
+const { BUDGET_LABEL, CATEGORY_LABEL, OPTIONS_LABEL, PROJECT_NAME_LABEL } =
+  FIELD_LABELS;
+const {
+  BUDGET_FIELD_NAME,
+  PROJECT_CATEGORY_FIELD_NAME,
+  OPTIONS_FIELD_NAME,
+  PROJECT_NAME_FIELD_NAME,
+} = FIELD_NAMES;
 
 export const projectDetailsConfig: FieldConfig<ProjectDetailsFormValues>[] = [
   {
-    label: 'Budget',
-    name: 'budget',
+    label: BUDGET_LABEL,
+    name: BUDGET_FIELD_NAME,
     type: 'input',
     required: true,
-    tooltip: budget,
-    sanitize: (value: string) => value.replace(DIGITS_ONLY, ''),
+    tooltip: BUDGET,
+    sanitize: (value: string) => value.replace(SANITIZE_DIGITS_REGEX, ''),
   },
   {
-    label: 'Category',
-    name: 'projectCategory',
+    label: CATEGORY_LABEL,
+    name: PROJECT_CATEGORY_FIELD_NAME,
     type: 'select',
     options: mapToOptions(RESOURCE_PROJECT_CATEGORY_VALUES),
-    defaultValue: '',
+    defaultValue: RESOURCE_PROJECT_CATEGORY.INTERNAL,
   },
   {
-    label: 'Options',
-    name: 'options',
+    label: OPTIONS_LABEL,
+    name: OPTIONS_FIELD_NAME,
     type: 'multiselect',
     options: SELECT_TEAM_OPTIONS,
   },
   {
-    label: 'Project Name',
-    name: 'projectName',
+    label: PROJECT_NAME_LABEL,
+    name: PROJECT_NAME_FIELD_NAME,
     type: 'input',
     required: true,
-    tooltip: projectName,
-    sanitize: (value: string) => value.replace(INVALID_PROJECT_NAME_CHARS, ''),
+    tooltip: PROJECT_NAME,
+    sanitize: (value: string) =>
+      value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
   },
 ];

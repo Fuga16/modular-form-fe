@@ -1,6 +1,6 @@
 import type { ProjectDetailsFormValues } from './ResourceProjectDetailsPage.types';
+import { RESOURCE_PROJECT_CATEGORY_VALUES } from '@/api/types';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
-import { RESOURCE_PROJECT_CATEGORY_VALUES } from '@/constants/ResourceProjectCategory';
 import { SELECT_TEAM_OPTIONS } from '@/constants/TeamOptions';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import { mapToOptions } from '@/utils/mapToOptions';

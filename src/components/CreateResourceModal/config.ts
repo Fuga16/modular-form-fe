@@ -4,10 +4,10 @@ import type { FieldConfig } from '../FormFieldsRenderer/FormFieldsRenderer.types
 import type { CreateResourceFormValues } from './CreateResourceModal.types';
 import { FIELD_TOOLTIPS } from '@/constants/tooltips';
 import {
-  EMAIL_ALLOWED_CHARS_REGEX,
-  EMAIL_FORMAT_REGEX,
-  LETTERS_AND_NUMBERS_REGEX,
-  LETTERS_NUMBERS_AND_SPACES_REGEX,
+  ALLOWED_EMAIL_FORMAT_REGEX,
+  ALLOWED_LETTERS_NUMBERS_AND_SPACES_REGEX,
+  SANITIZE_EMAIL_FORMAT_REGEX,
+  SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX,
 } from '@/constants/validation';
 
 export const DEFAULT_VALUES: CreateResourceFormValues = {
@@ -45,10 +45,10 @@ export const fieldsConfig: FieldConfig<CreateResourceFormValues>[] = [
     type: 'input',
     tooltip: RESOURCE_NAME_TOOLTIP,
     sanitize: (value: string) =>
-      value.replace(LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
+      value.replace(SANITIZE_LETTERS_NUMBERS_AND_SPACES_REGEX, ''),
     placeholder: RESOURCE_NAME_PLACEHOLDER,
     rules: {
-      pattern: LETTERS_AND_NUMBERS_REGEX,
+      pattern: ALLOWED_LETTERS_NUMBERS_AND_SPACES_REGEX,
       message: RESOURCE_NAME_REQUIRED_ERROR,
     },
   },
@@ -67,9 +67,9 @@ export const fieldsConfig: FieldConfig<CreateResourceFormValues>[] = [
     name: 'email',
     type: 'input',
     tooltip: FIELD_TOOLTIPS.email,
-    sanitize: (value: string) => value.replace(EMAIL_ALLOWED_CHARS_REGEX, ''),
+    sanitize: (value: string) => value.replace(SANITIZE_EMAIL_FORMAT_REGEX, ''),
     rules: {
-      pattern: EMAIL_FORMAT_REGEX,
+      pattern: ALLOWED_EMAIL_FORMAT_REGEX,
       message: RESOURCE_EMAIL_INVALID_ERROR,
     },
   },

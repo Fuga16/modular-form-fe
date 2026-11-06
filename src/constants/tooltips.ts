@@ -6,4 +6,6 @@ export const FIELD_TOOLTIPS = {
     'Name of the person responsible for the resource; letters and spaces only.',
   budget: 'Specify the resource budget in arbitrary units; numbers only.',
   projectName: 'Project name: letters, numbers, spaces, and hyphens only.',
+  createdAtRange: 'Filter resources created within this period.',
+  updatedAtRange: 'Filter resources updated within this period.',
 } as const;

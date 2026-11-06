@@ -1,3 +1,5 @@
+@import '../../../styles/breakpoints.css';
+
 .overlay {
   position: fixed;
   inset: 0;

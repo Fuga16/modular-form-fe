@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import { useSearchParams } from 'react-router-dom';
 
 import { type FieldValues, useFormContext } from 'react-hook-form';
@@ -14,6 +12,7 @@ import styles from './FiltersBlock.module.css';
 import type { FiltersBlockProps } from './FiltersBlock.types';
 import { Button } from '@/design-system';
 import { createSearchParamsFromForm } from '@/utils/createSearchParamsFromForm';
+import { getFieldKeys } from '@/utils/fieldUrl';
 
 /**
  * Filter panel rendered from a field config.
@@ -34,21 +33,21 @@ export function FiltersBlock<TValues extends FieldValues = FieldValues>({
   });
 
   const handleClearFilters = () => {
-    // Empty strings for every filter field, not the parent's defaults.
+    const keys = config.flatMap((field) => getFieldKeys(field));
+
     const emptyValues = Object.fromEntries(
-      config.map((field) => [field.name, '']),
+      keys.map((key) => [key, '']),
     ) as TValues;
     reset(emptyValues);
 
     const nextParams = new URLSearchParams(searchParams);
-    config.forEach((field) => nextParams.delete(field.name));
+    keys.forEach((key) => nextParams.delete(key));
     setSearchParams(nextParams, { replace: true });
   };
-
   return (
     <form
       className={styles.container}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
         void handleApplyFilters(event);
       }}
       noValidate

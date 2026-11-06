@@ -1,7 +1,7 @@
 import type { NavigateFunction } from 'react-router-dom';
 
 import type { DetailCardConfig } from './ResourceDetailsPage.types';
-import type { Resource } from '@/api/types';
+import { ResourceStatus, type Resource } from '@/api/types';
 import { isModuleCompleted } from '@/utils/isModuleCompleted';
 
 /** Parameters for `buildDetailsCards`. */
@@ -38,7 +38,7 @@ export function buildDetailsCards({
     priority,
   });
   const projectDetailsCompleted = isModuleCompleted(projectDetails);
-  const isCompleted = status === 'completed';
+  const isCompleted = status === ResourceStatus.COMPLETED;
 
   return [
     {

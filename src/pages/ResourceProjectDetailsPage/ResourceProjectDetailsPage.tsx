@@ -8,6 +8,7 @@ import layout from '../PageLayout.module.css';
 
 import type { ProjectDetailsFormValues } from './ResourceProjectDetailsPage.types';
 import { projectDetailsConfig } from './config';
+import { ResourceStatus } from '@/api/types';
 import {
   Breadcrumb,
   FormFieldsRenderer,
@@ -154,7 +155,7 @@ export function ResourceProjectDetailsPage() {
   };
 
   const onSubmit = (data: ProjectDetailsFormValues) => {
-    if (resource.status === 'completed') {
+    if (resource.status === ResourceStatus.COMPLETED) {
       handleCompletedResource(data);
       return;
     }

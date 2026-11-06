@@ -1,20 +1,11 @@
+import { readFieldFromUrl } from './fieldUrl';
 import type { FieldConfig } from '@/components/FormFieldsRenderer/FormFieldsRenderer.types';
 
-export const getFilterValues = (
+export const getDefaultFilterValues = (
   searchParams: URLSearchParams,
   config: FieldConfig[],
-) => {
-  return config.reduce(
-    (acc, filter) => {
-      const value = searchParams.get(filter.name) ?? '';
-
-      acc[filter.name] =
-        'sanitize' in filter && filter.sanitize
-          ? filter.sanitize(value)
-          : value;
-
-      return acc;
-    },
-    {} as Record<string, string>,
+) =>
+  config.reduce<Record<string, string>>(
+    (acc, field) => Object.assign(acc, readFieldFromUrl(field, searchParams)),
+    {},
   );
-};

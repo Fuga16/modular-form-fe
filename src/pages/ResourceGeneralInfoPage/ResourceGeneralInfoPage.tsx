@@ -22,6 +22,7 @@ import { useResourceBuffer } from '@/hooks/useResourceBuffer';
 import { getBreadcrumbs } from '@/utils/getBreadcrumbs';
 import { getChangedFields } from '@/utils/getChangedFields';
 import { updateResourceBuffer } from '@/utils/updateResourceBuffer';
+import { ResourceStatus } from '@/api/types';
 
 /**
  * General information step of the resource wizard.
@@ -124,7 +125,7 @@ export function ResourceGeneralInfoPage() {
   };
 
   const onSubmit = (data: GeneralInfoFormValues) => {
-    if (resource.status === 'completed') {
+    if (resource.status === ResourceStatus.COMPLETED) {
       handleCompletedResource(data);
       return;
     }

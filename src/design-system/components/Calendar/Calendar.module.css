@@ -1,0 +1,80 @@
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.caption {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-1);
+}
+
+.weekday {
+  padding: var(--space-1) 0;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-subtle);
+  text-align: center;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.cellInRange {
+  background-color: var(--color-accent-subtle);
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height-sm);
+  height: var(--control-height-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background-color: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.day:hover:not([aria-disabled='true']):not(.dayEdge) {
+  background-color: var(--color-surface-hover);
+}
+
+.dayEdge {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.dayToday {
+  border-color: var(--color-border-strong);
+}
+
+.dayDisabled {
+  color: var(--color-text-disabled);
+  cursor: var(--cursor-disabled);
+  text-decoration: line-through;
+}
